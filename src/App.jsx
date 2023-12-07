@@ -35,7 +35,6 @@ function App() {
             <Routes>
               <Route element={<PrivateRoute />}>
                 <Route element={<FirstPage />} path='/home' exact/>
-                <Route element={<Clients />} path='/clients' exact/>
               </Route>
               <Route path='/auth' element={<Auth />} />
               <Route path='/' element={<Auth />} />
