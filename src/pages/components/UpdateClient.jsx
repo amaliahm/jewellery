@@ -2,37 +2,14 @@ import React, {useState} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiBook } from "react-icons/fi";
 import { clients } from "../../data";
-import axios from "axios";
 
-const AddClient = ({ isOpen, setIsOpen }) => {
+const UpdateClient = ({ isOpen, setIsOpen, row}) => {
     const [client, setClient] = useState({
         nom: '',
         ville: '',
         wilaya: '',
         telephone: '',
     })
-
-    const handleChange = (e) => {
-        setClient(c => ({...c, [e.target.name] : e.target.value}))
-    }
-    
-    const handleClick = async e => {
-        e.preventDefault();
-        const between = client.nom != '' && client.ville != '' && client.wilaya != '' && client.telephone != '' && client.telephone.length == 10
-        if (between) {
-            const addClient = {
-                table: 'clients',
-                data: client
-            }
-            try {
-                await axios.post('http://localhost:8800/home', addClient)
-            } catch (e) {
-                console.log(e)
-                return
-            }
-            setIsOpen(false)
-        }
-    }
     return (
         <AnimatePresence>
             {isOpen && (
@@ -54,46 +31,51 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                             <div className="modal-content__row"  >
                                 <p className="model-content__titre">nom</p>
                                 <div className="input">
-                                    <input type='text' name='nom' 
-                                      placeholder='nom' 
-                                      value={client.nom} onChange={handleChange} required/>
+                                    <input type='text' name=''
+                                      value={row.nom} onChange={(e) => row.nom = e.target.value} />
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
                                 <p className="model-content__titre">ville</p>
                                 <div className="input">
-                                    <input type='text' name='ville' 
-                                      placeholder='ville' 
-                                      value={client.ville} onChange={handleChange} required/>
+                                    <input type='text' name=''
+                                      value={row.ville} onChange={(e) => setClient(c => ({ ...row, ...{ville: e.target.value} }))} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
                                 <p className="model-content__titre">wilaya</p>
                                 <div className="input">
-                                    <input type='text' name='wilaya' 
-                                      placeholder='wilaya' 
-                                      value={client.wilaya} onChange={handleChange} required/>
+                                    <input type='text' name='' 
+                                      value={row.wilaya} onChange={(e) => setClient(c => ({ ...row, ...{wilaya: e.target.value} }))} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
                                 <p className="model-content__titre">telephone</p>
                                 <div className="input">
-                                    <input type='text' name='telephone' 
-                                      placeholder='06...' 
-                                      value={client.telephone} onChange={handleChange} required/>
+                                    <input type='text' name='' 
+                                      value={row.telephone} onChange={(e) => setClient(c => ({ ...row, ...{telephone: e.target.value} }))} required/>
                                 </div>
                             </div>
-
+                            
+                            
+                            
                             <div className="modal-content__btns">
                             <button type="button" onClick={() => {
                                     setIsOpen(false)
                                 }}
-                                    className="btn-secondary">
-                                    annuler
+                                    style={{
+                                        color: 'white',
+                                        borderColor: 'red',
+                                        backgroundColor: 'red'
+                                    }}
+                                    >
+                                    supprimer
                                 </button>
-                            <button type="button" onClick={handleClick}
+                            <button type="button" onClick={() => {
+                                setIsOpen(false)
+                                }}
                                     className="btn-primary">
-                                    ajouter
+                                    modifier
                                 </button>
                             </div>
                         </div>
@@ -105,4 +87,4 @@ const AddClient = ({ isOpen, setIsOpen }) => {
     )
 }
 
-export default AddClient
+export default UpdateClient
