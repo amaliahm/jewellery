@@ -43,7 +43,7 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='' 
                                       placeholder='amalia' 
-                                      value={client.nom} onChange={(e) => setClient(c => ({ ...client, ...{nom: e.target.value} }))}/>
+                                      value={client.nom} onChange={(e) => setClient(c => ({ ...client, ...{nom: e.target.value} }))} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
@@ -51,7 +51,7 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='' 
                                       placeholder='ville' 
-                                      value={client.ville} onChange={(e) => setClient(c => ({ ...client, ...{ville: e.target.value} }))}/>
+                                      value={client.ville} onChange={(e) => setClient(c => ({ ...client, ...{ville: e.target.value} }))} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
@@ -59,7 +59,7 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='' 
                                       placeholder='wilaya' 
-                                      value={client.wilaya} onChange={(e) => setClient(c => ({ ...client, ...{wilaya: e.target.value} }))}/>
+                                      value={client.wilaya} onChange={(e) => setClient(c => ({ ...client, ...{wilaya: e.target.value} }))} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
@@ -67,27 +67,26 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='' 
                                       placeholder='06...' 
-                                      value={client.telephone} onChange={(e) => setClient(c => ({ ...client, ...{telephone: e.target.value} }))}/>
+                                      value={client.telephone} onChange={(e) => setClient(c => ({ ...client, ...{telephone: e.target.value} }))} required/>
                                 </div>
                             </div>
                             
                             
                             
                             <div className="modal-content__btns">
-                            <button onClick={() => {
+                            <button type="button" onClick={() => {
                                     setIsOpen(false)
                                 }}
                                     className="btn-secondary">
                                     annuler
                                 </button>
-                            <button onClick={() => {
+                            <button type="button" onClick={() => {
                                 clients.push(client)
                                 setIsOpen(false)
                                 }}
                                     className="btn-primary">
                                     ajouter
                                 </button>
-                                
                             </div>
                         </div>
                         </form>

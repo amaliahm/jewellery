@@ -1,4 +1,6 @@
 
+
+
 const clients = [
     {
       id: 1,
@@ -67,123 +69,6 @@ const clients = [
   ];
 
 
-  const columns_clients = [
-    { 
-        field: "id", 
-        headerName: "ID", 
-        flex: 0.5,
-        minWidth: 50,
-        maxWidth: 80,
-        headerAlign: 'left'
-    },
-    {
-      field: "nom",
-      headerName: "NOM",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "ville",
-      headerName: "VILLE",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "wilaya",
-      headerName: "WILAYA",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "telephone",
-      headerName: "TELEPHONE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "chiffre d'affaire",
-      headerName: "CHIFFRE D'AFFAIRE",
-      flex: 1,
-      minWidth: 200,
-      maxWidth: 250,
-      headerAlign: 'left'
-    },
-    {
-      field: "total or",
-      headerName: "TOTAL OR",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total vo",
-      headerName: "TOTAL VO",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total va",
-      headerName: "TOTAL VA",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total perte",
-      headerName: "TOTAL PERTE",
-      flex: 1,
-      minWidth: 130,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total ro",
-      headerName: "TOTAL RO",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total ra",
-      headerName: "TOTAL RA",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "reste o",
-      headerName: "TOTAL O",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "reste a",
-      headerName: "TOTAL A",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-  ];
 
   const articles = [
     {
@@ -312,4 +197,4 @@ const clients = [
   ];
 
 
-  export {clients, columns_clients, articles, utilisateurs}
+  export {clients, articles, utilisateurs}

@@ -1,19 +1,14 @@
-import React, {useState, useEffect} from 'react'
-import {  useNavigate } from 'react-router-dom';
+import React, {useState} from 'react'
 import SignupComponent from './signup';
-import LoadingComponent from '../components/loader';
 import SigninComponent from './signin';
 
 function Auth() {
+
   const [right, setRight] = useState(false)
+
   const addRight = () => {
     setRight(!right);
   }
-
-
-  const [isOpen, setIsOpen] = useState(false);
-  
-
 
   return (
     <div className='auth'>

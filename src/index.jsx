@@ -4,6 +4,7 @@ import Elements from "./pages/home/elements";
 import Articles from "./pages/sidebar/Articles";
 import Clients from "./pages/sidebar/Clients";
 import Users from "./pages/sidebar/Users";
+import Fournisseurs from "./pages/sidebar/Fournisseurs";
 
 const espace_clients = [
     {
@@ -89,7 +90,7 @@ const links = [
     },
     {
         nom: "les fournisseurs",
-        to: Clients
+        to: Fournisseurs
     },
     {
         nom: "les achat",

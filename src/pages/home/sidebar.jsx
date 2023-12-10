@@ -14,9 +14,7 @@ import { links, sidebar } from "../../index.jsx";
 import { tokens } from "../../theme";
 import LoadingComponent from "../components/loader.jsx";
 import { logoutButton } from '../../assets/icons/index.jsx';
-import { useNavigate } from 'react-router-dom';
-import { app } from '../../firebase';
-import { getAuth, signOut } from 'firebase/auth';
+import LogOutComponent from '../components/logout.jsx';
 
 
 const drawerWidth = 250;
@@ -47,7 +45,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -101,10 +98,11 @@ const Item = ({icon, nom, open, to}) => {
   };
 
 const SideBarComponent = () => {
-  const navigate = useNavigate()
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const [Loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [out, setOut] = useState(false)
+
     function changeLoading() {
       setTimeout(() => {
         setLoading(false)
@@ -120,11 +118,6 @@ const SideBarComponent = () => {
     };
     const colors = tokens(theme.palette.mode);
     const [selected, setSelected] = useState(0);
-
-    const logout = () => {
-      const user = getAuth(app)
-        user.signOut()
-    }
 
     return (
       <Box sx={{
@@ -181,12 +174,9 @@ const SideBarComponent = () => {
               disablePadding 
               sx={{ display: 'block' }}
               onClick={() => {
-                logout()
-                navigate('/auth')
-                setLoading(true)
+                setOut(true)
               }}
               >
-                
                 <Item
                 icon={logoutButton}
                 nom={'logout'}
@@ -196,12 +186,13 @@ const SideBarComponent = () => {
           </List>
           
         </Drawer>
+        {loading ? <LoadingComponent /> :
         <main className="content">
-          {Loading && <LoadingComponent />}
+          {out && <LogOutComponent out={out} setOut={setOut}/>}
           {links.map((e, index) => (
             selected == index ?  <e.to  key={index}/> : <div key={index}></div>
           ))}
-        </main>
+        </main>}
       </Box>
     );
 }

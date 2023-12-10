@@ -1,19 +1,18 @@
 import { Box, useTheme } from "@mui/material";
 import { DataGrid, GridEditDateCell, GridToolbar } from "@mui/x-data-grid";
-import { clients } from "../../data";
 import { tokens } from "../../theme";
 import Header from "./Header";
 import { useState, useEffect } from "react";
 import axios from 'axios'
 import {  Typography } from "@mui/material";
-import { GridDeleteIcon, GridDeleteForeverIcon } from "@mui/x-data-grid";
+import { GridDeleteIcon } from "@mui/x-data-grid";
 
 
-const Clients = () => {
+const Fournisseurs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  const columns_clients = [
+  const columns_fournisseurs = [
     { 
         field: "id", 
         headerName: "ID", 
@@ -156,8 +155,11 @@ const Clients = () => {
               console.log('clicked update')
             }}
           >
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              update
+            <Typography 
+              color={colors.grey[100]} sx={{ ml: "5px" }}
+              
+            >
+                update
             </Typography>
           </Box>
         );
@@ -192,7 +194,7 @@ const Clients = () => {
           >
             <GridDeleteIcon />
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              delete
+                delete
             </Typography>
           </Box>
         );
@@ -215,13 +217,14 @@ const Clients = () => {
     const fetchAllData = async () => {
       try {
         const res = await axios.get('http://localhost:8800/home')
-        setData(res.data.clients)
+        setData(res.data.fournisseurs)
       } catch (e) {
         console.log(e)
       }
     }
     fetchAllData()
   }, [])
+
   
 
   return (
@@ -229,7 +232,7 @@ const Clients = () => {
         paddingLeft: "20px"
       }}>
       <Header
-        title="les clients"
+        title="les fournisseurs"
       />
       <Box
         m="-10px"
@@ -267,7 +270,7 @@ const Clients = () => {
         <DataGrid
           // checkboxSelection
           rows={isCol ? [] : data}
-          columns={columns_clients}
+          columns={columns_fournisseurs}
           components={{ Toolbar: GridToolbar,}}
         />
       </Box>
@@ -275,4 +278,4 @@ const Clients = () => {
   );
 };
 
-export default Clients;
+export default Fournisseurs;

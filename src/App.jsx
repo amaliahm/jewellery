@@ -8,7 +8,6 @@ import LoadingComponent from './pages/components/loader.jsx';
 import FirstPage from './pages/home/firstPage.jsx';
 import { ColorModeContext, useMode } from './theme.js';
 import PrivateRoute from './pages/components/PrivateRoute.jsx';
-import Clients from './pages/sidebar/Clients.jsx';
 
 
 function App() {
@@ -36,7 +35,6 @@ function App() {
               <Route element={<PrivateRoute />}>
                 <Route element={<FirstPage />} path='/home' exact/>
               </Route>
-              <Route path='/auth' element={<Auth />} />
               <Route path='/' element={<Auth />} />
               
             </Routes>

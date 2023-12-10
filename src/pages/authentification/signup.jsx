@@ -1,27 +1,30 @@
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import React, { useEffect, useState, useRef } from "react";
 import { email, password, user } from "../../assets/icons";
 import AlertMessage from "../components/alertMessage";
 import LoadingComponent from "../components/loader";
-import { app } from "../../firebase";
+import { auth } from "../../firebase";
 import { getAdmins } from '../../firebase';
 
 const SignupComponent = () => {
-    const [signUpEmail, setUpEmail] = useState('');
-    const [signUpUsername, setUpUsername] = useState('');
-    const [signUpPassword, setUpPassword] = useState('');
+    const emailRef = useRef()
+    const passwordRef = useRef()
+    const usernameRef = useRef()
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
 
     const [admins, setAdmins] = useState([]);
 
-
-  const fetchData = async () => {
-    const res = await getAdmins()
-    setAdmins([...res])
-  }
+    const fetchData = async () => {
+        const res = await getAdmins()
+        setAdmins([...res])
+    }
   
     useEffect(() => {
       fetchData()
     }, [])
+
     const checkAdmin = (nom, email, password) => {
         console.log(nom, email)
         let find = false;
@@ -36,58 +39,58 @@ const SignupComponent = () => {
         })
         if (!find) {
             console.log("nooooooooo")
-            setMessage("error, user not found")
+            setError("Error, user not found")
             setIsOpen(true)
         }
-        setIsLoading(false)
+        setLoading(false)
     }
-    const [isOpen, setIsOpen] = useState(false)
-    const [message, setMessage] = useState('Error')
-    const [isLoading, setIsLoading] = useState(false)
 
     const signUp = (email, password) => {
-        setIsOpen(true)
-        setIsLoading(false);
-        const auth = getAuth(app);
+        if (password <= 8) {
+            setError('Short password')
+            setIsOpen(true)
+            return
+        }
         createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-            setMessage("Please verify your email")
-            var _user = auth.currentUser;
-            sendEmailVerification(_user).then((value) => { });
+            setError("Verify your email")
+            sendEmailVerification(auth.currentUser).then((value) => { });
         }).catch((error) => {
-            setIsOpen(false)
-            console.log(error)
             if (firebase.auth().currentUser == null) {
-                setMessage('Error, please verify your information')
+                setError('Error, failed to create account')
+                setIsOpen(true)
             }
         })
+        setLoading(false);
     }
+
     return (
-        isLoading ? <LoadingComponent /> : <div className='form-container sign-up-container'>
-            <form  action='#' className='form-registration'>
+        loading ? <LoadingComponent /> : <div className='form-container sign-up-container'>
+            <AlertMessage isOpen={isOpen} setIsOpen={setIsOpen} message={error} />
+            <form action="#" className='form-registration'>
                 <h1 className='m-0'>Create Account</h1>
                 <div className="input">
                     <img src={user} alt='user' />
-                    <input type='text' name='' placeholder='user' value={signUpUsername} onChange={(e) => setUpUsername(e.target.value)} />
+                    <input type='text' name='' placeholder='user' ref={usernameRef} required/>
                     <span className='input-border'></span>
                 </div>
                 <div className="input">
                     <img src={email} alt='email' />
-                    <input type='email' name='' placeholder='email' value={signUpEmail} onChange={(e) => setUpEmail(e.target.value)} />
+                    <input type='email' name='' placeholder='email' ref={emailRef} required />
                     <span className='input-border'></span>
                 </div>
                 <div className="input">
                     <img src={password} alt='password' />
-                    <input type='password' name='' placeholder='password' value={signUpPassword} onChange={(e) => setUpPassword(e.target.value)} />
+                    <input type='password' name='' placeholder='password' ref={passwordRef} required />
                     <span className='input-border'></span>
                 </div>
 
-                <button className='submit' onClick={() => {
-                    setIsLoading(true)
-                    checkAdmin(signUpUsername, signUpEmail, signUpPassword)
+                <button className='submit' type="button" onClick={() => {
+                    setLoading(true)
+                    checkAdmin(usernameRef.current.value, emailRef.current.value, passwordRef.current.value)
                 }} >
                     sign up
                 </button>
-                <AlertMessage isOpen={isOpen} setIsOpen={setIsOpen} message={message} />
+                
             </form>
         </div>
     )

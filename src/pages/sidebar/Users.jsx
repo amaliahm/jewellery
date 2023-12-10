@@ -119,7 +119,11 @@ const Users = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={utilisateurs} columns={columns_users} />
+        <DataGrid 
+          checkboxSelection 
+          rows={utilisateurs} 
+          columns={columns_users} 
+        />
       </Box>
     </Box>
   );

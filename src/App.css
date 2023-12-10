@@ -635,9 +635,18 @@ button.ghost {
 	overflow-y: scroll;
 	cursor: pointer;
 }
+
+.modal-out {
+	width: 500px;
+}
+
 .modal-box {
-	background: var(--babyblue);
 	width: 80%;
+}
+
+.modal-box,
+.modal-out {
+	background: var(--babyblue);
 	color: #000;
 	padding: 10px;
 	border: none;
@@ -695,7 +704,8 @@ button.ghost {
 	margin: 0;
 }
 
-.modal-content__row > .model-content__titre {
+.modal-content__row > .model-content__titre,
+.model-content__titre {
 	margin: 0;
 	padding: 10px 20px;
 	border-radius: 11px;
@@ -709,6 +719,13 @@ button.ghost {
 .model-content__description {
 	padding: 10px;
 	text-align: center;
+}
+
+.modal-content__titre {
+	padding: 10px;
+	text-align: center;
+	font-weight: 600;
+	font-size: 20px;
 }
 
 .modal-content__btns {

@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {collection, getDocs, getFirestore} from "firebase/firestore"
-import { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useContext } from "react";
+import 'firebase/auth'
+import { getAuth, sendEmailVerification } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDRCZICHh9gaVRccwd6t7RbT43Tx51nLr0",
@@ -22,6 +23,7 @@ let database = false;
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const auth = getAuth(app)
 
 
 
@@ -46,8 +48,64 @@ const getAdmins  = async () => {
 }
 
 
+const AuthContext = React.createContext()
+
+function useAuth() {
+    return useContext(AuthContext)
+}
 
 
 
 
-export { app, getAdmins}
+function AuthProvider({children}) {
+    const [currentUser, setCurrentUser] = useState()
+    const [loading, setLoading] = useState(true)
+
+
+
+function login(email, password) {
+    return auth.signInWithEmailAndPassword(email, password)
+}
+
+function logout() {
+    return auth.signOut()
+}
+
+function resetPassword(email) {
+    return auth.sendPasswordResetEmail(email)
+}
+
+function verifyEmail() {
+    sendEmailVerification(auth.currentUser).then((value) => {})
+}
+
+useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+        setCurrentUser(user)
+        setLoading(false)
+    })
+    return unsubscribe
+}, [])
+
+
+
+const value = {
+    currentUser,
+    login,
+    
+    logout,
+    resetPassword,
+    verifyEmail,
+}
+
+return (
+    <AuthContext.Provider value={value}>
+        {!loading && children}
+    </AuthContext.Provider>
+)
+}
+
+
+
+
+export { app, getAdmins,auth, useAuth, AuthProvider}
