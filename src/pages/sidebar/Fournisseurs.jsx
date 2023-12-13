@@ -1,22 +1,22 @@
 import { Box, useTheme } from "@mui/material";
-import { DataGrid, GridEditDateCell, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "./Header";
 import { useState, useEffect } from "react";
 import axios from 'axios'
-import {  Typography } from "@mui/material";
-import { GridDeleteIcon } from "@mui/x-data-grid";
+import UpdateFournisseur from "../update/UpdateFournisseur";
+import { result } from "../../backend";
 
 
 const columns_fournisseurs = [
-  { 
-      field: "id", 
-      headerName: "ID", 
-      flex: 0.5,
-      minWidth: 50,
-      maxWidth: 80,
-      headerAlign: 'left'
-  },
+  // { 
+  //     field: "id", 
+  //     headerName: "ID", 
+  //     flex: 0.5,
+  //     minWidth: 50,
+  //     maxWidth: 80,
+  //     headerAlign: 'left'
+  // },
   {
     field: "nom",
     headerName: "NOM",
@@ -52,78 +52,78 @@ const columns_fournisseurs = [
     maxWidth: 200,
     headerAlign: 'left'
   },
-  {
-    field: "chiffre d'affaire",
-    headerName: "CHIFFRE D'AFFAIRE",
-    flex: 1,
-    minWidth: 200,
-    maxWidth: 250,
-    headerAlign: 'left'
-  },
-  {
-    field: "total or",
-    headerName: "TOTAL OR",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "total vo",
-    headerName: "TOTAL VO",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "total va",
-    headerName: "TOTAL VA",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "total perte",
-    headerName: "TOTAL PERTE",
-    flex: 1,
-    minWidth: 130,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "total ro",
-    headerName: "TOTAL RO",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "total ra",
-    headerName: "TOTAL RA",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "reste o",
-    headerName: "REST O",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "reste a",
-    headerName: "REST A",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
+  // {
+  //   field: "chiffre d'affaire",
+  //   headerName: "CHIFFRE D'AFFAIRE",
+  //   flex: 1,
+  //   minWidth: 200,
+  //   maxWidth: 250,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "total or",
+  //   headerName: "TOTAL OR",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "total vo",
+  //   headerName: "TOTAL VO",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "total va",
+  //   headerName: "TOTAL VA",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "total perte",
+  //   headerName: "TOTAL PERTE",
+  //   flex: 1,
+  //   minWidth: 130,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "total ro",
+  //   headerName: "TOTAL RO",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "total ra",
+  //   headerName: "TOTAL RA",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "reste o",
+  //   headerName: "REST O",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
+  // {
+  //   field: "reste a",
+  //   headerName: "REST A",
+  //   flex: 1,
+  //   minWidth: 100,
+  //   maxWidth: 200,
+  //   headerAlign: 'left'
+  // },
   // {
   //   field: "update",
   //   headerName: "update".toUpperCase(),
@@ -207,22 +207,26 @@ const Fournisseurs = () => {
 
 
   const [isCol, setIsCol] = useState(true)
+  const [row, setRow] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
 
   const [data, setData] = useState([])
 
   useEffect(() => {
     const fetchAllData = async () => {
-      try {
-        const res = await axios.get('http://localhost:8800/home')
-        setData(res.data.fournisseurs)
-        setIsCol(false)
-      } catch (e) {
-        console.log(e)
-      }
+      const fournisseurs = result.data.fournisseurs
+      setData(fournisseurs)
+      setIsCol(false)
     }
-    fetchAllData()
-  }, [])
+    setInterval(fetchAllData, 2000)
+  }, [2000])
+
+  const handleRow = (table) => {
+    const clickedRow = table.row
+    setRow(clickedRow)
+    setIsOpen(true);
+  }
 
   
 
@@ -271,8 +275,10 @@ const Fournisseurs = () => {
           rows={isCol ? [] : data}
           columns={columns_fournisseurs}
           components={{ Toolbar: GridToolbar,}}
+          onRowClick={handleRow}
         />
       </Box>
+      {isOpen && <UpdateFournisseur isOpen={isOpen} setIsOpen={setIsOpen} row={row}/>}
     </Box>
   );
 };

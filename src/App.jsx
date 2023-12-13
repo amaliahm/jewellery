@@ -1,6 +1,4 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { getAuth } from 'firebase/auth';
-import { app } from './firebase.jsx';
 import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Auth from './pages/authentification/auth';
@@ -14,8 +12,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   const [theme, colorMode] = useMode();
-  const user = getAuth(app)
-  console.log(user.currentUser)
   
   useEffect(() => {
     setTimeout(() => {
@@ -35,7 +31,7 @@ function App() {
               <Route element={<PrivateRoute />}>
                 <Route element={<FirstPage />} path='/home' exact/>
               </Route>
-              <Route path='/' element={<Auth />} />
+              <Route path='/auth' element={<Auth />} />
               
             </Routes>
           </Router>

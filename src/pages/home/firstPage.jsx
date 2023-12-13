@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import { useMode } from "../../theme";
 import SideBarComponent from "./sidebar";
-import { Opacity, Translate } from "@mui/icons-material";
+import AddVente from "../add/AddVente";
+import AddAchat from "../add/AddAchat";
 
 function FirstPage() {
   const [theme, colorMode] = useMode();
-  
   const [showButton, setShowButton] = useState(true);
   const [achat, setAchat] = useState(false);
   const [vente, setVente] = useState(false);
@@ -38,13 +38,25 @@ function FirstPage() {
                 <>
                     <SideBarComponent />
                     <div className="bon">
-                      <button id="b1">achat</button>
-                      <button id="b2">vente</button>
+                      <button 
+                        id="b1"
+                        onClick = {() => {
+                          setAchat(true)
+                        }}
+                      >achat</button>
+                      <button 
+                        id="b2"
+                        onClick= {() => {
+                          setVente(true)
+                        }}
+                      >vente</button>
                       <button id="b3">versement</button>
                       <div className="bon-button">
                         <button id="b-1" onClick={toggleButton}>+</button>
                       </div>
                     </div>
+                    <AddVente isOpen={vente} setIsOpen={setVente}/>
+                    <AddAchat isOpen={achat} setIsOpen={setAchat}/>
                 </>
     )
 }

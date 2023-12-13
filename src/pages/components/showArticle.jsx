@@ -8,27 +8,27 @@ const ShowArticle = ({
     setIsOpen,
     detail
  }) => {
-
+    console.log(detail)
     const mes_articles = [
         {
             nom: 'article',
             valeur: detail.article,
         },
         {
-            nom: 'designation',
-            valeur: detail.designation,
+            nom: "designation d'article",
+            valeur: detail["designation d'article"],
         },
         {
-            nom: 'prix u',
-            valeur: detail['prix u'],
+            nom: 'prix unitaire',
+            valeur: detail['prix unitaire'],
         },
         {
             nom: 'qte stock',
             valeur: detail['qte stock'],
         },
         {
-            nom: 'valeur stock',
-            valeur: detail['valeur stock'],
+            nom: 'valeur de stock',
+            valeur: detail['valeur de stock'],
         },
         {
             nom: 'stock min',

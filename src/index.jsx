@@ -1,10 +1,11 @@
-import { useState } from "react";
 import { achat, add_client, add_fournisseur, articles, bourse, clients, fournisseurs, gestion_utilisateurs, home, suivi_client, suivi_fournissuer, vente, ventes, versement } from "./assets/icons";
 import Elements from "./pages/home/elements";
 import Articles from "./pages/sidebar/Articles";
 import Clients from "./pages/sidebar/Clients";
 import Users from "./pages/sidebar/Users";
 import Fournisseurs from "./pages/sidebar/Fournisseurs";
+import Ventes from "./pages/sidebar/Ventes";
+import Vide from "./pages/sidebar/Vide";
 
 const espace_clients = [
     {
@@ -94,27 +95,27 @@ const links = [
     },
     {
         nom: "les achat",
-        to: Clients
+        to: Vide
     },
     {
         nom: "les ventes",
-        to: Clients
+        to: Ventes
     },
     {
         nom: "bource d'or",
-        to: Clients
+        to: Vide
     },
     {
         nom: "versement",
-        to: Clients
+        to: Vide
     },
     {
         nom: "les ventes2",
-        to: Clients
+        to: Vide
     },
     {
         nom: "les utilisateurs",
-        to: Users 
+        to: Vide 
     },
 ]
 

@@ -3,13 +3,22 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import Header from "./Header";
 import { useState, useEffect } from "react";
-import UpdateClient from "../update/UpdateClient";
+import axios from 'axios'
+import { api } from "../../backend";
 import { result } from "../../backend";
 
-const columns_clients = [
+const columns_ventes = [
+  { 
+      field: "vente n=°", 
+      headerName: "VENTE N=°", 
+      flex: 0.5,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+  },
   {
-    field: "nom",
-    headerName: "NOM",
+    field: "date",
+    headerName: "DATE",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -17,36 +26,60 @@ const columns_clients = [
     headerAlign: 'left'
   },
   {
-    field: "ville",
-    headerName: "VILLE",
+    field: "article",
+    headerName: "ARTICLE",
     flex: 1,
     cellClassName: "name-column--cell",
-    minWidth: 200,
-    maxWidth: 300,
+    minWidth: 80,
+    maxWidth: 150,
     headerAlign: 'left'
   },
   {
-    field: "wilaya",
-    headerName: "WILAYA",
+    field: "designation d'article",
+    headerName: "DESIGNATION D'ARTICLE",
     flex: 1,
     cellClassName: "name-column--cell",
-    minWidth: 200,
-    maxWidth: 300,
+    minWidth: 300,
+    maxWidth: 400,
     headerAlign: 'left'
   },
   {
-    field: "telephone",
-    headerName: "TELEPHONE",
+    field: "qte",
+    headerName: "QTE",
+    flex: 1,
+    minWidth: 80,
+    maxWidth: 150,
+    headerAlign: 'left'
+  },
+  {
+    field: "pu",
+    headerName: "PU",
+    flex: 1,
+    minWidth: 80,
+    maxWidth: 150,
+    headerAlign: 'left'
+  },
+  {
+    field: "total",
+    headerName: "TOTAL",
     flex: 1,
     minWidth: 150,
-    maxWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "client",
+    headerName: "CLIENT",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 300,
     headerAlign: 'left'
   },
 ];
 
 
 
-const Clients = () => {
+const Ventes = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -65,20 +98,19 @@ const Clients = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      const clients = result.data.clients
+      const ventes = result.data.ventes
       setIsCol(false)
-      setData(clients)
+      setData(ventes)
     }
     setInterval(fetchAllData, 2000)
   }, [2000])
   
-
   return (
     <Box m="0px" sx={{
         paddingLeft: "20px"
       }}>
       <Header
-        title="les clients"
+        title="les ventes"
       />
       <Box
         m="-10px"
@@ -116,14 +148,15 @@ const Clients = () => {
         <DataGrid
           // checkboxSelection
           rows={isCol ? [] : data}
-          columns={columns_clients}
-          components={{ Toolbar: GridToolbar,}}
+          columns={columns_ventes}
+          components={{ Toolbar: GridToolbar, }}
           onRowClick={handleRow}
         />
       </Box>
-      {isOpen && <UpdateClient isOpen={isOpen} setIsOpen={setIsOpen} row={row}/>}
     </Box>
   );
 };
 
-export default Clients;
+export default Ventes;
+
+

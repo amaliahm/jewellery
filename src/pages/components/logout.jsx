@@ -35,7 +35,7 @@ const LogOutComponent = ({ out, setOut }) => {
                                 <button onClick={() => {
                                     setOut(false)
                                     auth.signOut()
-                                    navigate('/')
+                                    navigate('/auth')
                                 }}
                                     className="btn-primary">
                                     log out

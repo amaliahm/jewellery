@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiBook } from "react-icons/fi";
-import { clients } from "../../data";
 import axios from "axios";
+import { api } from "../../backend";
 
-const AddClient = ({ isOpen, setIsOpen }) => {
-    const [client, setClient] = useState({
+const AddFournissuer = ({ isOpen, setIsOpen }) => {
+    const [fournisseur, setFournisseur] = useState({
         nom: '',
         ville: '',
         wilaya: '',
@@ -13,24 +13,32 @@ const AddClient = ({ isOpen, setIsOpen }) => {
     })
 
     const handleChange = (e) => {
-        setClient(c => ({...c, [e.target.name] : e.target.value}))
+        setFournisseur(c => ({...c, [e.target.name] : e.target.value}))
     }
     
     const handleClick = async e => {
         e.preventDefault();
-        const between = client.nom != '' && client.ville != '' && client.wilaya != '' && client.telephone != '' && client.telephone.length == 10
+        const between = fournisseur.nom != '' && fournisseur.ville != '' && fournisseur.wilaya != '' && fournisseur.telephone != '' && fournisseur.telephone.length <= 10
         if (between) {
-            const addClient = {
-                table: 'clients',
-                data: client
+            const addFournisseur = {
+                table: 'fournisseurs',
+                data: fournisseur
             }
             try {
-                await axios.post('http://localhost:8800/home', addClient)
+                const result = await axios.post(api, addFournisseur)
+                if(result.status === 200) {
+                    setIsOpen(false)
+                    setFournisseur({
+                        nom: '',
+                        ville: '',
+                        wilaya: '',
+                        telephone: '',
+                    })
+                }
             } catch (e) {
                 console.log(e)
                 return
             }
-            setIsOpen(false)
         }
     }
     return (
@@ -50,13 +58,14 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                         className="modal-box-article">
                         <FiBook className="modal-bg-icon" />
                         <form action="#">
+                        <p>ajouter fournisseur</p>
                         <div className="modal-content">
                             <div className="modal-content__row"  >
                                 <p className="model-content__titre">nom</p>
                                 <div className="input">
                                     <input type='text' name='nom' 
                                       placeholder='nom' 
-                                      value={client.nom} onChange={handleChange} required/>
+                                      value={fournisseur.nom} onChange={handleChange} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
@@ -64,7 +73,7 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='ville' 
                                       placeholder='ville' 
-                                      value={client.ville} onChange={handleChange} required/>
+                                      value={fournisseur.ville} onChange={handleChange} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
@@ -72,7 +81,7 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='wilaya' 
                                       placeholder='wilaya' 
-                                      value={client.wilaya} onChange={handleChange} required/>
+                                      value={fournisseur.wilaya} onChange={handleChange} required/>
                                 </div>
                             </div>
                             <div className="modal-content__row"  >
@@ -80,13 +89,19 @@ const AddClient = ({ isOpen, setIsOpen }) => {
                                 <div className="input">
                                     <input type='text' name='telephone' 
                                       placeholder='06...' 
-                                      value={client.telephone} onChange={handleChange} required/>
+                                      value={fournisseur.telephone} onChange={handleChange} required/>
                                 </div>
                             </div>
 
                             <div className="modal-content__btns">
                             <button type="button" onClick={() => {
                                     setIsOpen(false)
+                                    setFournisseur({
+                                        nom: '',
+                                        ville: '',
+                                        wilaya: '',
+                                        telephone: '',
+                                    })
                                 }}
                                     className="btn-secondary">
                                     annuler
@@ -105,4 +120,4 @@ const AddClient = ({ isOpen, setIsOpen }) => {
     )
 }
 
-export default AddClient
+export default AddFournissuer

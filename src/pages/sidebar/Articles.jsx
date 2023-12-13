@@ -1,14 +1,34 @@
 import Header from "./Header"
-import * as React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Card, Box, CardActions, CardContent, Button, Typography, useTheme } from "@mui/material"
 import { tokens } from "../../theme";
-import { articles } from "../../data";
 import ShowArticle from "../components/showArticle";
+import { result } from "../../backend";
+
 
 
 const Articles = () => {
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [detail, setDetail] = React.useState({})
+  const [isOpen, setIsOpen] = useState(false)
+  const [detail, setDetail] = useState({})
+  const [articles, setArticles] = useState({
+    article: '',
+    "designation d'article" : '',
+    'prix unitaire': '',
+    'qte stock' : '',
+    "valeur de stock": '',
+    "stock min": '',
+    alert: ''
+  })
+  useEffect(() => {
+    const fetchAllData = async () => {
+      const data = result.data.articles
+      // setIsCol(false)
+      setArticles(data)
+    }
+    fetchAllData()
+    // setInterval(fetchAllData, 2000)
+  }, [2000])
+  
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     return (
@@ -29,7 +49,7 @@ const Articles = () => {
                 overflowY: "scroll",
                 padding: '20px'
             }}>
-                {articles.map((e) => (
+                {Object.keys(articles).map((e, index) => (
 
             
                 <Card 
@@ -40,19 +60,20 @@ const Articles = () => {
                     width: "200px",
                 }}
                 className="article-card"
+                key={index}
                 > 
                     <React.Fragment>
                   <CardContent>
                       
                     <Typography sx={{zIndex: 5}} variant="h3" component="div">
-                      {e.article}
+                      {articles[e]['article']}
                     </Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small"
                     onClick={() => {
                       setIsOpen(true)
-                      setDetail(e)
+                      setDetail(articles[e])
                     }}
                    sx={{
                      background: `${colors.primary[400]} !important`,

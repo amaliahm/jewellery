@@ -706,13 +706,17 @@ button.ghost {
 
 .modal-content__row > .model-content__titre,
 .model-content__titre {
+	text-transform: capitalize;
 	margin: 0;
 	padding: 10px 20px;
 	border-radius: 11px;
 	background-color: #1F2A40;
+	height: 100%;
+	display: flex;
+	align-items: center;
 	color: #fff;
 	box-shadow: 8px 0px 9px 0px #00000060;
-	width: 200px;
+	width: 250px;
 	font-size: clamp(1rem, 1vw, 1.2rem);
 }
 
@@ -737,7 +741,8 @@ button.ghost {
 	gap: 10px;
 }
 
-.modal-content__btns > button {
+.modal-content__btns > button,
+.confirme_delete {
 	padding: 0.75rem 2rem;
 	text-transform: capitalize;
 	white-space: nowrap;
@@ -746,9 +751,61 @@ button.ghost {
 	font-weight: bold;
 }
 
+.modal-box-article > form > h2 {
+	padding: 1rem 0.75rem;
+	text-transform: capitalize;
+}
+
 .modal-content__btns .btn-secondary {
 	background-color: transparent;
 	color: var(--blue);
+}
+
+.confirme_delete {
+	background-color: red;
+	color: white;
+	font-size: 14px;
+}
+
+.modal-content__row .input {
+	align-items: center;
+	justify-content: center;
+}
+
+.modal-content__row .input input {
+	height: 40px;
+	width: 120%;
+	background-color: transparent;
+	outline: none;
+	border: none;
+	color: #000;
+	font-size: 16px;
+}
+
+.modal-content__row .input input + .input-border {
+	position: absolute;
+	bottom: 40%;
+	left: 46%;
+	background-color: green;
+	background-color: #1F2A40;
+	height: 2px;
+	width: 0%;
+	transition: 0.4s;
+}
+
+.modal-content__row .input input:focus + .input-border {
+	width: 45%;
+}
+
+
+.modal-u-s {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.modal-box-article-u-s {
+	width: 1100px;
 }
 
 /** articles */
@@ -805,33 +862,10 @@ button.ghost {
 }
 
 
+/* for tryinnnnnnnnnnnnnnnng */
 
-.modal-content__row .input {
-	align-items: center;
-	justify-content: center;
-}
 
-.modal-content__row .input input {
-	height: 40px;
-	width: 120%;
-	background-color: transparent;
-	outline: none;
-	border: none;
-	color: #000;
-	font-size: 16px;
-}
-
-.modal-content__row .input input + .input-border {
-	position: absolute;
-	bottom: 40%;
-	left: 46%;
-	background-color: green;
-	background-color: #1F2A40;
-	height: 2px;
-	width: 0%;
-	transition: 0.4s;
-}
-
-.modal-content__row .input input:focus + .input-border {
-	width: 45%;
-}
+.MuiMenu-root ul{
+	background-color: white;
+	color: #1F2A40;
+  }
