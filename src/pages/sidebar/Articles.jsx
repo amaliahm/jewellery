@@ -2,8 +2,9 @@ import Header from "./Header"
 import React, {useState, useEffect} from 'react'
 import { Card, Box, CardActions, CardContent, Button, Typography, useTheme } from "@mui/material"
 import { tokens } from "../../theme";
-import ShowArticle from "../components/showArticle";
+import UpdateArticle from "../update/UpdateArticle";
 import { result } from "../../backend";
+import AddArticle from "../add/AddArticle";
 
 
 
@@ -19,14 +20,13 @@ const Articles = () => {
     "stock min": '',
     alert: ''
   })
+  const [add, setAdd] = useState(false)
   useEffect(() => {
     const fetchAllData = async () => {
       const data = result.data.articles
-      // setIsCol(false)
       setArticles(data)
     }
-    fetchAllData()
-    // setInterval(fetchAllData, 2000)
+    setInterval(fetchAllData, 2000)
   }, [2000])
   
     const theme = useTheme();
@@ -89,10 +89,28 @@ const Articles = () => {
                 </React.Fragment>
                 </Card>
                 ))}
-                <ShowArticle 
+                <Button size="small"
+                    onClick={() => {
+                      setAdd(true)
+                    }}
+                   sx={{
+                     background: `${colors.primary[800]} !important`,
+                     color: "#fff",
+                      padding: "5px 15px",
+                      fontSize: '20rem'
+                    }}
+                    >
+                      <Typography variant="h6" >
+                      ajouter article
+                    </Typography>
+                    </Button>
+                {isOpen && <UpdateArticle 
                 isOpen={isOpen} 
                 setIsOpen={setIsOpen} 
-                detail={detail}/>
+                detail={detail}/>}
+                {add && <AddArticle 
+                isOpen={add} 
+                setIsOpen={setAdd}/>}
             </Box>
         </Box>
     )

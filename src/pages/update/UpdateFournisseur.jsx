@@ -25,6 +25,7 @@ const UpdateFournisseur = ({ isOpen, setIsOpen, row}) => {
                     if(result.status === 200) {
                         console.log(result)
                         setIsOpen(false)
+                        setIsDelete(false)
                     } else {
                         console.log('errrrrrror')
                     }
@@ -41,6 +42,7 @@ const UpdateFournisseur = ({ isOpen, setIsOpen, row}) => {
             const result = await axios.delete(api, {data: data})
             if(result.status === 200) {
                 setIsOpen(false)
+                setIsDelete(false)
             }
         } catch (error) {
             return
@@ -55,7 +57,10 @@ const UpdateFournisseur = ({ isOpen, setIsOpen, row}) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                        setIsOpen(false)
+                        setIsDelete(false)
+                    }}
                     className="modal">
                     <motion.div
                         initial={{ scale: 0, rotate: "14.5deg" }}

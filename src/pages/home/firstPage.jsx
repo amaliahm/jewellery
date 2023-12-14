@@ -12,7 +12,6 @@ function FirstPage() {
   const [versement, setVersement] = useState(false);
 
   const toggleButton = () => {
-    console.log("hey")
     if (showButton) {
       document.getElementById('b1').style.opacity= 1;
       document.getElementById('b1').style.translate = ('0px' , '0px'),
@@ -55,8 +54,8 @@ function FirstPage() {
                         <button id="b-1" onClick={toggleButton}>+</button>
                       </div>
                     </div>
-                    <AddVente isOpen={vente} setIsOpen={setVente}/>
-                    <AddAchat isOpen={achat} setIsOpen={setAchat}/>
+                    {vente && <AddVente isOpen={vente} setIsOpen={setVente}/>}
+                    {achat && <AddAchat isOpen={achat} setIsOpen={setAchat}/>}
                 </>
     )
 }

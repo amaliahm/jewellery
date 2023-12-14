@@ -12,7 +12,7 @@ import { result } from "../../backend";
 
 
 
-function SimpleListMenu({options}) {
+function SimpleListMenu({options, onSet}) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const open = Boolean(anchorEl);
@@ -23,6 +23,7 @@ function SimpleListMenu({options}) {
     const handleMenuItemClick = (event, index) => {
       setSelectedIndex(index);
       setAnchorEl(null);
+      onSet(options[index])
     };
   
     const handleClose = () => {
@@ -63,7 +64,8 @@ function SimpleListMenu({options}) {
         >
           {options.map((option, index) => (
             <MenuItem
-              key={option}
+              key={index}
+              value={option}
               disabled={index === 0}
               selected={index === selectedIndex}
               onClick={(event) => handleMenuItemClick(event, index)}
@@ -78,64 +80,80 @@ function SimpleListMenu({options}) {
 
   const AddVente = ({ isOpen, setIsOpen }) => {
       const [clients,setClients] = useState([])
-      const [artcile, setArticle] = useState([])
-      
+      const [article, setArticle] = useState([])
+      function setOptions (name, object, setValeur) {
+        let x = [name,]
+        Object.keys(object).map((e, i) => {
+          x = [...x, object[e].nom]
+        })
+        setValeur(x)
+      }
       useEffect(() => {
           const fetchAllData = async () => {
-              const clients = result.data.clients
-              let options = ['Clients',]
-              Object.keys(clients).map((e, i) => {
-                options = [...options, clients[e].nom]
-              })
-              setClients(options)
+            let x = ['Clients',]
+            let c = result.data.clients
+            Object.keys(c).map((e, i) => {
+              x = [...x, c[e].nom]
+            })
+            setClients(x)
+            x = ['Articles',]
+            c = result.data.articles
+            Object.keys(c).map((e, i) => {
+              x = [...x, c[e]["designation d'article"]]
+            })
+            setArticle(x)
         }
         fetchAllData()
       }, [2000])
 
     const currentDate = new Date();
+    const jour = String(currentDate.getDate()).padStart(2, '0')
+    const mois = String(currentDate.getMonth() + 1).padStart(2, '0')
+    const annee = String(currentDate.getFullYear())
     const [vente, setVente] = useState({
-        jour: String(currentDate.getDate()).padStart(2, '0'),
-        mois: String(currentDate.getMonth() + 1).padStart(2, '0'),
-        annee: String(currentDate.getFullYear()),
+        jour: jour,
+        mois: mois,
+        annee: annee,
         client: '',
-        article: '',
         "designation d'article": '',
-        qte: 0,
+        qte: 1,
         pu: 0,
     })
-    let total = vente.qte * vente.pu;
-
-    const handleChange = (e) => {
-        setVente(c => ({...c, [e.target.name] : e.target.value}))
-        total = vente.qte * vente.pu;
+    let total = 0;
+    const handleSetClient = (valeur) => {
+      setVente(c => ({...c, client: valeur}))
     }
-    
+    const handleSetArticle = (valeur) => {
+      setVente(c => ({...c, "designation d'article" : valeur}))
+    }
     const handleClick = async e => {
-        console.log(vente)
-        // e.preventDefault();
-        // const between = vente.nom != '' && vente.ville != '' && vente.wilaya != '' && vente.telephone != '' && vente.telephone.length <= 10
-        // if (between) {
-        //     const addVente = {
-        //         table: 'ventes',
-        //         data: vente
-        //     }
-        //     try {
-        //         const result = await axios.post(api, addVente)
-        //         if(result.status === 200) {
-        //             setIsOpen(false)
-        //             setVente({
-        //                 article: '',
-        //                 "designation d'article": '',
-        //                 qte: 0,
-        //                 pu: 0,
-        //                 client: ''
-        //             })
-        //         }
-        //     } catch (e) {
-        //         console.log(e)
-        //         return
-        //     }
-        // }
+        e.preventDefault();
+        const between = vente.client != '' && vente['designation d\'article'] != '' && vente['prix unitaire'] != 0 
+        if (between) {
+          console.log('doooo')
+            const addVente = {
+                table: 'ventes',
+                data: vente
+            }
+            try {
+                const result = await axios.post(api, addVente)
+                if(result.status === 200) {
+                    setIsOpen(false)
+                    setVente({
+                      jour: jour,
+                      mois: mois,
+                      annee: annee,
+                      client: '',
+                      "designation d'article": '',
+                      qte: 1,
+                      pu: 0,
+                    })
+                }
+            } catch (e) {
+                console.log(e)
+                return
+            }
+        }
     }
     return (
         <AnimatePresence>
@@ -156,55 +174,48 @@ function SimpleListMenu({options}) {
                         <form action="#">
                         <h2>ajouter vente</h2>
                         <div className="modal-content modal-u-s">
-                            {Object.keys(vente).slice(2).map((value, index) => (
-                                <div className="modal-content__row" key={index} >
-                                    {(index < 1 )
-                                    ? <>
-                                        <h1 className="model-content__titre"> la date </h1>
+                        <div className="modal-content__row" >
+                          <h1 className="model-content__titre"> la date </h1>
+                          <div className="input">
+                               <input type='text'  
+                                  name='Date'
+                                  value={`${annee}-${mois}-${jour}`} onChange={() => {}}/>
+                          </div>
+                        </div>
+                        <div className="modal-content__row" >
+                          <h1 className="model-content__titre"> clients </h1>
+                          <div className="input">
+                            <SimpleListMenu options={clients} onSet={handleSetClient}/>
+                          </div>
+                        </div>
+                        <div className="modal-content__row" >
+                          <h1 className="model-content__titre"> designation d'article </h1>
+                          <div className="input">
+                            <SimpleListMenu options={article} onSet={handleSetArticle}/>
+                          </div>
+                        </div>
+                                <div className="modal-content__row">
+                                        <h1 className="model-content__titre"> prix unitaire </h1>
                                         <div className="input">
                                              <input type='text'  
-                                                name='Date'
-                                                value={`${vente.annee}-${vente.mois}-${vente.jour}`} onChange={() => {}}/>
+                                                placeholder='0'
+                                                name='prix unitaire'
+                                                value={vente['prix unitaire']} onChange={(e) => {
+                                                  setVente(c => ({...c, 'prix unitaire' : e.target.value}))
+                                                }}/>
                                         </div>
-                                    </>
-                                    : (index <= 3) 
-                                    ? <>
-                                        <h1 className="model-content__titre"> {value}</h1>
-                                        <div className="input">
-                                             <SimpleListMenu options={clients} />
-                                        </div>
-                                    </> 
-                                    : <>
-                                        <h1 className="model-content__titre"> {value}</h1>
-                                        <div className="input">
-                                             <input type='text'  
-                                                placeholder={value}
-                                                name={value}
-                                                value={vente.value} onChange={handleChange}/>
-                                        </div>
-                                    </>}
                                 </div>
-                            ))}
-                            <div className="modal-content__row" >
-                                <h1 className="model-content__titre"> la date </h1>
-                                <div className="input">
-                                     <input type='text'  
-                                        name='Date'
-                                        value={total} onChange={() => {}}/>
-                                </div>
-                            </div>
 
                             <div className="modal-content__btns">
                             <button type="button" onClick={() => {
                                     setIsOpen(false)
                                     setVente({
-                                        jour: String(currentDate.getDate()).padStart(2, '0'),
-                                        mois: String(currentDate.getMonth() + 1).padStart(2, '0'),
-                                        annee: String(currentDate.getFullYear()),
+                                        jour: jour,
+                                        mois: mois,
+                                        annee: annee,
                                         client: '',
-                                        article: '',
                                         "designation d'article": '',
-                                        qte: 0,
+                                        qte: 1,
                                         pu: 0,
                                     })
                                 }}
