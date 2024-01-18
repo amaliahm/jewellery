@@ -2,11 +2,19 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Auth from './pages/authentification/auth';
-import LoadingComponent from './pages/components/loader.jsx';
-import FirstPage from './pages/home/firstPage.jsx';
+import PrivateRoute from './pages/home/PrivateRoute.jsx';
+import add_routes from './pages/home/add_routes.jsx';
+import Home from './pages/home/home.jsx';
+import './pages/home/index.css';
+import LoadingComponent from './pages/home/loader.jsx';
+import routes from './pages/home/route.jsx';
 import { ColorModeContext, useMode } from './theme.js';
-import PrivateRoute from './pages/components/PrivateRoute.jsx';
-
+import Produits from './pages/articles/produits.jsx';
+import DisplayArticle from './pages/articles/DisplayArticle.jsx';
+import Lock from './pages/home/Lock.jsx';
+import update_routes from './pages/home/update_route.jsx';
+import AchatImportation from './pages/achat_importation/AchatImportation.jsx';
+import VersementImportation from './pages/versement_importation/VersementImportation.jsx';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -29,10 +37,52 @@ function App() {
           <Router>
             <Routes>
               <Route element={<PrivateRoute />}>
-                <Route element={<FirstPage />} path='/home' exact/>
+              <Route key='home' element={<Home />} path='/home' exact/>
+              <Route key='lock' element={<Lock />} path='/lock' exact/>
+              <Route key='/produits/*'  path='/produits/*' exact/>
+              <Route key='/clients/*'  path='/clients/*' exact/>
+              <Route key='/fournisseurs/*'  path='/fournisseurs/*' exact/>
+              <Route key='/versements/*'  path='/versements/*' exact/>
+              <Route key='/ventes/*'  path='/ventes/*' exact/>
+              <Route key='/achats/*'  path='/achats/*' exact/>
+              <Route key='/importations/*'  path='/importations/*' exact/>
+              <Route key='produits-nom'
+                path='/produits/:nom'
+                action={({ params }) => {}}
+                element={<Produits />}
+                exact/>
+                <Route key='/importations/achat'
+                path='/importations/achat_importation'
+                action={({ params }) => {}}
+                element={<AchatImportation />}
+                exact/>
+                <Route key='/importations/versement'
+                path='/importations/versement_importation'
+                action={({ params }) => {}}
+                element={<VersementImportation />}
+                exact/>
+                <Route key='produits-nom-article'
+                  path='/produits/:nom/:article'
+                  action={({ params }) => {}}
+                  element={<DisplayArticle />}
+                  exact/>
+                {update_routes.map((e, i) => (
+                  <Route key={i}
+                  path={e.to}
+                  action={({ params }) => {}}
+                  element={e.component}
+                  exact/>
+                ))}
+              {add_routes.map((e, i) => (
+                  <Route key={i} element={e.component} path={e.to} exact/>
+                ))}
+                {routes.map((e) => (
+                  <>
+                    {e.name != 'home' && <Route key={e.key} element={e.component} path={e.to} exact/>}
+                  </>
+                ))}
               </Route>
-              <Route path='/auth' element={<Auth />} />
-              
+              <Route path='/' element={<Auth />} />
             </Routes>
           </Router>
         </div>

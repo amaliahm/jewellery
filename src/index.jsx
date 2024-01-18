@@ -1,10 +1,12 @@
 import { achat, add_client, add_fournisseur, articles, bourse, clients, fournisseurs, gestion_utilisateurs, home, suivi_client, suivi_fournissuer, vente, ventes, versement } from "./assets/icons";
-import Elements from "./pages/home/elements";
+import Clients from "./pages/clients/Clients";
+import Elements from "./pages/home__/elements";
+import Achat from "./pages/sidebar/Achat";
 import Articles from "./pages/sidebar/Articles";
-import Clients from "./pages/sidebar/Clients";
-import Users from "./pages/sidebar/Users";
 import Fournisseurs from "./pages/sidebar/Fournisseurs";
 import Ventes from "./pages/sidebar/Ventes";
+import VersementC from "./pages/sidebar/VersementC";
+import VersementF from "./pages/sidebar/VersementF";
 import Vide from "./pages/sidebar/Vide";
 
 const espace_clients = [
@@ -63,7 +65,11 @@ const sidebar = [
         icon: bourse,
     },
     {
-        nom: "versement",
+        nom: "versement fr",
+        icon: versement,
+    },
+    {
+        nom: "versement clients",
         icon: versement,
     },
     {
@@ -95,7 +101,7 @@ const links = [
     },
     {
         nom: "les achat",
-        to: Vide
+        to: Achat
     },
     {
         nom: "les ventes",
@@ -106,8 +112,12 @@ const links = [
         to: Vide
     },
     {
-        nom: "versement",
-        to: Vide
+        nom: "versement fournisseurs",
+        to: VersementF
+    },
+    {
+        nom: "versement clients",
+        to: VersementC
     },
     {
         nom: "les ventes2",
@@ -119,4 +129,5 @@ const links = [
     },
 ]
 
-export { espace_clients, espace_fournisseurs, links, sidebar};
+export { espace_clients, espace_fournisseurs, links, sidebar };
+

@@ -1,0 +1,123 @@
+@import url('https://cdn.syncfusion.com/ej2/material.css');
+
+.where-me {
+    display: flex;
+    align-items: start;
+    justify-content: end;
+    position: absolute;
+    height: 40px;
+    width: 96%;
+}
+
+.where-me .nav-items {
+    overflow: hidden;
+    border: 1px solid var(--brand-1);
+    background-color: var(--bg-color-2);
+    width: 40px;
+    border-radius: 20px;
+    padding: 4px;
+    min-height: 40px;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+    transition: 0.5s;
+}
+
+
+.where-me .nav-items .humberger {
+    background-color: transparent;
+    color: white;
+    padding: 5px 0;
+    border-radius: 50%;
+    min-width: 30px;
+    min-height: 30px;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.where-me > i {
+    color: var(--brand-1);
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+.where-me > h2 {
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--bg-color-2);
+    margin-right: auto;
+}
+
+.where-me .nav-items > i::after {
+  content: attr(data-name);
+  text-wrap: nowrap;
+  font-size: 12px;
+  background-color: var(--brand-1);
+  position: absolute;
+  color: var(--bg-color-2);
+  height: fit-content;
+  width: fit-content;
+  padding: 4px 5px;
+  border-radius: 4px;
+  z-index: 50;
+  left: 20%;
+  letter-spacing: 2px;
+  display: none;
+}
+
+.where-me .nav-items > i:hover::after {
+  display: block;
+}
+
+.add,
+.text-field-done {
+  background-color: var(--bg-color-2);
+  margin-top: 80px;
+  height: fit-content;
+  width: 95vw;
+  padding: 10px;
+  color: white;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.add {
+  min-height: 85vh;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-around;
+}
+
+.text-field-done {
+  min-height: 50vh;
+  flex-direction: column;
+  align-content: start;
+  justify-content: space-evenly;
+  align-items: start;
+}
+
+.show-fournisseur {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-evenly;
+}
+
+.text-field-done .select-article {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}

@@ -1,10 +1,8 @@
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import React, { useEffect, useState, useRef } from "react";
-import { email, password, user } from "../../assets/icons";
-import AlertMessage from "../components/alertMessage";
-import LoadingComponent from "../components/loader";
-import { auth } from "../../firebase";
-import { getAdmins } from '../../firebase';
+import React, { useEffect, useRef, useState } from "react";
+import { auth, getAdmins } from "../../firebase";
+import AlertMessage from "../home/alertMessage";
+import LoadingComponent from "../home/loader";
 
 const SignupComponent = () => {
     const emailRef = useRef()
@@ -69,17 +67,17 @@ const SignupComponent = () => {
             <form action="#" className='form-registration'>
                 <h1 className='m-0'>Create Account</h1>
                 <div className="input">
-                    <img src={user} alt='user' />
+                    <i className="fa-solid fa-user fa-xl"></i>
                     <input type='text' name='' placeholder='user' ref={usernameRef} required/>
                     <span className='input-border'></span>
                 </div>
                 <div className="input">
-                    <img src={email} alt='email' />
+                    <i className="fa-regular fa-at fa-xl"></i>
                     <input type='email' name='' placeholder='email' ref={emailRef} required />
                     <span className='input-border'></span>
                 </div>
                 <div className="input">
-                    <img src={password} alt='password' />
+                    <i className="fa-solid fa-lock fa-xl"></i>
                     <input type='password' name='' placeholder='password' ref={passwordRef} required />
                     <span className='input-border'></span>
                 </div>

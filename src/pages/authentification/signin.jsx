@@ -1,11 +1,10 @@
-import React, {useState, useRef} from "react";
-import { email, password } from "../../assets/icons";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import LoadingComponent from "../components/loader";
-import AlertMessage from "../components/alertMessage";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ResetPassword from "../components/ResetPassword";
 import { auth } from "../../firebase";
+import ResetPassword from "../home/ResetPassword";
+import AlertMessage from "../home/alertMessage";
+import LoadingComponent from "../home/loader";
 
 const SigninComponent = () => {
   const emailRef = useRef()
@@ -44,12 +43,12 @@ const SigninComponent = () => {
       <form action='#' className='form-registration'>
         <h1 className='m-0'>Sign in</h1>
         <div className="input">
-          <img src={email} alt='email'/>
+          <i className="fa-regular fa-at fa-xl"></i>
           <input type='email' name='' placeholder='email' ref={emailRef} required/>
           <span className='input-border'></span>
         </div>
         <div className="input">
-          <img src={password} alt='password'/>
+          <i className="fa-solid fa-lock fa-xl"></i>
           <input type='password' name='' placeholder='password' ref={passwordRef} required/>
           <span className='input-border'></span>
         </div>
