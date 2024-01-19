@@ -3,6 +3,8 @@ import AddAchat from "../achats/AddAchat"
 import AddFournissuer from "../fournisseurs/AddFournisseur"
 import AddVente from "../ventes/AddVente"
 import AddVersement from "../versements/AddVersement"
+import AddAchatImportation from "../achat_importation/AddAchatImportation"
+import AddVersementImportation from "../versement_importation/AddVersementImportation"
 
 const add_routes = [
     {
@@ -24,6 +26,14 @@ const add_routes = [
     {
         to: '/versements/add-versement',
         component: <AddVersement />
+    },
+    {
+        to: '/importations/achat_importation/add',
+        component: <AddAchatImportation />
+    },
+    {
+        to: '/importations/versement_importation/add',
+        component: <AddVersementImportation />
     },
 ]
 

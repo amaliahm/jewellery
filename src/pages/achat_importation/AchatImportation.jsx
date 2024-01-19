@@ -12,18 +12,18 @@ import { useLocation } from "react-router-dom";
 
 const AchatImportation = () => {
 
-  const columns_achats = [
+  const columns_achat_importation = [
     { 
-        field: "achat n=°", 
-        headerName: "ACHAT N=°", 
+        field: "date", 
+        headerName: "DATE", 
         flex: 0.5,
         minWidth: 200,
         maxWidth: 300,
         headerAlign: 'left'
     },
     {
-      field: "date",
-      headerName: "DATE",
+      field: "poid 18k",
+      headerName: "POID 18K",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 200,
@@ -31,8 +31,8 @@ const AchatImportation = () => {
       headerAlign: 'left'
     },
     {
-      field: "famille",
-      headerName: "FAMILLE",
+      field: "poid 24k",
+      headerName: "POID 24K",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 250,
@@ -40,8 +40,8 @@ const AchatImportation = () => {
       headerAlign: 'left'
     },
     {
-      field: "designation d'article",
-      headerName: "ARTICLE",
+      field: "prix unitaire",
+      headerName: "PRIX UNITAIRE",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 250,
@@ -49,8 +49,8 @@ const AchatImportation = () => {
       headerAlign: 'left'
     },
     {
-      field: "fournisseur",
-      headerName: "FOURNISSEUR",
+      field: "total",
+      headerName: "TOTAL",
       flex: 1,
       minWidth: 200,
       maxWidth: 300,
@@ -85,14 +85,18 @@ const AchatImportation = () => {
   const gridRef = useRef();
   const navigate = useNavigate()
   const location = useLocation()
-
-
   const [data, setData] = useState([])
 
   useEffect(() => {
     const fetchAllData = async () => {
-      const data = result.data.achats
-      setData(data)
+      const data = result.data.achat_importation
+      let inter = []
+      Object.keys(data).map((e, i) => {
+        if (data[e].importateur == location.state) {
+          inter.push(data[e])
+        }
+      })
+      setData(inter)
     }
     fetchAllData()
   }, [2000])
@@ -104,13 +108,12 @@ const AchatImportation = () => {
   }))
 
   const cellClickListner = (params) => {
-    navigate(`/achats/${params.data.id}`, {state: params.data})
+    navigate(`/importations/achat_importation/${params.data.id}`, {state: params.data})
   }
 
   const onBtExport = useCallback(() => {
     gridRef.current.api.exportDataAsExcel();
   }, []);
-  console.log(location.state)
 
   return (
     <>
@@ -129,8 +132,8 @@ const AchatImportation = () => {
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              onClick={() => { navigate('/achats/add-achat') }}
-              >ajouter achat</Button>
+              onClick={() => { navigate('/importations/achat_importation/add', {state: location.state}) }}
+              >ajouter</Button>
               <Button sx={{
                 color: 'var(--brand-1)',
                 border: '1px solid var(--brand-1)',
@@ -142,7 +145,7 @@ const AchatImportation = () => {
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
-              columnDefs={columns_achats}
+              columnDefs={columns_achat_importation}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}

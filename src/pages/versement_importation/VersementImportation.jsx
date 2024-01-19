@@ -12,18 +12,18 @@ import { useLocation } from "react-router-dom";
 
 const VersementImportation = () => {
 
-  const columns_achats = [
+  const columns_versement_importation = [
     { 
-        field: "achat n=°", 
-        headerName: "ACHAT N=°", 
+        field: "date", 
+        headerName: "DATE", 
         flex: 0.5,
         minWidth: 200,
         maxWidth: 300,
         headerAlign: 'left'
     },
     {
-      field: "date",
-      headerName: "DATE",
+      field: "poid 18k",
+      headerName: "POID",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 200,
@@ -31,8 +31,8 @@ const VersementImportation = () => {
       headerAlign: 'left'
     },
     {
-      field: "famille",
-      headerName: "FAMILLE",
+      field: "titre",
+      headerName: "TITRE",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 250,
@@ -40,20 +40,12 @@ const VersementImportation = () => {
       headerAlign: 'left'
     },
     {
-      field: "designation d'article",
-      headerName: "ARTICLE",
+      field: "versement",
+      headerName: "VERSEMENT",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 250,
       maxWidth: 350,
-      headerAlign: 'left'
-    },
-    {
-      field: "fournisseur",
-      headerName: "FOURNISSEUR",
-      flex: 1,
-      minWidth: 200,
-      maxWidth: 300,
       headerAlign: 'left'
     },
     {
@@ -85,14 +77,18 @@ const VersementImportation = () => {
   const gridRef = useRef();
   const navigate = useNavigate()
   const location = useLocation()
-
-
   const [data, setData] = useState([])
 
   useEffect(() => {
     const fetchAllData = async () => {
-      const data = result.data.achats
-      setData(data)
+      const data = result.data.versement_importation
+      let inter = []
+      Object.keys(data).map((e, i) => {
+        if (data[e].importateur == location.state) {
+          inter.push(data[e])
+        }
+      })
+      setData(inter)
     }
     fetchAllData()
   }, [2000])
@@ -104,7 +100,7 @@ const VersementImportation = () => {
   }))
 
   const cellClickListner = (params) => {
-    navigate(`/achats/${params.data.id}`, {state: params.data})
+    navigate(`/importations/versement_importation/${params.data.id}`, {state: params.data})
   }
 
   const onBtExport = useCallback(() => {
@@ -128,8 +124,8 @@ const VersementImportation = () => {
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              onClick={() => { navigate('/achats/add-achat') }}
-              >ajouter achat</Button>
+              onClick={() => { navigate('/importations/versement_importation/add', {state: location.state}) }}
+              >ajouter</Button>
               <Button sx={{
                 color: 'var(--brand-1)',
                 border: '1px solid var(--brand-1)',
@@ -141,7 +137,7 @@ const VersementImportation = () => {
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
-              columnDefs={columns_achats}
+              columnDefs={columns_versement_importation}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}

@@ -80,7 +80,7 @@ const AddVersement = () => {
             setDone(true)
             setTimeout(() => {
                 setDone(false)
-                // navigate('/versements')
+                navigate('/versements')
             }, 2000)
             const result = await axios.post(api_add_versement, versement)
             if(result.status === 200) {

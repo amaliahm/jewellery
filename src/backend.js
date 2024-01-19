@@ -15,6 +15,8 @@ const api_add_achat = api + 'achats/add-achat'
 const api_add_vente = api + 'ventes/add-vente'
 const api_add_fournisseur = api + 'fournisseurs/add-fournisseur'
 const api_add_versement = api + 'versements/add-versement'
+const api_add_achat_importation = api + 'importations/achat_importation/add'
+const api_add_versement_importation = api + 'importations/versement_importation/add'
 
 
 
@@ -35,5 +37,7 @@ export {
     api_add_vente,
     api_add_fournisseur,
     api_add_versement,
+    api_add_achat_importation,
+    api_add_versement_importation,
     result,
 }

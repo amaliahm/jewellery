@@ -169,7 +169,7 @@ const Versement = () => {
         <div 
         className="ag-theme-quartz-dark"
         style={{
-            marginTop: "50px",
+            marginTop: "90px",
             height: '75vh',
             width: '95vw',
             marginBottom: '100px'

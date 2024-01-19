@@ -4,6 +4,8 @@ import UpdateAchat from "../achats/UpdateAchat"
 import UpdateVente from "../ventes/UpdateVente"
 import UpdateVersement from "../versements/UpdateVersement"
 import UpdateImportation from "../importation/UpdateImportation"
+import UpdateAchatImportation from "../achat_importation/UpdateAchatImportation"
+import UpdateVersementImportation from "../versement_importation/UpdateVersementImportation"
 
 const update_routes = [
     {
@@ -29,6 +31,14 @@ const update_routes = [
     {
         to: '/importations/:id',
         component: <UpdateImportation />
+    },
+    {
+        to: '/importations/achat_importation/:id',
+        component: <UpdateAchatImportation />
+    },
+    {
+        to: '/importations/versement_importation/:id',
+        component: <UpdateVersementImportation />
     },
 ]
 
