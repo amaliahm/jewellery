@@ -30,7 +30,6 @@ const TableData = ({nom}) => {
   const [achat, setAchat] = useState([])
   const [vente, setVente] = useState([])
   const [click, setClick] = useState(0)
-  console.log(nom)
 
   const getAchat = () => {
     const data = result.data.achats

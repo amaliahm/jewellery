@@ -26,7 +26,24 @@ const UpdateClient = () => {
     const location = useLocation()
     const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
-    const [data, setData] = useState(location.state)
+    const [data, setData] = useState({
+      id: location.state.id,
+      nom: location.state.nom,
+      wilaya: location.state.wilaya,
+      ville: location.state.ville,
+      telephone: location.state.telephone,
+      email: location.state.email,
+      titre: location.state.titre,
+      'chiffre d\'affaire': location.state['chiffre d\'affaire'],
+      'total or': location.state['total or'],
+      'total versement or': location.state['total vo'],
+      'total versement argent': location.state['total va'],
+      'total perte': location.state['total perte'],
+      'total retour or': location.state['total ro'],
+      'total retour argent': location.state['total ra'],
+      'reste or': location.state['reste o'],
+      'reste argent': location.state['reste a'],
+    })
 
     return (
         <>

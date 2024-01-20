@@ -17,6 +17,14 @@ const columns_ventes = [
       headerAlign: 'left'
     },
     {
+      field: "client",
+      headerName: "CLIENT",
+      flex: 1,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
       field: "designation d'article",
       headerName: "ARTICLE",
       flex: 1,
@@ -35,7 +43,7 @@ const columns_ventes = [
     },
     {
       field: "pu",
-      headerName: "PU",
+      headerName: "PRIX UNITAIRE",
       flex: 1,
       minWidth: 150,
       maxWidth: 250,
@@ -49,17 +57,17 @@ const columns_ventes = [
       maxWidth: 250,
       headerAlign: 'left'
     },
+  ];
+
+  const columns_add_vente = [
     {
       field: "client",
-      headerName: "CLIENT",
+      headerName: "client",
       flex: 1,
       minWidth: 200,
       maxWidth: 300,
       headerAlign: 'left'
     },
-  ];
-
-  const columns_add_vente = [
     {
       field: "famille",
       headerName: "FAMILLE",
@@ -100,14 +108,6 @@ const columns_ventes = [
       flex: 1,
       minWidth: 150,
       maxWidth: 250,
-      headerAlign: 'left'
-    },
-    {
-      field: "client",
-      headerName: "client",
-      flex: 1,
-      minWidth: 200,
-      maxWidth: 300,
       headerAlign: 'left'
     },
   ];

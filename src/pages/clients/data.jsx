@@ -60,7 +60,7 @@ const columns_clients = [
   },
   {
     field: "total or",
-    headerName: "TOTAL",
+    headerName: "TOTAL OR",
     flex: 1,
     minWidth: 100,
     maxWidth: 200,
@@ -108,7 +108,7 @@ const columns_clients = [
   },
   {
     field: "reste o",
-    headerName: "REST OR",
+    headerName: "RESTE OR",
     flex: 1,
     minWidth: 130,
     maxWidth: 200,
@@ -116,7 +116,7 @@ const columns_clients = [
   },
   {
     field: "reste a",
-    headerName: "REST ARGENT",
+    headerName: "RESTE ARGENT",
     flex: 1,
     minWidth: 150,
     maxWidth: 200,

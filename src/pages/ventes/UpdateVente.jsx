@@ -25,13 +25,23 @@ const UpdateVente = () => {
     const location = useLocation()
     const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
-    const [data, setData] = useState(location.state)
+    const [data, setData] = useState({
+      'vente n=°': location.state["vente n=°"],
+      id: location.state.id,
+      date: location.state.date,
+      client: location.state.client,
+      famille: location.state.famille,
+      article: location.state["designation d'article"],
+      quantite: location.state.qte,
+      "prix unitaire": location.state.pu,
+      total: location.state.total,
+    })
 
     return (
         <>
           <NavigationBar name={data['vente n=°']}/>
           <div className="add">
-            {Object.keys(data).slice(1).map(value => (
+            {Object.keys(data).slice(2).map(value => (
                    <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"

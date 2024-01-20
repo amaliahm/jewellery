@@ -15,13 +15,13 @@ const useStyles = makeStyles({
   },
 });
 
-const Famille = ({nom ,famille}) => {
+const Famille = ({nom ,famille, id}) => {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const navigate= useNavigate()
 
   function handleClick () {
-    navigate(`/produits/${nom}`, { state : { nom: nom, articles: famille } })
+    navigate(`/produits/${id}`, { state : { nom: nom, id: id, articles: famille } })
   }
 
 

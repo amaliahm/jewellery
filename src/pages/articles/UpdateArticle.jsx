@@ -1,134 +1,95 @@
-import { AnimatePresence, motion } from "framer-motion";
-import React, {useState} from "react";
-import { FiActivity } from "react-icons/fi";
-import axios from "axios";
-import { api } from "../../backend";
+import * as React from 'react';
+import { useState } from "react";
+import NavigationBar from "../home/NavigationBar"
+import { useLocation } from "react-router-dom"
+import { TextField } from "@mui/material"
+import { makeStyles } from "@mui/styles";
+import TableData from './restData';
+import ModalUpdate from './ModelUpdateArticle';
+import ModalDelete from './ModelDeleteArticle';
 
-
-const UpdateArticle = ({ isOpen, setIsOpen, detail }) => {
-    const [article, setArticle] = useState(detail)
-
-    const [isDelete, setIsDelete] = useState(false)
-
-    const handleChange = (e) => {
-        setArticle(c => ({...c, [e.target.name] : e.target.value}))
-    }
-
-    const update = async (first, second) => {
-        let between = (first.article != '' && first["designation d'article"] != '' && first['prix unitaire'] != '' && first["stock min"] != '')
-        if (between) {
-            between = (first.article == second.article && first["designation d'article"] == second["designation d'article"] && first['prix unitaire'] == second['prix unitaire'] && first["stock min"] == second["stock min"])
-            if(!between) {
-                const data = { table: 'articles', data: first }
-                try {
-                    console.log(data)
-                    const result = await axios.put(api, data)
-                    console.log(result)
-                    if(result.status === 200) {
-                        setIsOpen(false)
-                        setIsDelete(false)
-                    }
-                } catch (error) {
-                    console.log(error)
-                    return
-                }
-            }
+const useStyle = makeStyles({
+    root: {
+        "& label.Mui-focused": {
+          color: "white"
+        },
+        "& .MuiOutlinedInput-root": {
+          "&.Mui-focused fieldset": {
+            borderColor: "#12f7d6",
+          }
         }
-    }
-    const deleteFunction = async () => {
-        const data = {table: 'articles', data: detail}
-        console.log(data)
-        try {
-            const result = await axios.delete(api, {data: data})
-            console.log(result)
-            if(result.status === 200) {
-                setIsOpen(false)
-                setIsDelete(false)
-            }
-        } catch (error) {
-            console.log(error)
-            return
-        }
-        console.log(data)
-    }
+      }
+})
+
+const UpdateArticle = () => {
+    const colors = useStyle()
+    const location = useLocation()
+    const [modal, setModal] = useState(false);
+    const [m_delete, setM_Delete] = useState(false)
+    const [data, setData] = useState({
+      id: location.state.detail.id,
+      famille: location.state.detail.famille,
+      fournisseur: location.state.detail.fournisseur,
+      "designation d'article": location.state.detail.article,
+      article: location.state.detail["designation d'article"],
+      "prix unitaire": location.state.detail["prix unitaire"],
+      "quantite de stock": location.state.detail["qte stock"],
+      "valeur de stock": location.state.detail["valeur de stock"],
+      "stock min": location.state.detail["stock min"],
+      alert: location.state.detail.alert
+    })
+
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => {
-                        setIsOpen(false)
-                        setIsDelete(false)
-                    }}
-                    className="modal">
-                    <motion.div
-                        initial={{ scale: 0, rotate: "14.5deg" }}
-                        animate={{ scale: 1, rotate: "0deg" }}
-                        exit={{ scale: 0, rotate: "0deg" }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="modal-box-article modal-box-article-u-s">
-                        <FiActivity className="modal-bg-icon" />
-                        <form action="#">
-                        <h2>Article</h2>
-                            <div className="modal-content modal-u-s">
-                                {Object.keys(article).slice(1).map((value, index) => (
-                                    // <div className="modal-content__row" key={index} >
-                                    //    <p className="model-content__titre">{article}</p>
-                                    //    <p className="model-content__description">{detail[article]}</p>
-                                    // </div>
-                                     <div className="modal-content__row" key={index}>
-                                     <p className="model-content__titre"> {value} </p>
-                                     <div className="input">
-                                         {(index <= 2 || index == 5 ) ?
-                                         <input type='text' 
-                                           name={value}
-                                           value={article[value]} onChange={handleChange}/>
-                                         : <input type='text' 
-                                           name={value}
-                                           value={article[value]} onChange={() => {}}/>}
-                                     </div>
-                                 </div>
-                                ))}
-                                { isDelete
-                                ? <div className="modal-content__btns">
-                                   
-                                     <button type="button" onClick={() => deleteFunction()}
-                                         style={{
-                                            color: 'white',
-                                             borderColor: 'red',
-                                             backgroundColor: 'red'
-                                         }}
-                                         >
-                                         supprimer cette article!!
-                                     </button>
-                                 </div>
-                                : <div className="modal-content__btns">
-                                   
-                                   <button type="button" onClick={() => {setIsDelete(true)}}
-                                       style={{
-                                           color: 'white',
-                                           borderColor: 'red',
-                                           backgroundColor: 'red'
-                                       }}
-                                       >
-                                       supprimer
-                                   </button>
-                                   <button type="button" onClick={() => {
-                                        update({id: detail.id , ...article}, detail)
-                                    }}
-                                       className="btn-primary">
-                                       modifier
-                                   </button>
-                                </div>}
-                            </div>
-                        </form>
-                    </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
-    );
+        <>
+          <NavigationBar name={location.state.nom}/>
+          <div className="add">
+            {Object.keys(data).slice(1).map(value => (
+                   <TextField 
+                   id={"outlined-controlled"}
+                   label={value} variant="outlined"
+                   sx={{
+                     borderColor: "transparent",
+                     margin: '10px'
+                   }}
+                   name={value}
+                   className={colors.root}
+                   onChange={() => {}}
+                   value={data[value]}
+                   disabled
+                   />
+            ))}
+            <div style={{
+              height: '50px',
+              width: '100px',
+              position: 'absolute',
+              right: '10px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}>
+              <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
+              <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
+            </div>
+            <ModalUpdate
+              setShowModal={setModal}
+              showModal={modal}
+              detail={data}
+              colors={colors.root}
+              setDetail={setData}
+              famille={location.state.id}
+            />
+            <ModalDelete
+              setDelete={setM_Delete}
+              _delete={m_delete}
+              detail={data}
+              colors={colors.root}
+              famille={location.state.id}
+            />
+          </div>
+          <TableData nom={location.state.nom} />
+        </>
+    )
 }
 
 export default UpdateArticle

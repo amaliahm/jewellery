@@ -67,9 +67,7 @@ const AddVersement = () => {
     const handleChange = (e) => {
         setVersement(c => ({
           ...c,
-          [e.target.name] : parseInt(e.target.value),
-          'net 750': ((parseInt(versement['or v']) - parseInt(versement.fonte)) * parseInt(versement.titre) / 750).toFixed(3),
-          ecart: (parseInt(versement['or v']) - ((parseInt(versement['or v']) - parseInt(versement.fonte)) * parseInt(versement.titre) / 750)).toFixed(3),
+          [e.target.name] : parseFloat(e.target.value),
         }))
         console.log(versement)
     }
@@ -90,6 +88,7 @@ const AddVersement = () => {
             return
         }
     }
+    console.log(versement)
     
     return (
         <>
@@ -119,8 +118,9 @@ const AddVersement = () => {
                 </FormControl>
                 {Object.keys(versement).slice(6).map((key, index) => (
                     <>
-                    {(index <= 5) 
-                     ? <TextField 
+                    {(index <= 3) && 
+                    <TextField 
+                        key={index}
                         id={"outlined-controlled"}
                         label={key} variant="outlined"
                         type='number'
@@ -128,20 +128,60 @@ const AddVersement = () => {
                         name={key}
                         className={colors.root}
                         onChange={handleChange}
-                        value={versement[key]}
-                    />
-                    : <TextField 
-                    id={"outlined"}
-                    label={key} variant="outlined"
-                    type='number'
-                    sx={style}
-                    name={key}
-                    className={colors.root}
-                    value={versement[key]}
-                    disabled
-                />
-                  }
+                        value={versement[key]}/>}
                 </>))}
+                    <TextField 
+                       id={"outlined-controlled"}
+                       label= 'fonte' variant="outlined"
+                       type='number'
+                       sx={style}
+                       name= 'fonte'
+                       className={colors.root}
+                       onChange={(e) => {
+                        setVersement(v => ({
+                          ...v,
+                          fonte: parseFloat(e.target.value),
+                          'net 750': ((versement['or v'] - parseFloat(e.target.value)) * versement.titre / 750).toFixed(3),
+                          ecart: (versement['or v'] -((versement['or v'] - parseFloat(e.target.value)) * versement.titre / 750)).toFixed(3),
+                        }))
+                       }}
+                       value={versement.fonte}
+                    />
+                    <TextField 
+                       id={"outlined-controlled"}
+                       label= 'or v' variant="outlined"
+                       type='number'
+                       sx={style}
+                       name= 'or v'
+                       className={colors.root}
+                       onChange={(e) => {
+                        setVersement(v => ({
+                          ...v,
+                          'or v': parseFloat(e.target.value),
+                          'net 750': ((parseFloat(e.target.value) - versement.fonte) * versement.titre / 750).toFixed(3),
+                          ecart: (parseFloat(e.target.value) - ((parseFloat(e.target.value) - versement.fonte) * versement.titre / 750)).toFixed(3),
+                        }))
+                       }}
+                       value={versement['or v']}
+                    />
+                    <TextField 
+                       disabled
+                       id={"outlined"}
+                       label= 'net 750' variant="outlined"
+                       type='number'
+                       sx={style}
+                       className={colors.root}
+                       value={versement['net 750']}
+                    />
+                    <TextField 
+                       disabled
+                       id={"outlined"}
+                       label= 'ecart' variant="outlined"
+                       type='number'
+                       sx={style}
+                       className={colors.root}
+                       value={versement.ecart}
+                    />
                 <Button 
                 sx={{
                     color: 'var(--brand-1)',
@@ -151,7 +191,7 @@ const AddVersement = () => {
                     position: 'absolute',
                     right: '0',
                     bottom: '0',
-                }} 
+                }}
                 onClick={handleClick}
                 disabled={versement.titre === "" || versement.person === '' || versement.nom === '' }
                 >ajouter versement</Button>

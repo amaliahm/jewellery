@@ -6,6 +6,7 @@ import UpdateVersement from "../versements/UpdateVersement"
 import UpdateImportation from "../importation/UpdateImportation"
 import UpdateAchatImportation from "../achat_importation/UpdateAchatImportation"
 import UpdateVersementImportation from "../versement_importation/UpdateVersementImportation"
+import UpdateArticle from "../articles/UpdateArticle"
 
 const update_routes = [
     {
@@ -39,6 +40,10 @@ const update_routes = [
     {
         to: '/importations/versement_importation/:id',
         component: <UpdateVersementImportation />
+    },
+    {
+        to: '/produits/:id/:id',
+        component: <UpdateArticle />
     },
 ]
 

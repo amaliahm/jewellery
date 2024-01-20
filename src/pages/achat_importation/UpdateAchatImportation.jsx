@@ -6,7 +6,6 @@ import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
-// import TableData from './restData';
 
 const useStyle = makeStyles({
     root: {

@@ -10,7 +10,6 @@ import LoadingComponent from './pages/home/loader.jsx';
 import routes from './pages/home/route.jsx';
 import { ColorModeContext, useMode } from './theme.js';
 import Produits from './pages/articles/produits.jsx';
-import DisplayArticle from './pages/articles/DisplayArticle.jsx';
 import Lock from './pages/home/Lock.jsx';
 import update_routes from './pages/home/update_route.jsx';
 import AchatImportation from './pages/achat_importation/AchatImportation.jsx';
@@ -61,11 +60,6 @@ function App() {
                 action={({ params }) => {}}
                 element={<VersementImportation />}
                 exact/>
-                <Route key='produits-nom-article'
-                  path='/produits/:nom/:article'
-                  action={({ params }) => {}}
-                  element={<DisplayArticle />}
-                  exact/>
                 {update_routes.map((e, i) => (
                   <Route key={i}
                   path={e.to}

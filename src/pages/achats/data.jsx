@@ -35,7 +35,7 @@ const columns_achats = [
   },
   {
     field: "pu",
-    headerName: "PU",
+    headerName: "PRIX UNITAIRE",
     flex: 1,
     minWidth: 150,
     maxWidth: 250,
@@ -49,6 +49,9 @@ const columns_achats = [
     maxWidth: 250,
     headerAlign: 'left'
   },
+];
+
+const columns_add_achat = [
   {
     field: "fournisseur",
     headerName: "FOURNISSEUR",
@@ -57,9 +60,6 @@ const columns_achats = [
     maxWidth: 300,
     headerAlign: 'left'
   },
-];
-
-const columns_add_achat = [
   {
     field: "famille",
     headerName: "FAMILLE",
@@ -100,14 +100,6 @@ const columns_add_achat = [
     flex: 1,
     minWidth: 150,
     maxWidth: 250,
-    headerAlign: 'left'
-  },
-  {
-    field: "fournisseur",
-    headerName: "FOURNISSEUR",
-    flex: 1,
-    minWidth: 200,
-    maxWidth: 300,
     headerAlign: 'left'
   },
 ];

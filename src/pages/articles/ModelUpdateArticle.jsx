@@ -4,13 +4,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import SelectedMenu from '../home/SelectedMenu';
+import { wilayas, display } from '../../wilaya';
 import { FormControl } from '@mui/material';
 import { api } from '../../backend';
 import axios from 'axios';
 import Notification from '../home/notification';
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material"
-import SelectedClient from '../home/SelectedClient';
+import SelectedFournisseur from '../home/SelectedFournisseur';
 import { result } from "../../backend";
 
 const style = {
@@ -60,7 +61,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const handleClose = () => setShowModal(false);
     const [inter, setInter] = useState(props.detail)
     const [confirm, setConfirm] = useState(false)
-    const [client, setClient] = useState([])
+    const [fournisseur, setFournisseur] = useState([])
     const [famille, setFamille] = useState([])
     const [articles, setArticles] = useState([])
 
@@ -68,8 +69,8 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
         const fetchAllData = async () => {
             let data = result.data.articles
             setArticles(data)
-            let __client = result.data.clients
-            setClient(__client)
+            let __fournisseur = result.data.fournisseurs
+            setFournisseur(__fournisseur)
             const famille = [...new Set(
                 data.map(item => item.famille))]
                 setFamille(famille)
@@ -79,14 +80,14 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `ventes/${props.detail.id}`, data)
+          const result = await axios.put(api + `produits/${props.famille}/${props.detail.id}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
           return
       }
     }
-  
+
   
     const hanldeConfirm = async () => {
       props.setDetail(d => ({
@@ -105,12 +106,11 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
         const result = []
         Object.keys(articles).map((e, i) => {
           if (articles[e].famille === name) {
-            result.push(articles[e]["designation d'article"] )
+            result.push(articles[e]["article"] )
           }
         })
         return result
     }
-    console.log(inter)
     
     return (
       <div>
@@ -125,33 +125,41 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             minHeight: 300,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Update {inter['vente n=°']}
+              Update {inter["article"]}
             </Typography>
             <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedMenu name='famille' options={famille} setValue={setInter} valeur={inter}/>
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedMenu name="article" options={displayFamille(inter.famille)} setValue={setInter} valeur={inter}/>
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedClient name='client' options={client} setValue={setInter} valeur={inter} show={false}/>
+              <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setInter} valeur={inter} show={false}/>
             </FormControl>
             <TextField 
               id={"outlined-controlled"}
-              label='quantite' variant="outlined"
-              type='number'
+              label="article" variant="outlined"
+              type='text'
               sx={style_textField}
-              name='quantite'
+              name="article"
               className={props.colors}
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    quantite: parseInt(e.target.value),
-                    total: Math.abs(parseInt(e.target.value)) * inter['prix unitaire']
+                    "article": e.target.value.toUpperCase(),
                 }))
               }}
-              value={inter.quantite}
+              value={inter["article"]}
              />
+             <TextField 
+               id={"outlined-controlled"}
+               label="designation d'article" variant="outlined"
+               type='text'
+               sx={style_textField}
+               name="designation d'article"
+               className={props.colors}
+               onChange={(e) => {
+                 setInter(c => ({
+                     ...c,
+                     "designation d'article": e.target.value.toUpperCase(),
+                 }))
+               }}
+               value={inter["designation d'article"]}
+              />
             <TextField 
               id={"outlined-controlled"}
               label='prix unitaire' variant="outlined"
@@ -162,29 +170,32 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    'prix unitaire': parseInt(e.target.value),
-                    total: Math.abs(inter.quantite) * parseInt(e.target.value)
+                    'prix unitaire': parseFloat(e.target.value),
                 }))
               }}
               value={inter['prix unitaire']}
              />
             <TextField 
-              id={"outlined"}
-              label='total' variant="outlined"
-              type='number'
+              id={"outlined-controlled"}
+              label='stock min' variant="outlined"
+              type='text'
               sx={style_textField}
-              name='total'
+              name='stock min'
               className={props.colors}
-              onChange={() => {}}
-              value={inter.total}
-              disabled
+              onChange={() => {
+                setInter(c => ({
+                    ...c,
+                    "stock min": e.target.value,
+                }))
+              }}
+              value={inter['stock min']}
               />
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.famille === "" || inter["designation d'article"] === '' || inter.fournisseur == '' || inter.quantite === 0 || inter['prix unitaire'] === 0}
+                disabled={inter.famille === "" || inter["article"] === '' || inter.fournisseur == '' || inter['quantite de stock'] === 0 || inter['prix unitaire'] === 0}
               >confirmer</Button>
             </Box>
           </Box>

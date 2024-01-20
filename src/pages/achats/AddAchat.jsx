@@ -58,7 +58,7 @@ const AddAchat = () => {
             setArticles(data)
             let __fournisseur = result.data.fournisseurs
             setFournisseur(__fournisseur)
-
+            data = result.data.familles
             const famille = [...new Set(
                 data.map(item => item.famille))]
                 setFamille(famille)
@@ -154,8 +154,8 @@ const AddAchat = () => {
                     onChange={(e) => {
                       setAchat(r => ({
                         ...r,
-                        'prix unitaire': parseInt(e.target.value),
-                        total: Math.abs(achat.quantite) * parseInt(e.target.value),
+                        'prix unitaire': parseFloat(e.target.value),
+                        total: Math.abs(achat.quantite) * parseFloat(e.target.value),
                       }))
                     }}
                     value={achat['prix unitaire']}
@@ -172,8 +172,8 @@ const AddAchat = () => {
                     onChange={(e) => {
                       setAchat(r => ({
                         ...r,
-                        quantite: parseInt(e.target.value),
-                        total: Math.abs(parseInt(e.target.value)) * achat['prix unitaire'],
+                        quantite: parseFloat(e.target.value),
+                        total: Math.abs(parseFloat(e.target.value)) * achat['prix unitaire'],
                       }))
                     }}
                     value={achat.quantite}

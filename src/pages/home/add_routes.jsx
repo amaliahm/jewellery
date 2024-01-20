@@ -5,6 +5,7 @@ import AddVente from "../ventes/AddVente"
 import AddVersement from "../versements/AddVersement"
 import AddAchatImportation from "../achat_importation/AddAchatImportation"
 import AddVersementImportation from "../versement_importation/AddVersementImportation"
+import AddArticle from "../articles/AddArticle"
 
 const add_routes = [
     {
@@ -34,6 +35,10 @@ const add_routes = [
     {
         to: '/importations/versement_importation/add',
         component: <AddVersementImportation />
+    },
+    {
+        to: '/produits/:id/add',
+        component: <AddArticle />
     },
 ]
 

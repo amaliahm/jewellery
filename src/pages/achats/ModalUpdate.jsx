@@ -64,6 +64,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const [fournisseur, setFournisseur] = useState([])
     const [famille, setFamille] = useState([])
     const [articles, setArticles] = useState([])
+    console.log(props.detail)
 
     useEffect(() => {
         const fetchAllData = async () => {
@@ -92,7 +93,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       setInter(c => ({
         ...c,
         [e.target.name] : e.target.value,
-        total: inter.qte * inter.pu
+        total: inter.quantite * inter['prix unitaire']
       }))
     }
   
@@ -118,7 +119,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
         })
         return result
     }
-    
+    console.log(inter)
     return (
       <div>
         <Modal
@@ -148,32 +149,32 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               label='quantite' variant="outlined"
               type='number'
               sx={style_textField}
-              name='qte'
+              name='quantite'
               className={props.colors}
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    qte: parseInt(e.target.value),
-                    total: Math.abs(parseInt(e.target.value)) * inter.pu
+                    quantite: parseFloat(e.target.value),
+                    total: Math.abs(parseFloat(e.target.value)) * inter['prix unitaire']
                 }))
               }}
-              value={inter.qte}
+              value={inter.quantite}
              />
             <TextField 
               id={"outlined-controlled"}
               label='prix unitaire' variant="outlined"
               type='number'
               sx={style_textField}
-              name='pu'
+              name='prix unitaire'
               className={props.colors}
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    pu: parseInt(e.target.value),
-                    total: Math.abs(inter.qte) * parseInt(e.target.value)
+                    'prix unitaire': parseFloat(e.target.value),
+                    total: Math.abs(inter.quantite) * parseFloat(e.target.value)
                 }))
               }}
-              value={inter.pu}
+              value={inter['prix unitaire']}
              />
             <TextField 
               id={"outlined"}
@@ -191,7 +192,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.famille === "" || inter["designation d'article"] === '' || inter.fournisseur == '' || inter.qte === 0 || inter.pu === 0}
+                disabled={inter.famille === "" || inter["designation d'article"] === '' || inter.fournisseur == '' || inter.quantite === 0 || inter['prix unitaire'] === 0}
               >confirmer</Button>
             </Box>
           </Box>

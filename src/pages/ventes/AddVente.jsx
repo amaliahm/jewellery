@@ -58,7 +58,7 @@ const AddVente = () => {
             setArticles(data)
             let __client = result.data.clients
             setClient(__client)
-
+            data = result.data.familles
             const famille = [...new Set(
                 data.map(item => item.famille))]
                 setFamille(famille)

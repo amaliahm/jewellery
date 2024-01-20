@@ -13,6 +13,7 @@ import SelectedFournisseur from '../home/SelectedFournisseur';
 import { result } from "../../backend";
 import { titre } from '../../data';
 import SelectedMenu from '../home/SelectedMenu';
+import SelectedClient from '../home/SelectedClient';
 
 const style = {
   position: 'absolute',
@@ -69,12 +70,15 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const [inter, setInter] = useState(props.detail)
     const [confirm, setConfirm] = useState(false)
     const [fournisseur, setFournisseur] = useState([])
+    const [client , setClient] = useState([])
 
     useEffect(() => {
         const fetchAllData = async () => {
             let __fournisseur = result.data.fournisseurs
             setFournisseur(__fournisseur)
-            }
+            __fournisseur = result.data.clients
+            setClient(__fournisseur)
+          }
             fetchAllData()
     }, [])
   
@@ -91,7 +95,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const handleChange = (e) => {
       setInter(c => ({
         ...c,
-        [e.target.name] : parseInt(e.target.value),
+        [e.target.name] : parseFloat(e.target.value),
       }))
     }
   
@@ -100,8 +104,8 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       props.setDetail(d => ({
         ...d,
         ...inter,
-        'net 750': ((parseInt(inter['or v']) - parseInt(inter.fonte)) * parseInt(inter.titre) / 750).toFixed(3),
-        ecart: (parseInt(inter['or v']) - ((parseInt(inter['or v']) - parseInt(inter.fonte)) * parseInt(inter.titre) / 750)).toFixed(3),
+        'net 750': ((parseFloat(inter['or v']) - parseFloat(inter.fonte)) * parseFloat(inter.titre) / 750).toFixed(3),
+        ecart: (parseFloat(inter['or v']) - ((parseFloat(inter['or v']) - parseFloat(inter.fonte)) * parseFloat(inter.titre) / 750)).toFixed(3),
       }))
       setShowModal(false)
       setConfirm(true)
@@ -110,6 +114,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       }, 2000)
       await update(inter)
     }
+    console.log(inter['versement n=°'].split('-')[1])
     
     return (
       <div>
@@ -127,7 +132,8 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               Update {inter['versement n=°']}
             </Typography>
             <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setInter} valeur={inter} show={false}/>
+              {(inter['versement n=°'].split('-')[1] == 'FOURNISSEUR') && <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setInter} valeur={inter} show={false}/>}
+              {(inter['versement n=°'].split('-')[1] == 'CLIENT') &&<SelectedClient name='client' options={client} setValue={setInter} valeur={inter} show={false}/>}
             </FormControl>
             <FormControl sx={{ m: 1, minWidth: 200 }}>
               <SelectedMenu name='titre' options={titre} setValue={setInter} valeur={inter}/>
@@ -154,7 +160,6 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.fournisseur === "" || inter.titre === '' || inter['versement argent'] === 0 || inter['versement or'] === 0 || inter['retour argent'] === 0 || inter['retour or'] === 0 || inter['or v'] === 0 || inter['fonte'] === 0}
               >confirmer</Button>
             </Box>
           </Box>

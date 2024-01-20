@@ -212,8 +212,8 @@ const add_versement = {
   "versement argent": 0,
   "retour or": 0,
   "retour argent": 0,
-  "or v": 0,
   fonte: 0,
+  "or v": 0,
   "net 750": 0,
   ecart: 0,
 }

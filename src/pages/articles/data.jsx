@@ -122,7 +122,17 @@ const columns_article =[
   },
 ];
 
+const add_article = {
+  fournisseur: '',
+  famille: '',
+  "designation d'article": '',
+  article: '',
+  "prix unitaire": 0,
+  "stock min": 0,
+}
+
 export {
   display_famille,
-  columns_article
+  columns_article,
+  add_article
 }

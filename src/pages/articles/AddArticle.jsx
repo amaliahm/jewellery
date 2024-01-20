@@ -1,122 +1,130 @@
-import React, {useState} from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { FiBook } from "react-icons/fi";
+import { Button, FormControl, TextField } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import { api } from "../../backend";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { api_add_article } from "../../backend";
+import { titre } from '../../data';
+import { display, wilayas } from "../../wilaya";
+import NavigationBar from "../home/NavigationBar";
+import SelectedMenu from "../home/SelectedMenu";
+import SelectedFournisseur from '../home/SelectedFournisseur'
+import Notification from "../home/notification";
+import { add_article } from "./data";
+import { useLocation } from "react-router-dom";
+import { result } from "../../backend";
 
-const AddArticle = ({ isOpen, setIsOpen }) => {
-    const [article, addArticle] = useState({
-        article: '',
-        "designation d'article" : '',
-        'prix unitaire': '',
-        "stock min": '',
+const useStyle = makeStyles({
+    root: {
+        "& label.Mui-focused": {
+          color: "white"
+        },
+        "& .MuiOutlinedInput-root": {
+          "&.Mui-focused fieldset": {
+            borderColor: "#12f7d6",
+          }
+        }
+      }
+})
+
+const AddArticle = () => {
+    const colors = useStyle()
+    const location = useLocation()
+    const [article, setArticle] = useState({
+        ...add_article,
+        famille: location.state.nom,
     })
+    const [done, setDone] = useState(false)
+    const navigate = useNavigate()
+    const [fournisseur, setFournisseur] = useState([])
+
+    useEffect(() => {
+        const fetchAllData = async () => {
+            let __fournisseur = result.data.fournisseurs
+            setFournisseur(__fournisseur)
+        }
+        fetchAllData()
+    }, [])
 
     const handleChange = (e) => {
-        addArticle(c => ({...c, [e.target.name] : e.target.value}))
+        setArticle(c => ({...c, [e.target.name] : e.target.value.toUpperCase()}))
     }
     
     const handleClick = async e => {
         e.preventDefault();
-        const between = article.article != '' && article["designation d'article"] != '' && article['prix unitaire'] != '' && article["stock min"] != ''
-        if (between) {
-            const addArticle = {
-                table: 'articles',
-                data: article
+        setArticle(a => ({
+            ...a,
+            'prix unitaire': parseFloat(article["prix unitaire"])
+        }))
+        const inter = location.state.articles
+        inter.unshift(article)
+        setDone(true)
+        setTimeout(() => {
+            setDone(false)
+            navigate(`/produits/${location.state.id}`, { state : { nom: location.state.nom, id: location.state.id, articles: inter } })
+        }, 2000)
+        try {
+            const result = await axios.post(api_add_article, article)
+            if(result.status === 200) {
             }
-            try {
-                const result = await axios.post(api, addArticle)
-                if(result.status === 200) {
-                    setIsOpen(false)
-                    addArticle({
-                        article: '',
-                        "designation d'article" : '',
-                        'prix unitaire': '',
-                        "valeur de stock": '',
-                    })
-                }
-            } catch (e) {
-                console.log(e)
-                return
-            }
+        } catch (e) {
+            console.log(e)
+            return
         }
     }
+    
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setIsOpen(false)}
-                    className="modal">
-                    <motion.div
-                        initial={{ scale: 0, rotate: "14.5deg" }}
-                        animate={{ scale: 1, rotate: "0deg" }}
-                        exit={{ scale: 0, rotate: "0deg" }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="modal-box-article">
-                        <FiBook className="modal-bg-icon" />
-                        <form action="#">
-                        <h2>ajouter article</h2>
-                        <div className="modal-content">
-                            <div className="modal-content__row"  >
-                                <p className="model-content__titre">designation d'article</p>
-                                <div className="input">
-                                    <input type='text' name="designation d'article" 
-                                      placeholder="designation d'article"
-                                      value={article["designation d'article"]} onChange={handleChange} required/>
-                                </div>
-                            </div>
-                            <div className="modal-content__row"  >
-                                <p className="model-content__titre">article</p>
-                                <div className="input">
-                                    <input type='text' name='article' 
-                                      placeholder='article' 
-                                      value={article.article} onChange={handleChange} required/>
-                                </div>
-                            </div>
-                            <div className="modal-content__row"  >
-                                <p className="model-content__titre">prix unitaire</p>
-                                <div className="input">
-                                    <input type='text' name='prix unitaire' 
-                                      placeholder='prix unitaire' 
-                                      value={article['prix unitaire']} onChange={handleChange} required/>
-                                </div>
-                            </div>
-                            <div className="modal-content__row"  >
-                                <p className="model-content__titre">stock min</p>
-                                <div className="input">
-                                    <input type='text' name='stock min' 
-                                      placeholder='stock min' 
-                                      value={article['stock min']} onChange={handleChange} required/>
-                                </div>
-                            </div>
-
-                            <div className="modal-content__btns">
-                            <button type="button" onClick={() => {
-                                    setIsOpen(false)
-                                    addArticle({
-                                        article: '',
-                                        "designation d'article" : '',
-                                        'prix unitaire': '',
-                                        "stock min": '',
-                                    })
-                                }}
-                                    className="btn-secondary">
-                                    annuler
-                                </button>
-                            <button type="button" onClick={handleClick}
-                                    className="btn-primary">
-                                    ajouter
-                                </button>
-                            </div>
-                        </div>
-                        </form>
-                    </motion.div>
-                </motion.div>
-            )}
-        </AnimatePresence>
+        <>
+            <NavigationBar name={"ajouter article"} />
+            <div className="add">
+                {done && <Notification name={article.article + ' a été ajoutée'} />}
+                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                  <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setArticle} valeur={article} show={false}/>
+                </FormControl>
+                {Object.keys(article).slice(1).map((key, index) => (
+                    <>
+                    {(index > 0) 
+                    ? <TextField 
+                        id={"outlined-controlled"}
+                        label={key} variant="outlined"
+                        type={index >= 3 ? 'number' : 'text'}
+                        sx={{
+                          borderColor: "transparent",
+                          margin: '10px'
+                        }}
+                        name={key}
+                        className={colors.root}
+                        onChange={handleChange}
+                        value={article[key]}
+                    />
+                    : <TextField 
+                    disabled
+                    id={"outlined-read-only-input"}
+                    label={key} variant="outlined"
+                    sx={{
+                      borderColor: "transparent",
+                      margin: '10px'
+                    }}
+                    name={key}
+                    className={colors.root}
+                    value={article[key]}
+                />}
+                </>))}
+                <Button 
+                sx={{
+                    color: 'var(--brand-1)',
+                    border: '1px solid var(--brand-1)',
+                    marginBottom: '10px',
+                    marginRight: '10px',
+                    position: 'absolute',
+                    right: '0',
+                    bottom: '0',
+                }} 
+                onClick={handleClick}
+                disabled={article.fournisseur === "" || article["designation d'article"] === "" || article.article === '' || article["prix unitaire"] === ''|| article["prix unitaire"] === '0' }
+                >ajouter article</Button>
+            </div>
+        </>
     )
 }
 
