@@ -13,7 +13,6 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material"
 import SelectedFournisseur from '../home/SelectedFournisseur';
 import { result } from "../../backend";
-import { titre } from '../../data';
 
 const style = {
   position: 'absolute',
@@ -65,6 +64,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const [fournisseur, setFournisseur] = useState([])
     const [famille, setFamille] = useState([])
     const [articles, setArticles] = useState([])
+    const [titre, setTitre] = useState([])
 
     useEffect(() => {
         const fetchAllData = async () => {
@@ -75,6 +75,12 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             const famille = [...new Set(
                 data.map(item => item.famille))]
                 setFamille(famille)
+            data = result.data.titre
+            let inter = []
+            Object.keys(data).map(e => {
+              inter.push(data[e].titre)
+            })
+            setTitre(inter)
             }
             fetchAllData()
     }, [])

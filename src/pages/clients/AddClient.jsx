@@ -1,10 +1,10 @@
 import { Button, FormControl, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_client } from "../../backend";
-import { titre } from '../../data';
+import { result } from "../../backend";
 import { display, wilayas } from "../../wilaya";
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
@@ -30,6 +30,18 @@ const AddClient = () => {
     const [client, setClient] = useState(add_client)
     const [done, setDone] = useState(false)
     const navigate = useNavigate()
+    const [titre, setTitre] = useState([])
+    useEffect(() => {
+        const fetchAllData = () => {
+            const data = result.data.titre
+            let inter = []
+            Object.keys(data).map(e => {
+                inter.push(data[e].titre)
+            })
+            setTitre(inter)
+        }
+        fetchAllData()
+    }, [2000])
 
     const handleChange = (e) => {
         setClient(c => ({...c, [e.target.name] : e.target.value}))

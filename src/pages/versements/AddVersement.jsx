@@ -4,7 +4,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_versement} from "../../backend";
-import { titre } from '../../data';
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
@@ -39,6 +38,7 @@ const AddVersement = () => {
     const navigate = useNavigate()
     const currentDate = new Date();
     const person = ['client', 'fournisseur']
+    const [titre, setTitre] = useState([])
 
     const fetchAllData = async () => {
       let inter = []
@@ -53,6 +53,12 @@ const AddVersement = () => {
         inter.push(data[e].nom)
       })
       setClient(inter)
+      data = result.data.titre
+      inter = []
+      Object.keys(data).map((e, i) => {
+        inter.push(data[e].titre)
+      })
+      setTitre(inter)
     }
     useEffect(() => {
       setVersement(v => ({

@@ -4,7 +4,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_versement_importation} from "../../backend";
-import { titre } from '../../data';
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
@@ -39,25 +38,18 @@ const AddVersementImportation = () => {
       importateur: location.state,
     })
     const [done, setDone] = useState(false)
-    const [client, setClient] = useState()
-    const [fournisseur, setFournisseur] = useState()
     const navigate = useNavigate()
     const currentDate = new Date();
+    const [titre, setTitre] = useState([])
 
 
     const fetchAllData = async () => {
       let inter = []
-      let data = result.data.fournisseurs
+      let data = result.data.titre
       Object.keys(data).map((e, i) => {
-        inter.push(data[e].nom)
+        inter.push(data[e].titre)
       })
-      setFournisseur(inter)
-      data = result.data.clients
-      inter = []
-      Object.keys(data).map((e, i) => {
-        inter.push(data[e].nom)
-      })
-      setClient(inter)
+      setTitre(inter)
     }
     useEffect(() => {
       setVerImp(v => ({
@@ -77,7 +69,7 @@ const AddVersementImportation = () => {
             setDone(true)
             setTimeout(() => {
                 setDone(false)
-                // navigate('/importations/versement_importation', {state: location.state})
+                navigate('/importations/versement_importation', {state: location.state})
             }, 2000)
             const result = await axios.post(api_add_versement_importation, verImp)
             if(result.status === 200) {

@@ -6,6 +6,7 @@ import AddVersement from "../versements/AddVersement"
 import AddAchatImportation from "../achat_importation/AddAchatImportation"
 import AddVersementImportation from "../versement_importation/AddVersementImportation"
 import AddArticle from "../articles/AddArticle"
+import AddMouvement from "../bourse/AddMouvement"
 
 const add_routes = [
     {
@@ -39,6 +40,10 @@ const add_routes = [
     {
         to: '/produits/:id/add',
         component: <AddArticle />
+    },
+    {
+        to: '/bourse/add',
+        component: <AddMouvement />
     },
 ]
 

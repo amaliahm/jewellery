@@ -18,12 +18,15 @@ const api_add_versement = api + 'versements/add-versement'
 const api_add_achat_importation = api + 'importations/achat_importation/add'
 const api_add_versement_importation = api + 'importations/versement_importation/add'
 const api_add_article = api + 'produits/:id/add'
+const api_add_mouvement = api + 'bourse/add'
+let titres = []
 
 
 
 async function getData() {
     try {
         result = await axios.get(api)
+        titres = result.data.titre
     } catch (e) {
         console.log(e)
     }
@@ -41,5 +44,7 @@ export {
     api_add_achat_importation,
     api_add_versement_importation,
     api_add_article,
+    api_add_mouvement,
+    titres,
     result,
 }

@@ -14,6 +14,7 @@ import Lock from './pages/home/Lock.jsx';
 import update_routes from './pages/home/update_route.jsx';
 import AchatImportation from './pages/achat_importation/AchatImportation.jsx';
 import VersementImportation from './pages/versement_importation/VersementImportation.jsx';
+import Titre from './pages/titre/titre.jsx';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -38,6 +39,7 @@ function App() {
               <Route element={<PrivateRoute />}>
               <Route key='home' element={<Home />} path='/home' exact/>
               <Route key='lock' element={<Lock />} path='/lock' exact/>
+              <Route key='titre' element={<Titre />} path='/titres' exact/>
               <Route key='/produits/*'  path='/produits/*' exact/>
               <Route key='/clients/*'  path='/clients/*' exact/>
               <Route key='/fournisseurs/*'  path='/fournisseurs/*' exact/>

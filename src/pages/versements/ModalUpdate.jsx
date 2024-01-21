@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material"
 import SelectedFournisseur from '../home/SelectedFournisseur';
 import { result } from "../../backend";
-import { titre } from '../../data';
 import SelectedMenu from '../home/SelectedMenu';
 import SelectedClient from '../home/SelectedClient';
 
@@ -71,6 +70,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const [confirm, setConfirm] = useState(false)
     const [fournisseur, setFournisseur] = useState([])
     const [client , setClient] = useState([])
+    const [titre, setTitre] = useState([])
 
     useEffect(() => {
         const fetchAllData = async () => {
@@ -78,6 +78,12 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             setFournisseur(__fournisseur)
             __fournisseur = result.data.clients
             setClient(__fournisseur)
+            __fournisseur = result.data.titre
+            let __inter = []
+            Object.keys(__fournisseur).map(e => {
+              inter.push(__fournisseur[e].titre)
+            })
+            setTitre(__inter)
           }
             fetchAllData()
     }, [])

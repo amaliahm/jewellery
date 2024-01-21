@@ -4,8 +4,6 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_article } from "../../backend";
-import { titre } from '../../data';
-import { display, wilayas } from "../../wilaya";
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import SelectedFournisseur from '../home/SelectedFournisseur'

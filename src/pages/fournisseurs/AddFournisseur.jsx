@@ -1,10 +1,10 @@
 import { Button, FormControl, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_fournisseur } from "../../backend";
-import { titre } from '../../data';
+import { result } from "../../backend";
 import { display, wilayas } from "../../wilaya";
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
@@ -29,7 +29,20 @@ const AddFournisseur = () => {
     const colors = useStyle()
     const [fournisseur, setFournisseur] = useState(add_fournisseur)
     const [done, setDone] = useState(false)
+    const [titre, setTitre] = useState([])
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchAllData = () => {
+            let data = result.data.titre
+            let inter = []
+            Object.keys(data).map(e => {
+                inter.push(data[e].titre)
+            })
+            setTitre(inter)
+        }
+        fetchAllData()
+    }, [2000])
 
     const handleChange = (e) => {
         setFournisseur(c => ({...c, [e.target.name] : e.target.value}))

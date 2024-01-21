@@ -1,6 +1,3 @@
-const titre = [ 1, 710, 720, 730, 750, 999, 1000 ]
-
-
 
 
   const utilisateurs = [
@@ -27,6 +24,5 @@ const titre = [ 1, 710, 720, 730, 750, 999, 1000 ]
     },
   ];
 export {
-    titre, 
     utilisateurs,
 }
