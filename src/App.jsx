@@ -35,6 +35,7 @@ function App() {
         <CssBaseline />
         <div className="app">
           <Router>
+          
             <Routes>
               <Route element={<PrivateRoute />}>
               <Route key='home' element={<Home />} path='/home' exact/>

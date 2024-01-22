@@ -6,6 +6,10 @@ import Ventes from "../ventes/Ventes"
 import Versement from "../versements/Versement"
 import Importation from "../importation/Importation"
 import Bourse from "../bourse/bourse"
+import Command from "../command/Command"
+import Reparation from "../reparation/Reparation"
+import Charge from "../charge/Charge"
+import Reception from "../reception/Reception"
 
 const routes = [
     {
@@ -45,9 +49,10 @@ const routes = [
     },
     {
         icon: 'truck-field',
-        to: 'commands',
+        to: '/commands',
         name: 'les commandes',
         key: 'commands',
+        component: <Command />
     },
     {
         icon: 'money-bill-transfer',
@@ -58,9 +63,10 @@ const routes = [
     },
     {
         icon: 'receipt',
-        to: 'receptions',
+        to: '/receptions',
         name: 'les réceptions',
         key: 'receptions',
+        component: <Reception />
     },
     {
         icon: 'plane',
@@ -77,9 +83,10 @@ const routes = [
     },
     {
         icon: 'arrow-rotate-right',
-        to: 'reparation',
+        to: '/reparations',
         name: 'les réparations',
         key: 'reparation',
+        component: <Reparation />
     },
     {
         icon: 'dollar-sign',

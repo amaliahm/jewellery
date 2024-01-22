@@ -9,12 +9,39 @@ import NavigationBar from "../home/NavigationBar";
 import { exportDataToPdf } from "../home/telecharger";
 
 
-const Command = () => {
+const Reception = () => {
 
-const columns_command = [
+const columns_reception = [
   {
-    field: "command n=°",
-    headerName: "COMMAND N=°",
+    field: "reception n=°",
+    headerName: "RECEPTION N=°",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left',
+  },
+  {
+    field: "date",
+    headerName: "DATE",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left',
+  },
+  {
+    field: "fournisseur",
+    headerName: "FOURNISSEUR",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left',
+  },
+  {
+    field: "total",
+    headerName: "TOTAL",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -49,7 +76,7 @@ const columns_command = [
   const [data, setData] = useState([])
 
   const fetchAllData = async () => {
-  //   const data = result.data.commands
+  //   const data = result.data.receptions
   //   setData(data)
   }
   useEffect(() => {
@@ -63,7 +90,7 @@ const columns_command = [
   })) 
 
   const cellClickListner = (params) => {
-    // navigate(`/commands/${params.data.id}`, {state: params.data})
+    // navigate(`/receptions/${params.data.id}`, {state: params.data})
   }
 
   const processRowGroup = (params) => {
@@ -121,7 +148,7 @@ const columns_command = [
   
   return (
     <>
-      <NavigationBar name="les commandes" />
+      <NavigationBar name="les receptions" />
         <div 
         className="ag-theme-quartz-dark"
         style={{
@@ -135,8 +162,8 @@ const columns_command = [
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              // onClick={() => { navigate('/commands/add-command') }}
-              >ajouter command</Button>
+              // onClick={() => { navigate('/receptions/add-reception') }}
+              >ajouter reception</Button>
               <Button sx={{
                 color: 'var(--brand-1)',
                 border: '1px solid var(--brand-1)',
@@ -144,13 +171,13 @@ const columns_command = [
                 marginRight: '10px'
               }} 
               onClick={() => {
-                exportDataToPdf(data, gridApi, 'les commands')
+                exportDataToPdf(data, gridApi, 'les receptions')
               }}
               >telecharger pdf</Button>
             <AgGridReact 
               ref={gridRef}
               rowData={data}
-              columnDefs={columns_command}
+              columnDefs={columns_reception}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
@@ -161,4 +188,4 @@ const columns_command = [
   );
 };
 
-export default Command;
+export default Reception;

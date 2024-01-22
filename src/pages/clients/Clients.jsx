@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { result } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
+import { exportDataToPdf } from "../home/telecharger";
 
 
 const Clients = () => {
@@ -92,17 +93,66 @@ const columns_clients = [
   const defaultColDef = useMemo(() => ({
     sortable: true,
     filter: true,
-    enableRowGroup: true,
-  }))
+    // floatingFilter: true,
+  })) 
 
   const cellClickListner = (params) => {
     navigate(`/clients/${params.data.id}`, {state: params.data})
   }
 
-  const onBtExport = useCallback(() => {
-    gridRef.current.api.exportDataAsExcel();
-  }, []); 
+  const processRowGroup = (params) => {
+    // You can customize the row data here
+    // For example, you can format the date or manipulate the data before exporting
+    return params.node.group ? params.node.key : params.data;
+  };
 
+  const processHeader = (params) => {
+    // You can customize the header names here
+    // For example, you can change the header names or add additional information
+    return params.column.getColDef().headerName;
+  };
+
+  let gridApi;
+
+  const onGridReady = (params) => {
+    gridApi = params.api
+  }
+
+
+
+  const exportFilteredDataToHtml = () => {
+    let filteredData = [];
+
+    if (gridApi && gridApi.isAnyFilterPresent()) {
+      gridApi.forEachNodeAfterFilter((node) => {
+        filteredData.push(node.data);
+      });
+    } else {
+      filteredData = data
+    }
+    
+    // Iterate over filtered rows
+
+      const htmlContent = generateHtmlTable(filteredData);
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+
+      // Create a URL for the Blob
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Create a downloadable link
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = 'eurl bhn zahav.html';
+      document.body.appendChild(a);
+
+      // Trigger a click on the link to start the download
+      a.click();
+
+      // Remove the link from the DOM
+      document.body.removeChild(a);
+  };
+
+  
   return (
     <>
       <NavigationBar name="les clients" />
@@ -127,15 +177,18 @@ const columns_clients = [
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              onClick={onBtExport}
-              >telecharger excel</Button>
-            <AgGridReact className="clear"
+              onClick={() => {
+                exportDataToPdf(data, gridApi, 'les client')
+              }}
+              >telecharger pdf</Button>
+            <AgGridReact 
               ref={gridRef}
               rowData={data}
               columnDefs={columns_clients}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
+              onGridReady={onGridReady}
             />
             </div>
     </>
