@@ -10,6 +10,7 @@ import Command from "../command/Command"
 import Reparation from "../reparation/Reparation"
 import Charge from "../charge/Charge"
 import Reception from "../reception/Reception"
+import Utilisateurs from "../utilisateurs/Users"
 
 const routes = [
     {
@@ -97,9 +98,10 @@ const routes = [
     },
     {
         icon: 'user-group',
-        to: 'gestion',
+        to: '/utilisateurs',
         name: 'gestion des utilisateurs',
-        key: 'gestion',
+        key: 'utilisateur',
+        component: <Utilisateurs />
     },
     {
         icon: 'arrow-right-from-bracket',

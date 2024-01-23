@@ -1,15 +1,20 @@
 import { Box, Typography, useTheme } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
-import Header from "./Header";
-import { utilisateurs } from "../../data";
+import { utilisateurs } from "./data";
+import { Button } from "@mui/material";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AgGridReact } from "ag-grid-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { result } from "../../backend";
+import NavigationBar from "../home/NavigationBar";
+import { exportDataToPdf } from "../home/telecharger";
 
-const Users = () => {
+const Utilisateurs = () => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const columns_users = [
     { 
         field: "id",
@@ -50,83 +55,128 @@ const Users = () => {
       minWidth: 200,
       maxWidth: 300,
       headerAlign: 'center',
-      renderCell: ({ row: { access } }) => {
+      cellRenderer: (params) => {
         return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : access === "manager"
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
+          <Button
+            sx={{
+              mt: '5px',
+              padding: '15px',
+              height: '20px',
+              width: '60%',
+              display: 'flex',
+              justifyContent: 'center',
+              background:`${params.data.access  === "admin"
+              ? '#1e5245'
+              : params.data.access === "manager"
+              ? '#2e7c67'
+              : '#4cceac'}`,
+            }}
+            // borderRadius="4px"
           >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
+            {params.data.access === "admin" && <AdminPanelSettingsOutlinedIcon />}
+            {params.data.access === "manager" && <SecurityOutlinedIcon />}
+            {params.data.access === "user" && <LockOpenOutlinedIcon />}
+            <Typography color='white' sx={{ mt: "5px" }}>
+              {params.data.access}
             </Typography>
-          </Box>
+          </Button>
         );
       },
     },
+    {
+      field: "plus details",
+      headerName: "",
+      flex: 1,
+      minWidth: 100,
+      maxWidth: 100,
+      headerAlign: 'left',
+      cellRenderer : (params) => 
+        <Button
+        sx={{
+          background: 'var(--brand-1)',
+          marginBottom: '5px',
+          padding: '15px',
+          '&:hover' : {
+            border: '1px solid var(--brand-1)',
+          }
+        }} 
+        onClick={() => {cellClickListner(params)}}
+        >
+          <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
+        </Button>
+    },
   ];
 
-  return (
-    <Box m="0px" sx={{
-        paddingLeft: "20px"
-      }}>
-      <Header title="les utilisateurs" />
-      <Box
-        m="-10px"
-        height="85vh"
-        width="90vw"
-        
-       
-        
-        
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: '#3e0df2cc',
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
 
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: '#3e0df2cc',
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-        }}
-      >
-        <DataGrid 
-          checkboxSelection 
-          rows={utilisateurs} 
-          columns={columns_users} 
-        />
-      </Box>
-    </Box>
+
+  const gridRef = useRef();
+  const navigate = useNavigate()
+  const [data, setData] = useState([])
+
+  const fetchAllData = async () => {
+  //   const data = result.data.utilisateurs
+  //   setData(data)
+  }
+  useEffect(() => {
+    fetchAllData()
+  }, [2000])
+
+  const defaultColDef = useMemo(() => ({
+    sortable: true,
+    filter: true,
+    // floatingFilter: true,
+  })) 
+
+  const cellClickListner = (params) => {
+    // navigate(`/utilisateurs/${params.data.id}`, {state: params.data})
+  }
+
+  let gridApi;
+
+  const onGridReady = (params) => {
+    gridApi = params.api
+  }  
+
+  return (
+        <>
+          <NavigationBar name="gestion des utilisateurs" />
+            <div 
+            className="ag-theme-quartz-dark"
+            style={{
+                marginTop: "30px",
+                height: '75vh',
+                width: '95vw',
+            }}>
+                  <Button sx={{
+                    color: 'var(--brand-1)',
+                    border: '1px solid var(--brand-1)',
+                    marginBottom: '10px',
+                    marginRight: '10px'
+                  }} 
+                  // onClick={() => { navigate('/utilisateurs/add-utilisateur') }}
+                  >ajouter utilisateur</Button>
+                  <Button sx={{
+                    color: 'var(--brand-1)',
+                    border: '1px solid var(--brand-1)',
+                    marginBottom: '10px',
+                    marginRight: '10px'
+                  }} 
+                  onClick={() => {
+                    exportDataToPdf(data, gridApi, 'les utilisateurs')
+                  }}
+                  >telecharger pdf</Button>
+                <AgGridReact 
+                  ref={gridRef}
+                  rowData={utilisateurs}
+                  columnDefs={columns_users}
+                  defaultColDef={defaultColDef}
+                  rowGroupPanelShow='always'
+                  pagination={true}
+                  onGridReady={onGridReady}
+                />
+                </div>
+        </>
   );
 };
 
-export default Users;
+export default Utilisateurs;
