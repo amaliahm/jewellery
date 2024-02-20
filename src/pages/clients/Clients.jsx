@@ -4,155 +4,133 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
+import { client } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
-import { exportDataToPdf } from "../home/telecharger";
-
+import { exportDataToPdf } from "../home/telecharger_table";
+import { RowNode } from "ag-grid-community";
 
 const Clients = () => {
+  const columns_clients = [
+    {
+      field: "nom_client",
+      headerName: "NOM",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left',
+    },
+    {
+      field: "wilaya",
+      headerName: "WILAYA",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "ville",
+      headerName: "VILLE",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "telephone",
+      headerName: "TELEPHONE",
+      flex: 1,
+      minWidth: 150,
+      maxWidth: 200,
+      headerAlign: 'left'
+    },
+    {
+      field: "solde",
+      headerName: "solde",
+      flex: 1,
+      minWidth: 100,
+      maxWidth: 150,
+      headerAlign: 'left'
+    },
+    {
+      field: "plus details",
+      headerName: "",
+      flex: 1,
+      minWidth: 100,
+      maxWidth: 100,
+      headerAlign: 'left',
+      cellRenderer : (params) => 
+        <Button
+        sx={{
+          background: 'var(--brand-1)',
+          marginBottom: '5px',
+          padding: '15px',
+          '&:hover' : {
+            border: '1px solid var(--brand-1)',
+          }
+        }} 
+        onClick={() => {cellClickListner(params)}}
+        >
+          <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
+        </Button>
+    },
+  ]
+  
 
-const columns_clients = [
-  {
-    field: "nom",
-    headerName: "NOM",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    minWidth: 200,
-    maxWidth: 300,
-    headerAlign: 'left',
-  },
-  {
-    field: "ville",
-    headerName: "VILLE",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    minWidth: 200,
-    maxWidth: 300,
-    headerAlign: 'left'
-  },
-  {
-    field: "wilaya",
-    headerName: "WILAYA",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    minWidth: 200,
-    maxWidth: 300,
-    headerAlign: 'left'
-  },
-  {
-    field: "telephone",
-    headerName: "TELEPHONE",
-    flex: 1,
-    minWidth: 150,
-    maxWidth: 200,
-    headerAlign: 'left'
-  },
-  {
-    field: "email",
-    headerName: "EMAIL",
-    flex: 1,
-    minWidth: 300,
-    maxWidth: 350,
-    headerAlign: 'left'
-  },
-  {
-    field: "plus details",
-    headerName: "",
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 100,
-    headerAlign: 'left',
-    cellRenderer : (params) => 
-      <Button
-      sx={{
-        background: 'var(--brand-1)',
-        marginBottom: '5px',
-        padding: '15px',
-        '&:hover' : {
-          border: '1px solid var(--brand-1)',
-        }
-      }} 
-      onClick={() => {cellClickListner(params)}}
-      >
-        <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
-      </Button>
-  },
-];
+  const cellClickListner = (params) => {
+    navigate(`/clients/${params.data.id_client}`, {state: params.data.id_client})
+  }
+
+  const getRowStyle = (params) => {
+    if (params.data.is_deleted) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
+
   const gridRef = useRef();
   const navigate = useNavigate()
   const [data, setData] = useState([])
+  const [gridApi, setGridApi] = useState(null);
+  const [filtered, setFiltered] = useState(false)
 
-  const fetchAllData = async () => {
-    const data = result.data.clients
-    setData(data)
-  }
   useEffect(() => {
+    const fetchAllData = async () => {
+      setData(client)
+    }
     fetchAllData()
   }, [2000])
 
   const defaultColDef = useMemo(() => ({
     sortable: true,
     filter: true,
-    // floatingFilter: true,
-  })) 
+  }))
 
-  const cellClickListner = (params) => {
-    navigate(`/clients/${params.data.id}`, {state: params.data})
-  }
-
-  const processRowGroup = (params) => {
-    // You can customize the row data here
-    // For example, you can format the date or manipulate the data before exporting
-    return params.node.group ? params.node.key : params.data;
-  };
-
-  const processHeader = (params) => {
-    // You can customize the header names here
-    // For example, you can change the header names or add additional information
-    return params.column.getColDef().headerName;
-  };
-
-  let gridApi;
 
   const onGridReady = (params) => {
-    gridApi = params.api
+    setGridApi(params.api);
   }
 
+  
 
-
-  const exportFilteredDataToHtml = () => {
-    let filteredData = [];
-
-    if (gridApi && gridApi.isAnyFilterPresent()) {
-      gridApi.forEachNodeAfterFilter((node) => {
-        filteredData.push(node.data);
-      });
-    } else {
-      filteredData = data
-    }
-    
-    // Iterate over filtered rows
-
-      const htmlContent = generateHtmlTable(filteredData);
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-
-      // Create a URL for the Blob
-      const blobUrl = URL.createObjectURL(blob);
-
-      // Create a downloadable link
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = 'eurl bhn zahav.html';
-      document.body.appendChild(a);
-
-      // Trigger a click on the link to start the download
-      a.click();
-
-      // Remove the link from the DOM
-      document.body.removeChild(a);
+  const onFilterChanged = () => {
+    const filteredRows = gridApi.getModel().rowsToDisplay;
+    setFiltered(true)
+    let inter = []
+    Object.keys(filteredRows).map((e, i) => {
+      inter.push(filteredRows[e].data)
+    })
+    return inter
   };
 
+
+
   
+
+ 
+
   return (
     <>
       <NavigationBar name="les clients" />
@@ -169,7 +147,9 @@ const columns_clients = [
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              onClick={() => { navigate('/clients/add-client') }}
+              onClick={() => { 
+                navigate('/clients/add-client') 
+              }}
               >ajouter client</Button>
               <Button sx={{
                 color: 'var(--brand-1)',
@@ -178,17 +158,32 @@ const columns_clients = [
                 marginRight: '10px'
               }} 
               onClick={() => {
-                exportDataToPdf(data, gridApi, 'les client')
+                const inter = filtered ? onFilterChanged() : data
+                let download_data = []
+                Object.keys(inter).map((e, i) => {
+                  download_data.push({
+                    nom: inter[e].nom_client,
+                    ville: inter[e].ville,
+                    wilaya: inter[e].wilaya,
+                    solde: inter[e].solde,
+                    or: inter[e].total_or,
+                  })
+                })
+                console.log(data)
+                console.log(download_data)
+                exportDataToPdf(download_data, gridApi, 'les clients')
               }}
               >telecharger pdf</Button>
-            <AgGridReact 
+            <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
               columnDefs={columns_clients}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
+              getRowStyle={getRowStyle}
               onGridReady={onGridReady}
+              onFilterChanged={onFilterChanged}
             />
             </div>
     </>

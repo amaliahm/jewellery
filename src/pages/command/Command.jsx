@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { result } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
-import { exportDataToPdf } from "../home/telecharger";
 
 
 const Command = () => {
@@ -144,7 +143,7 @@ const columns_command = [
                 marginRight: '10px'
               }} 
               onClick={() => {
-                exportDataToPdf(data, gridApi, 'les commands')
+                // exportDataToPdf(data, gridApi, 'les commands')
               }}
               >telecharger pdf</Button>
             <AgGridReact 

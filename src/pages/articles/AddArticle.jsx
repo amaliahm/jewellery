@@ -11,6 +11,7 @@ import Notification from "../home/notification";
 import { add_article } from "./data";
 import { useLocation } from "react-router-dom";
 import { result } from "../../backend";
+import { fournisseur } from "../../backend";
 
 const useStyle = makeStyles({
     root: {
@@ -25,41 +26,40 @@ const useStyle = makeStyles({
       }
 })
 
+const style = {
+    borderColor: "transparent",
+    margin: '10px'
+}
+
 const AddArticle = () => {
     const colors = useStyle()
     const location = useLocation()
     const [article, setArticle] = useState({
         ...add_article,
-        famille: location.state.nom,
+        ...location.state,
     })
     const [done, setDone] = useState(false)
     const navigate = useNavigate()
-    const [fournisseur, setFournisseur] = useState([])
 
     useEffect(() => {
-        const fetchAllData = async () => {
-            let __fournisseur = result.data.fournisseurs
-            setFournisseur(__fournisseur)
-        }
-        fetchAllData()
     }, [])
 
     const handleChange = (e) => {
         setArticle(c => ({...c, [e.target.name] : e.target.value.toUpperCase()}))
     }
+
+    const handlePrixChange = (e) => {
+        setArticle(c => ({...c, [e.target.name] : parseFloat(e.target.value)}))
+    }
     
     const handleClick = async e => {
         e.preventDefault();
-        setArticle(a => ({
-            ...a,
-            'prix unitaire': parseFloat(article["prix unitaire"])
-        }))
-        const inter = location.state.articles
-        inter.unshift(article)
         setDone(true)
+        console.log(location.state)
+        console.log(article)
         setTimeout(() => {
             setDone(false)
-            navigate(`/produits/${location.state.id}`, { state : { nom: location.state.nom, id: location.state.id, articles: inter } })
+            navigate(`/produits/${location.state.id_famille}`, { state : location.state })
         }, 2000)
         try {
             const result = await axios.post(api_add_article, article)
@@ -73,41 +73,72 @@ const AddArticle = () => {
     
     return (
         <>
-            <NavigationBar name={"ajouter article"} />
+            <NavigationBar name={`article pour ${location.state.nom_famille}`} />
             <div className="add">
                 {done && <Notification name={article.article + ' a été ajoutée'} />}
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
-                  <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setArticle} valeur={article} show={false}/>
+                  <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setArticle} valeur={article} show={false} bool_article={false}/>
                 </FormControl>
-                {Object.keys(article).slice(1).map((key, index) => (
-                    <>
-                    {(index > 0) 
-                    ? <TextField 
-                        id={"outlined-controlled"}
-                        label={key} variant="outlined"
-                        type={index >= 3 ? 'number' : 'text'}
-                        sx={{
-                          borderColor: "transparent",
-                          margin: '10px'
-                        }}
-                        name={key}
-                        className={colors.root}
-                        onChange={handleChange}
-                        value={article[key]}
-                    />
-                    : <TextField 
-                    disabled
-                    id={"outlined-read-only-input"}
-                    label={key} variant="outlined"
-                    sx={{
-                      borderColor: "transparent",
-                      margin: '10px'
-                    }}
-                    name={key}
+                <TextField 
+                    id={"outlined-controlled"}
+                    label='article' variant="outlined"
+                    type='text'
+                    sx={style}
+                    name='article'
                     className={colors.root}
-                    value={article[key]}
-                />}
-                </>))}
+                    onChange={handleChange}
+                    value={article.article}
+                />
+                <TextField 
+                    id={"outlined-controlled"}
+                    label='prix achat' variant="outlined"
+                    type='number'
+                    sx={style}
+                    name='prix achat'
+                    className={colors.root}
+                    onChange={handlePrixChange}
+                    value={article['prix achat']}
+                />
+                <TextField 
+                    id={"outlined-controlled"}
+                    label='prix vente' variant="outlined"
+                    type='number'
+                    sx={style}
+                    name='prix vente'
+                    className={colors.root}
+                    onChange={handlePrixChange}
+                    value={article['prix vente']}
+                />
+                <TextField 
+                    id={"outlined-controlled"}
+                    label='valeur de stock' variant="outlined"
+                    type='number'
+                    sx={style}
+                    name='valeur de stock'
+                    className={colors.root}
+                    onChange={handlePrixChange}
+                    value={article['valeur de stock']}
+                />
+                <TextField 
+                    id={"outlined-controlled"}
+                    label='stock min' variant="outlined"
+                    type='text'
+                    sx={style}
+                    name='stock min'
+                    className={colors.root}
+                    onChange={handlePrixChange}
+                    value={article['stock min']}
+                />
+                <TextField 
+                    id={"outlined-controlled"}
+                    label='mode de gestion' variant="outlined"
+                    type='text'
+                    sx={style}
+                    name='mode de gestion'
+                    className={colors.root}
+                    onChange={handleChange}
+                    value={article['mode de gestion']}
+                />
                 <Button 
                 sx={{
                     color: 'var(--brand-1)',
@@ -119,7 +150,7 @@ const AddArticle = () => {
                     bottom: '0',
                 }} 
                 onClick={handleClick}
-                disabled={article.fournisseur === "" || article["designation d'article"] === "" || article.article === '' || article["prix unitaire"] === ''|| article["prix unitaire"] === '0' }
+                disabled={article.id_fournisseur === "" || article.article === "" || article['prix achat'] === 0 || article["prix vente"] === 0 }
                 >ajouter article</Button>
             </div>
         </>

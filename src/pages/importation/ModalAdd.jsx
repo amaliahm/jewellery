@@ -61,6 +61,7 @@ export default function ModalAdd({showModal, setShowModal, ...props}) {
 
   
     const update = async (data) => {
+      console.log('imp')
       try {
           const result = await axios.post(api + 'importations', data)
           if(result.status === 200) {
@@ -74,10 +75,10 @@ export default function ModalAdd({showModal, setShowModal, ...props}) {
     const hanldeConfirm = async () => {
       const local_var = props.detail
       local_var.unshift(inter)
-      // props.setDetail(local_var)
-      setShowModal(false)
+      props.setDetail(local_var)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
       await update(inter)
@@ -97,34 +98,34 @@ export default function ModalAdd({showModal, setShowModal, ...props}) {
             minHeight: 200,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Ajouter importateur {inter.importateur}
+              Ajouter importateur {inter.nom_importateur}
             </Typography>
             <TextField 
               id={"outlined-controlled"}
               label='importateur' variant="outlined"
               type='text'
               sx={style_textField}
-              name='importateur'
+              name='nom_importateur'
               className={props.colors}
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    importateur: e.target.value.toUpperCase(),
+                    nom_importateur: e.target.value.toUpperCase(),
                 }))
               }}
-              value={inter.importateur}
+              value={inter.nom_importateur}
              />
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.importateur === "" }
+                disabled={inter.nom_importateur === "" }
               >confirmer</Button>
             </Box>
           </Box>
         </Modal>
-        {confirm && <Notification name={inter.importateur + ' a été enregitrées'}/>}
+        {confirm && <Notification name={inter.nom_importateur + ' a été enregitrées'}/>}
       </div>
     );
   }

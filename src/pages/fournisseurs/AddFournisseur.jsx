@@ -4,12 +4,13 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_fournisseur } from "../../backend";
-import { result } from "../../backend";
+import { result, titres } from "../../backend";
 import { display, wilayas } from "../../wilaya";
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
 import { add_fournisseur } from "./data";
+import SelectedTitre from "../home/SelectedTitre";
 
 
 const useStyle = makeStyles({
@@ -29,17 +30,10 @@ const AddFournisseur = () => {
     const colors = useStyle()
     const [fournisseur, setFournisseur] = useState(add_fournisseur)
     const [done, setDone] = useState(false)
-    const [titre, setTitre] = useState([])
     const navigate = useNavigate()
 
     useEffect(() => {
         const fetchAllData = () => {
-            let data = result.data.titre
-            let inter = []
-            Object.keys(data).map(e => {
-                inter.push(data[e].titre)
-            })
-            setTitre(inter)
         }
         fetchAllData()
     }, [2000])
@@ -76,9 +70,9 @@ const AddFournisseur = () => {
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
                     <SelectedMenu name='ville' options={display(fournisseur.wilaya)} setValue={setFournisseur} valeur={fournisseur}/>
                 </FormControl>
-                {Object.keys(fournisseur).map((key, index) => (
+                {Object.keys(fournisseur).slice(1).map((key, index) => (
                     <>
-                    {(index == 0 || (index > 2 && index != 4)) 
+                    {index != 1 && index != 2 && index != 4 
                     ? <TextField 
                         id={"outlined-read-only-input"}
                         label={key} variant="outlined"
@@ -95,7 +89,7 @@ const AddFournisseur = () => {
                     : <>
                       {index == 4 &&
                         <FormControl sx={{ m: 1, minWidth: 150 }}>
-                            <SelectedMenu name={key} options={titre} setValue={setFournisseur} valeur={fournisseur}/>
+                            <SelectedTitre id='id_titre' name='titre' options={titres} setValue={setFournisseur} valeur={fournisseur}/>
                         </FormControl>}
                     </>}
                 </>))}
@@ -110,7 +104,7 @@ const AddFournisseur = () => {
                     bottom: '0',
                 }} 
                 onClick={handleClick}
-                disabled={fournisseur.wilaya === "" || fournisseur.ville === '' || fournisseur.titre === '' || fournisseur.nom === '' || fournisseur.telephone === '' || fournisseur.telephone.length > 10}
+                disabled={fournisseur.wilaya === "" || fournisseur.ville === '' || fournisseur.id_titre === '' || fournisseur.nom === '' || fournisseur.telephone === ''}
                 >ajouter fournisseur</Button>
             </div>
         </>

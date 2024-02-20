@@ -7,6 +7,12 @@ import UpdateImportation from "../importation/UpdateImportation"
 import UpdateAchatImportation from "../achat_importation/UpdateAchatImportation"
 import UpdateVersementImportation from "../versement_importation/UpdateVersementImportation"
 import UpdateArticle from "../articles/UpdateArticle"
+import UpdateRetour from "../retours/UpdateRetour"
+import Reparation from "../reparation/Reparation"
+import UpdateReparation from "../reparation/UpdateReparation"
+import UpdateAchatDetail from "../achats/UpdateAchatDetail"
+import UpdateVenteDetail from "../ventes/UpdateVenteDetail"
+import UpdateTitre from "../titre/DataTitre"
 
 const update_routes = [
     {
@@ -22,6 +28,14 @@ const update_routes = [
         component: <UpdateAchat />
     },
     {
+        to: '/achats/:id/:id',
+        component: <UpdateAchatDetail />
+    },
+    {
+        to: '/ventes/:id/:id',
+        component: <UpdateVenteDetail />
+    },
+    {
         to: '/ventes/:id',
         component: <UpdateVente />
     },
@@ -30,8 +44,24 @@ const update_routes = [
         component: <UpdateVersement />
     },
     {
+        to: '/magasins/:id',
+        component: <Reparation />
+    },
+    {
+        to: '/magasins/:id/:id',
+        component: <UpdateReparation />
+    },
+    {
+        to: '/retours/:id',
+        component: <UpdateRetour />
+    },
+    {
         to: '/importations/:id',
         component: <UpdateImportation />
+    },
+    {
+        to: '/titres/:id',
+        component: <UpdateTitre />
     },
     {
         to: '/importations/achat_importation/:id',

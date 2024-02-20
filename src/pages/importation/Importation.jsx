@@ -2,12 +2,12 @@ import { Button } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 import ModalAdd from "./ModalAdd";
 import { makeStyles } from "@mui/styles";
+import { importation } from "../../backend";
 
 const useStyle = makeStyles({
     root: {
@@ -43,23 +43,28 @@ const Importation = () => {
 
   const columns_importation = [
     { 
-        field: "importateur", 
+        field: "nom_importateur", 
         headerName: "IMPORTATEUR",
         ...column, 
     },
     {
-      field: "total versement $",
-      headerName: "TOTAL VERSEMENT $",
+      field: "poid 18k",
+      headerName: "POID 18",
       ...column,
     },
     {
-      field: "reste poid 24k",
-      headerName: "RESTE POID 24K",
+      field: "poid 24k",
+      headerName: "POID 24",
       ...column,
     },
     {
-      field: "reste $",
-      headerName: "RESTE $",
+      field: "versement aregnt",
+      headerName: "VERSEMENT ARGENT",
+      ...column,
+    },
+    {
+      field: "versement or 24k",
+      headerName: "VERSEMENT OR 24K",
       ...column,
     },
     {
@@ -71,10 +76,19 @@ const Importation = () => {
       headerAlign: 'left',
       cellRenderer : (params) => 
         <Button
-        sx={style} 
-        onClick={() => {cellClickListner(params)}}
+        sx={{
+          background: `${!params.data.deleted_importation ? 'var(--brand-1)' : 'transparent'} `,
+          marginBottom: '5px',
+          padding: '15px',
+          '&:hover' : {
+            border: `${!params.data.deleted_importation ? '1px solid var(--brand-1)' : 'transparent'}`,
+          }
+        }} 
+        onClick={() => {
+          !params.data.deleted_importation ? cellClickListner(params) : console.log()
+        }}
         >
-          <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
+          {!params.data.deleted_importation && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
         </Button>
     },
   ];
@@ -89,9 +103,23 @@ const Importation = () => {
   const [modal, setModal] = useState(false)
 
   useEffect(() => {
-    const fetchAllData = async () => {
-      const data = result.data.importation
-      setData(data)
+    const fetchAllData = () => {
+      let inter = []
+      Object.keys(importation).map((e, i) => {
+        inter.push({
+          id_importation: importation[e].id_importation,
+          deleted_importation: importation[e].is_delete,
+          nom_importateur: importation[e].nom_importateur,
+          'poid 18k': importation[e].poid_18,
+          'poid 24k': importation[e].poid_24,
+          'total facon': importation[e].total_facon,
+          'versement or 24k': importation[e].versement_or_24,
+          'versement argent': importation[e].versement_argent,
+          'reste poid 24k': importation[e].reste_poid_24,
+          'reste argent': importation[e].reste_argent,
+        })
+      })
+      setData(inter)
     }
     fetchAllData()
   }, [2000])
@@ -103,18 +131,21 @@ const Importation = () => {
   }))
 
   const cellClickListner = (params) => {
-    navigate(`/importations/${params.data.id}`, {state: params.data})
+    console.log(params.data)
+    navigate(`/importations/${params.data.id_importation}`, {state: params.data})
   }
-
-  const onBtExport = useCallback(() => {
-    gridRef.current.api.exportDataAsExcel();
-  }, []);
-
 
   if (gridRef.current) {
     gridRef.current.api.setRowData([]);
     gridRef.current.api.setRowData(data);
   }
+
+  const getRowStyle = (params) => {
+    if (params.data.deleted_importation) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
 
   return (
     <>
@@ -143,14 +174,6 @@ const Importation = () => {
               }} 
               onClick={() => { setModal(true) }}
               >ajouter importateur</Button>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={onBtExport}
-              >telecharger excel</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
@@ -158,6 +181,7 @@ const Importation = () => {
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
+              getRowStyle={getRowStyle}
             />
             </div>
     </>

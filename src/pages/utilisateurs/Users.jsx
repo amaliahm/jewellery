@@ -11,7 +11,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { result } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
-import { exportDataToPdf } from "../home/telecharger";
 
 const Utilisateurs = () => {
   const theme = useTheme();
@@ -162,7 +161,7 @@ const Utilisateurs = () => {
                     marginRight: '10px'
                   }} 
                   onClick={() => {
-                    exportDataToPdf(data, gridApi, 'les utilisateurs')
+                    // exportDataToPdf(data, gridApi, 'les utilisateurs')
                   }}
                   >telecharger pdf</Button>
                 <AgGridReact 

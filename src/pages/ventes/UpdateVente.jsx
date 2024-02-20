@@ -1,11 +1,15 @@
-import * as React from 'react';
-import { useState } from "react";
+
 import NavigationBar from "../home/NavigationBar"
 import { useLocation } from "react-router-dom"
-import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
-import ModalUpdate from './ModalUpdate';
+import { view_vente_articles_client } from '../../backend';
+import { Button } from "@mui/material";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AgGridReact } from "ag-grid-react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const useStyle = makeStyles({
     root: {
@@ -21,70 +25,196 @@ const useStyle = makeStyles({
 })
 
 const UpdateVente = () => {
+
+  const columns_ventes = [
+    { 
+        field: "vente n=°", 
+        headerName: "VENTE N=°", 
+        flex: 0.5,
+        minWidth: 200,
+        maxWidth: 300,
+        headerAlign: 'left'
+    },
+    {
+      field: "nom_famille",
+      headerName: "FAMILLE",
+      flex: 1,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "nom_article",
+      headerName: "L'ARTICLE",
+      flex: 1,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "prix_unitaire",
+      headerName: "PRIX UNITAIRE",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 250,
+      maxWidth: 350,
+      headerAlign: 'left'
+    },
+    {
+      field: "quantite",
+      headerName: "QUANTITE",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 250,
+      maxWidth: 350,
+      headerAlign: 'left'
+    },
+    {
+      field: "total",
+      headerName: "TOTAL",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 250,
+      maxWidth: 350,
+      headerAlign: 'left'
+    },
+    {
+      field: "plus details",
+      headerName: "",
+      flex: 1,
+      minWidth: 100,
+      maxWidth: 100,
+      headerAlign: 'left',
+      cellRenderer : (params) => 
+        <Button
+        sx={{
+          background: `${!params.data.delete_vente ? 'var(--brand-1)' : 'transparent'} `,
+          marginBottom: '5px',
+          padding: '15px',
+          '&:hover' : {
+            border: `${!params.data.delete_vente ? '1px solid var(--brand-1)' : 'transparent'}`,
+          }
+        }} 
+        onClick={() => {
+          !params.data.delete_vente ? cellClickListner(params) : console.log()
+        }}
+        >
+          {!params.data.delete_vente && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
+        </Button>
+    },
+  ];
+
+  const navigate = useNavigate()
+  const getRowStyle = (params) => {
+    if (params.data.delete_vente) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
+
+
     const colors = useStyle()
     const location = useLocation()
-    const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
-    const [data, setData] = useState({
-      'vente n=°': location.state["vente n=°"],
-      id: location.state.id,
-      date: location.state.date,
-      client: location.state.client,
-      famille: location.state.famille,
-      article: location.state["designation d'article"],
-      quantite: location.state.qte,
-      "prix unitaire": location.state.pu,
-      total: location.state.total,
-    })
+    const [data_delete, setDataDelete] = useState()
+    const [gridApi, setGridApi] = useState(null);
+    const id = parseInt(location.pathname.split('/')[2])
+    useEffect(() => {
+      const fetchAllData = () => {
+        let inter = []
+        Object.keys(view_vente_articles_client).map((e, i) => {
+          if (view_vente_articles_client[e].id_total_vente === id) {
+            inter.push({
+              delete_total_vente: view_vente_articles_client[e].delete_total_vente,
+              delete_vente: view_vente_articles_client[e].delete_vente,
+              id_total_vente: view_vente_articles_client[e].id_total_vente,
+              id_vente: view_vente_articles_client[e].id_vente,
+              id_article: view_vente_articles_client[e].id_article,
+              'vente n=°': view_vente_articles_client[e]['vente n=°'],
+              prix_unitaire: view_vente_articles_client[e].prix_unitaire_vente,
+              quantite: view_vente_articles_client[e].quantite_vente,
+              total: view_vente_articles_client[e].total_vente,
+              nom_famille: view_vente_articles_client[e].nom_famille,
+              nom_article: view_vente_articles_client[e].nom_article,
+              id_fournisseur: view_vente_articles_client[e].id_fournisseur,
+            })
+          }
+        })
+        setData(inter)
+      }
+      fetchAllData()
+    }, [2000])
+    const gridRef = useRef();
 
-    return (
-        <>
-          <NavigationBar name={data['vente n=°']}/>
-          <div className="add">
-            {Object.keys(data).slice(2).map(value => (
-                   <TextField 
-                   id={"outlined-controlled"}
-                   label={value} variant="outlined"
-                   sx={{
-                     borderColor: "transparent",
-                     margin: '10px'
-                   }}
-                   name={value}
-                   className={colors.root}
-                   onChange={() => {}}
-                   value={data[value]}
-                   disabled
-                   />
-            ))}
-            <div style={{
-              height: '50px',
-              width: '100px',
-              position: 'absolute',
-              right: '10px',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-            }}>
-              <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
-              <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
-            </div>
-            <ModalUpdate
-              setShowModal={setModal}
-              showModal={modal}
-              detail={data}
-              colors={colors.root}
-              setDetail={setData}
+
+  const [data, setData] = useState([])
+  const [type, setType] = useState('')
+
+  const defaultColDef = useMemo(() => ({
+    sortable: true,
+    filter: true,
+  }))
+
+  if (gridRef.current) {
+    gridRef.current.api.setRowData([]);
+    gridRef.current.api.setRowData(data);
+  }
+  const cellClickListner = (params) => {
+    navigate(`/ventes/${params.data.id_total_vente}/${params.data.id_vente}`, {state: params.data})
+  }
+
+
+  return (
+    <>
+      <NavigationBar name="les ventes" />
+        <div 
+        className="ag-theme-quartz-dark"
+        style={{
+            marginTop: "50px",
+            height: '75vh',
+            width: '95vw',
+            marginBottom: '20px'
+        }}>
+           {true && <Button sx={{
+                color: 'var(--brand-1)',
+                border: '1px solid var(--brand-1)',
+                marginBottom: '10px',
+                marginRight: '10px'
+              }} 
+              onClick={() => { 
+                setM_Delete(true)
+                setType('total_ventes')
+              }}
+              >supprimer le vente</Button>}
+               <Button sx={{
+                color: 'var(--brand-1)',
+                border: '1px solid var(--brand-1)',
+                marginBottom: '10px',
+                marginRight: '10px'
+              }} 
+              // onClick={() => { navigate('/achats/add-achat') }}
+              >bon de vente</Button>
+
+            <AgGridReact className="clear"
+              ref={gridRef}
+              rowData={data}
+              columnDefs={columns_ventes}
+              defaultColDef={defaultColDef}
+              rowGroupPanelShow='always'
+              pagination={true}
+              getRowStyle={getRowStyle}
             />
-            <ModalDelete
+            </div>
+            {m_delete && <ModalDelete
               setDelete={setM_Delete}
               _delete={m_delete}
               detail={data}
               colors={colors.root}
-            />
-          </div>
-        </>
-    )
+              setDetail={setData}
+              type={type}
+            />}
+    </>
+  );
 }
 
 export default UpdateVente

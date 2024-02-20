@@ -1,5 +1,57 @@
 const columns_achats = [
   { 
+      field: "achat total n=°", 
+      headerName: "ACHAT TOTAL N=°", 
+      flex: 0.5,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+  },
+  {
+    field: "date total achat",
+    headerName: "DATE",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "piece_achat",
+    headerName: "nombre de piece",
+    flex: 1,
+    minWidth: 250,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "ancien_solde_achat",
+    headerName: "ANCIEN SOLDE",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "valeur_achats",
+    headerName: "total",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "nouveau_solde_achat",
+    headerName: "NOUVEAU SOLDE",
+    flex: 1,
+    minWidth: 250,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+];
+
+const columns_achat_article = [
+  { 
       field: "achat n=°", 
       headerName: "ACHAT N=°", 
       flex: 0.5,
@@ -17,35 +69,26 @@ const columns_achats = [
     headerAlign: 'left'
   },
   {
-    field: "designation d'article",
-    headerName: "ARTICLE",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    minWidth: 250,
-    maxWidth: 350,
-    headerAlign: 'left'
-  },
-  {
-    field: "qte",
-    headerName: "QUANTITE",
-    flex: 1,
-    minWidth: 150,
-    maxWidth: 2500,
-    headerAlign: 'left'
-  },
-  {
-    field: "pu",
+    field: "prix_unitaire",
     headerName: "PRIX UNITAIRE",
     flex: 1,
-    minWidth: 150,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "quantite_achat",
+    headerName: "QUANTITE",
+    flex: 1,
+    minWidth: 200,
     maxWidth: 250,
     headerAlign: 'left'
   },
   {
     field: "total",
-    headerName: "TOTAL",
+    headerName: "total",
     flex: 1,
-    minWidth: 150,
+    minWidth: 200,
     maxWidth: 250,
     headerAlign: 'left'
   },
@@ -53,29 +96,11 @@ const columns_achats = [
 
 const columns_add_achat = [
   {
-    field: "fournisseur",
-    headerName: "FOURNISSEUR",
+    field: "nom_article",
+    headerName: "L'ARTICLE",
     flex: 1,
     minWidth: 200,
     maxWidth: 300,
-    headerAlign: 'left'
-  },
-  {
-    field: "famille",
-    headerName: "FAMILLE",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    minWidth: 250,
-    maxWidth: 350,
-    headerAlign: 'left'
-  },
-  {
-    field: "article",
-    headerName: "ARTICLE",
-    flex: 1,
-    cellClassName: "name-column--cell",
-    minWidth: 250,
-    maxWidth: 350,
     headerAlign: 'left'
   },
   {
@@ -87,7 +112,7 @@ const columns_add_achat = [
     headerAlign: 'left'
   },
   {
-    field: "prix unitaire",
+    field: "prix_unitaire",
     headerName: "PRIX UNITAIRE",
     flex: 1,
     minWidth: 150,
@@ -106,19 +131,18 @@ const columns_add_achat = [
 
   
 const add_achat = {
-  jour: '',
-  mois: '',
-  annee: '',
-  famille: '',
-  article: '',
-  fournisseur: '',
+  id_article: '',
+  nom_article: '',
+  id_fournisseur: '',
+  nom: '',
   quantite: 0,
-  'prix unitaire': 0,
+  prix_unitaire: 0,
   total: 0,
 }
 
 export {
   columns_achats,
   add_achat,
-  columns_add_achat
+  columns_add_achat,
+  columns_achat_article
 }

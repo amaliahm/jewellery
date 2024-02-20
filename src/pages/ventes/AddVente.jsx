@@ -1,19 +1,18 @@
 import { Button, FormControl, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useMemo, useRef, useState, useReducer} from "react";
-import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
-import NavigationBar from "../home/NavigationBar";
-import SelectedArticle from "../home/SelectedArticle";
-import SelectedMenu from "../home/SelectedMenu";
-import { add_vente, columns_add_vente } from "./data";
-import { api_add_vente } from "../../backend";
-import axios from "axios";
-import Notification from "../home/notification";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
+import axios from "axios";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api_add_vente, client, result, view_achat_articles_fournisseur } from "../../backend";
+import NavigationBar from "../home/NavigationBar";
+import SelectedArticle from "../home/SelectedArticle";
 import SelectedClient from "../home/SelectedClient";
+import SelectedFamille from "../home/SelectedFamille";
+import Notification from "../home/notification";
+import { add_vente, columns_add_vente } from "./data";
 
 const useStyle = makeStyles({
     root: {
@@ -31,7 +30,6 @@ const useStyle = makeStyles({
 const AddVente = () => {
     const colors = useStyle()
     const [vente, setVente] = useState(add_vente)
-    const [client, setClient] = useState([])
     const [famille, setFamille] = useState([])
     const [articles, setArticles] = useState([])
     const [done, setDone] = useState(false)
@@ -47,43 +45,54 @@ const AddVente = () => {
     }))
 
     useEffect(() => {
-        setVente(a => ({
-            ...a,
-            jour: String(currentDate.getDate()).padStart(2, '0'),
-            mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
-            annee : String(currentDate.getFullYear())
-        }))
         const fetchAllData = async () => {
-            let data = result.data.articles
-            setArticles(data)
-            let __client = result.data.clients
-            setClient(__client)
-            data = result.data.familles
-            const famille = [...new Set(
-                data.map(item => item.famille))]
-                setFamille(famille)
-            
-              }
-              fetchAllData()
+          let inter = []
+          Object.keys(view_achat_articles_fournisseur).map((e, i) => {
+            inter.push({
+              id_famille: view_achat_articles_fournisseur[e].id_famille,
+              nom_famille: view_achat_articles_fournisseur[e].nom_famille,
+            })
+          })
+          
+          const uniqueObjectsSet = new Set();
+    
+          const uniqueArray = inter.filter(obj => {
+            const stringRepresentation = JSON.stringify(obj);
+            if (!uniqueObjectsSet.has(stringRepresentation)) {
+              uniqueObjectsSet.add(stringRepresentation);
+              return true;
+            }
+            return false;
+          });
+          setFamille(uniqueArray)
+        }
+        fetchAllData()
     }, [])
-
-    function displayFamille(name) {
-        const result = []
-        Object.keys(articles).map((e, i) => {
-          if (articles[e].famille === name) {
-            result.push(articles[e]["designation d'article"] )
-          }
-        })
-        return result
-    }
     
     const handleClick = async e => {
+      console.log(vente)
       setDone(true)
       addText()
     }
     const handleValidate = async e => {
       e.preventDefault();
       console.log(allVente)
+      let total_quantite = 0
+      let total_argent = 0
+      let ancien_solde = articles[0].solde
+      Object.keys(allVente).map((e, i) => {
+        total_quantite += allVente[e].quantite
+        total_argent += allVente[e].total
+      })
+      allVente.unshift({
+        jour: String(currentDate.getDate()).padStart(2, '0'),
+        mois: String(currentDate.getMonth() + 1).padStart(2, '0'),
+        annee: String(currentDate.getFullYear()),
+        total_argent: total_argent,
+        total_quantite: total_quantite,
+        ancien_solde: ancien_solde,
+        nombre_piece: allVente.length
+      })
       setVal(true)
       setTimeout(() => {
         setDone(false)
@@ -119,7 +128,7 @@ const AddVente = () => {
                 <TextField 
                     disabled
                     id="outlined-disabled"
-                    label={`${vente.jour}-${vente.mois}-${vente.annee}`} variant="outlined"
+                    label={`${String(currentDate.getDate()).padStart(2, '0')}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getFullYear())}`} variant="outlined"
                     type='text'
                     sx={{
                       borderColor: "transparent",
@@ -134,17 +143,17 @@ const AddVente = () => {
               </FormControl>
               <div className="select-article">
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedMenu name="famille"  options={famille} setValue={setVente} valeur={vente}/>
+                  <SelectedFamille name='famille' options={famille} setValue={setVente} valeur={vente} setArticles={setArticles}/>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedArticle name="article"  options={displayFamille(vente.famille)} setValue={setVente} valeur={vente} rest={articles}/>
+                    <SelectedArticle name="article"  options={articles} setValue={setVente} valeur={vente}/>
                 </FormControl>
               </div>
               <div className="select-article">
 
                 <TextField 
                     id={"outlined-controlled"}
-                    label='prix unitaire' variant="outlined"
+                    label='prix_unitaire' variant="outlined"
                     type='number'
                     sx={{
                       borderColor: "transparent",
@@ -154,11 +163,11 @@ const AddVente = () => {
                     onChange={(e) => {
                       setVente(r => ({
                         ...r,
-                        'prix unitaire': parseInt(e.target.value),
-                        total: Math.abs(vente.quantite) * parseInt(e.target.value),
+                        prix_unitaire: parseFloat(e.target.value),
+                        total: Math.abs(parseFloat(vente.quantite)) * parseFloat(e.target.value),
                       }))
                     }}
-                    value={vente['prix unitaire']}
+                    value={vente.prix_unitaire}
                 ></TextField>
                 <TextField 
                     id="outlined-controlled"
@@ -172,8 +181,8 @@ const AddVente = () => {
                     onChange={(e) => {
                       setVente(r => ({
                         ...r,
-                        quantite: parseInt(e.target.value),
-                        total: Math.abs(parseInt(e.target.value)) * vente['prix unitaire'],
+                        quantite: parseFloat(e.target.value),
+                        total: Math.abs(parseFloat(e.target.value)) * parseFloat(vente.prix_unitaire),
                       }))
                     }}
                     value={vente.quantite}
@@ -203,7 +212,7 @@ const AddVente = () => {
                     bottom: '0',
                 }} 
                 onClick={handleClick}
-                disabled={vente.famille === "" || vente.article === '' || vente.client === '' || vente.quantite === '' || vente.quantite == 0 || vente['prix unitaire'] == 0 || vente['prix unitaire'] === ''}
+                disabled={vente.id_article === '' || vente.id_client === '' ||vente.total === 0 || vente.total === ''}
                 >ajouter vente</Button>
            
             </div>

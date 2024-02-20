@@ -1,7 +1,7 @@
 const columns_versement_f = [
     {
-      field: "versement n=°",
-      headerName: "VERSEMENT N=°",
+      field: "versement fournisseur n=°",
+      headerName: "VERSEMENT FOURNISSEUR N=°",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 300,
@@ -18,16 +18,7 @@ const columns_versement_f = [
       headerAlign: 'left'
     },
     {
-      field: "fournisseur",
-      headerName: "FOURNISSEUR",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "versement or",
+      field: "versement_or",
       headerName: "VERSEMENT OR",
       flex: 1,
       minWidth: 200,
@@ -35,7 +26,7 @@ const columns_versement_f = [
       headerAlign: 'left'
     },
     {
-      field: "versement argent",
+      field: "versement_argent",
       headerName: "VERSEMENT ARGENT",
       flex: 1,
       minWidth: 250,
@@ -43,71 +34,31 @@ const columns_versement_f = [
       headerAlign: 'left'
     },
     {
-      field: "retour or",
-      headerName: "RETOUR OR",
+      field: "ancien_solde",
+      headerName: "ANCIEN SOLDE",
       flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 250,
+      maxWidth: 300,
       headerAlign: 'left'
     },
     {
-      field: "retour argent",
-      headerName: "RETOUR ARGENT",
+      field: "nouveau_solde",
+      headerName: "NOUVEAU SOLDE",
       flex: 1,
-      minWidth: 200,
-      maxWidth: 250,
-      headerAlign: 'left'
-    },
-    {
-      field: "or v",
-      headerName: "OR V",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "fonte",
-      headerName: "FONTE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "titre",
-      headerName: "TITRE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "net 750",
-      headerName: "NET 750",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "ecart",
-      headerName: "ECART",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 250,
+      maxWidth: 300,
       headerAlign: 'left'
     },
   ];
 
   const columns_versement_c = [
     {
-      field: "versement n=°",
-      headerName: "VERSEMENT N=°",
+      field: "versement client n=°",
+      headerName: "VERSEMENT CLIENT N=°",
       flex: 1,
       cellClassName: "name-column--cell",
-      minWidth: 250,
-      maxWidth: 300,
+      minWidth: 300,
+      maxWidth: 350,
       headerAlign: 'left'
     },
     {
@@ -120,24 +71,15 @@ const columns_versement_f = [
       headerAlign: 'left'
     },
     {
-      field: "client",
-      headerName: "CLIENT",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "versement or",
+      field: "versement_or",
       headerName: "VERSEMENT OR",
       flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 200,
+      maxWidth: 250,
       headerAlign: 'left'
     },
     {
-      field: "versement argent",
+      field: "versement_argent",
       headerName: "VERSEMENT ARGENT",
       flex: 1,
       minWidth: 250,
@@ -145,82 +87,92 @@ const columns_versement_f = [
       headerAlign: 'left'
     },
     {
-      field: "retour or",
-      headerName: "RETOUR OR",
+      field: "ancien_solde",
+      headerName: "ANCIEN SOLDE",
       flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 250,
+      maxWidth: 300,
       headerAlign: 'left'
     },
     {
-      field: "retour argent",
-      headerName: "RETOUR ARGENT",
+      field: "nouveau_solde",
+      headerName: "NOUVEAU SOLDE",
       flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "or v",
-      headerName: "OR V",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "fonte",
-      headerName: "FONTE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "titre",
-      headerName: "TITRE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "net 750",
-      headerName: "NET 750",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "ecart",
-      headerName: "ECART",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
+      minWidth: 250,
+      maxWidth: 300,
       headerAlign: 'left'
     },
   ];
+
+
 const add_versement = {
   jour: '',
   mois: '',
   annee: '',
-  person: '',
-  nom: '',
-  titre: '',
+  id_client: '',
+  solde: 0,
+  id_titre: 0,
+  titre: 0,
   "versement or" : 0,
   "versement argent": 0,
-  "retour or": 0,
-  "retour argent": 0,
-  fonte: 0,
+  "versement casse": 0,
   "or v": 0,
-  "net 750": 0,
+  fonte: 0,
+  'net 750': 0,
   ecart: 0,
 }
 
 
+const columns_ajouter_versement_fournisseur = [
+  { 
+      field: "achat total n=°", 
+      headerName: "ACHAT total N=°", 
+      flex: 0.5,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+  },
+  {
+    field: "date",
+    headerName: "DATE",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "nom_fournisseur",
+    headerName: "FOURNISSEUR",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "total_quantite_achats",
+    headerName: "VERSEMENT OR",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 250,
+    maxWidth: 350,
+    headerAlign: 'left'
+  },
+  {
+    field: "valeur_achats",
+    headerName: "VERSEMENT ARGENT",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 250,
+    maxWidth: 350,
+    headerAlign: 'left'
+  },
+];
+
 export {
     columns_versement_f,
     columns_versement_c,
-    add_versement
+    add_versement,
+    columns_ajouter_versement_fournisseur
 }

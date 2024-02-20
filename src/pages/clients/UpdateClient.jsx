@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationBar from "../home/NavigationBar"
 import { useLocation } from "react-router-dom"
 import { TextField } from "@mui/material"
@@ -7,6 +7,8 @@ import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
 import TableData from './restData';
+import { client } from '../../backend';
+import { export_details_to_pdf } from '../home/telecharger_details';
 
 const useStyle = makeStyles({
     root: {
@@ -26,31 +28,50 @@ const UpdateClient = () => {
     const location = useLocation()
     const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
-    const [data, setData] = useState({
-      id: location.state.id,
-      nom: location.state.nom,
-      wilaya: location.state.wilaya,
-      ville: location.state.ville,
-      telephone: location.state.telephone,
-      email: location.state.email,
-      titre: location.state.titre,
-      'chiffre d\'affaire': location.state['chiffre d\'affaire'],
-      'total or': location.state['total or'],
-      'total versement or': location.state['total vo'],
-      'total versement argent': location.state['total va'],
-      'total perte': location.state['total perte'],
-      'total retour or': location.state['total ro'],
-      'total retour argent': location.state['total ra'],
-      'reste or': location.state['reste o'],
-      'reste argent': location.state['reste a'],
-    })
+    const [data, setData] = useState({})
+    const [supprimer, setSupprimer] = useState(false)
 
+    useEffect(() => {
+      const fetchAllData = () => {
+        Object.keys(client).map((e, i) => {
+          if (client[i].id_client === location.state) {
+            setData({
+              id_client: client[i].id_client,
+              is_deleted: client[i].is_deleted,
+              nom: client[i].nom_client,
+              wilaya: client[i].wilaya,
+              ville: client[i].ville,
+              adresse: client[i].adresse,
+              titre: client[i].valeur,
+              telephone: client[i].telephone,
+              email: client[i].email,
+              solde: client[i].solde,
+              'or': client[i].total_or,
+              'versement or': client[i].total_versement_or,
+              'versement argent': client[i].total_versement_argent,
+              'perte': client[i].total_perte,
+              'retour or': client[i].total_retour_or,
+              'retour argent': client[i].total_retour_argent,
+              'reste or': client[i].reste_or,
+              'reste argent': client[i].reste_argent,
+              NRC: client[i].NRC,
+              NIF: client[i].NIF,
+              NIS: client[i].NIS,
+              'n=° article': client[i].N_art,
+            })
+          }
+        })
+      }
+      fetchAllData()
+    }, [2000])
+    
     return (
         <>
           <NavigationBar name={data.nom}/>
           <div className="add">
-            {Object.keys(data).slice(1).map(value => (
+            {Object.keys(data).slice(2).map((value, index) => (
                    <TextField 
+                   key={index}
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
                    sx={{
@@ -74,8 +95,11 @@ const UpdateClient = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => export_details_to_pdf(data)}></i>
+              {!supprimer && !data.is_deleted &&  <>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
+              </>}
             </div>
             <ModalUpdate
               setShowModal={setModal}
@@ -89,9 +113,11 @@ const UpdateClient = () => {
               _delete={m_delete}
               detail={data}
               colors={colors.root}
+              supprimer={supprimer}
+              setSupprimer={setSupprimer}
             />
           </div>
-          <TableData nom={data.nom} />
+          <TableData />
         </>
     )
 }

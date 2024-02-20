@@ -37,7 +37,7 @@ function App() {
           <Router>
           
             <Routes>
-              <Route element={<PrivateRoute />}>
+              <Route key='/private route' element={<PrivateRoute />}>
               <Route key='home' element={<Home />} path='/home' exact/>
               <Route key='lock' element={<Lock />} path='/lock' exact/>
               <Route key='titre' element={<Titre />} path='/titres' exact/>

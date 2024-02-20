@@ -1,75 +1,103 @@
 const columns_ventes = [
-    { 
-        field: "vente n=°", 
-        headerName: "VENTE N=°", 
-        flex: 0.5,
-        minWidth: 200,
-        maxWidth: 300,
-        headerAlign: 'left'
-    },
-    {
-      field: "date",
-      headerName: "DATE",
-      flex: 1,
-      cellClassName: "name-column--cell",
+  { 
+      field: "vente total n=°", 
+      headerName: "VENTE TOTAL N=°", 
+      flex: 0.5,
       minWidth: 200,
       maxWidth: 300,
       headerAlign: 'left'
-    },
-    {
-      field: "client",
-      headerName: "CLIENT",
-      flex: 1,
+  },
+  {
+    field: "date total vente",
+    headerName: "DATE",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "piece_vente",
+    headerName: "nombre de piece",
+    flex: 1,
+    minWidth: 250,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "ancien_solde_vente",
+    headerName: "ANCIEN SOLDE",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "total_vente",
+    headerName: "TOTAL",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "nouveau_solde_vente",
+    headerName: "NOUVEAU SOLDE",
+    flex: 1,
+    minWidth: 250,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+];
+
+
+const columns_vente_article = [
+  { 
+      field: "vente n=°", 
+      headerName: "VENTE N=°", 
+      flex: 0.5,
       minWidth: 200,
       maxWidth: 300,
       headerAlign: 'left'
-    },
-    {
-      field: "designation d'article",
-      headerName: "ARTICLE",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 250,
-      maxWidth: 350,
-      headerAlign: 'left'
-    },
-    {
-      field: "qte",
-      headerName: "QUANTITE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 2500,
-      headerAlign: 'left'
-    },
-    {
-      field: "pu",
-      headerName: "PRIX UNITAIRE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 250,
-      headerAlign: 'left'
-    },
-    {
-      field: "total",
-      headerName: "TOTAL",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 250,
-      headerAlign: 'left'
-    },
-  ];
+  },
+  {
+    field: "date",
+    headerName: "DATE",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left'
+  },
+  {
+    field: "prix_unitaire",
+    headerName: "PRIX UNITAIRE",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "quantite_vente",
+    headerName: "QUANTITE",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+  {
+    field: "total",
+    headerName: "total",
+    flex: 1,
+    minWidth: 200,
+    maxWidth: 250,
+    headerAlign: 'left'
+  },
+];
 
   const columns_add_vente = [
     {
-      field: "client",
-      headerName: "client",
-      flex: 1,
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "famille",
+      field: "nom_famille",
       headerName: "FAMILLE",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -78,7 +106,7 @@ const columns_ventes = [
       headerAlign: 'left'
     },
     {
-      field: "article",
+      field: "nom_article",
       headerName: "ARTICLE",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -95,7 +123,7 @@ const columns_ventes = [
       headerAlign: 'left'
     },
     {
-      field: "prix unitaire",
+      field: "prix_unitaire",
       headerName: "PRIX UNITAIRE",
       flex: 1,
       minWidth: 150,
@@ -114,19 +142,20 @@ const columns_ventes = [
   
     
   const add_vente = {
-    jour: '',
-    mois: '',
-    annee: '',
-    famille: '',
-    article: '',
-    client: '',
+    id_article: '',
+    nom_article: '',
+    id_famille: '',
+    nom_famille: '',
+    id_client: '',
+    nom: '',
     quantite: 0,
-    'prix unitaire': 0,
+    prix_unitaire: 0,
     total: 0,
   }
   
   export {
     columns_ventes,
     add_vente,
-    columns_add_vente
+    columns_add_vente,
+    columns_vente_article
   }

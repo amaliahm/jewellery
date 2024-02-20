@@ -27,23 +27,26 @@ const UpdateArticle = () => {
     const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
     const [data, setData] = useState({
-      id: location.state.detail.id,
-      famille: location.state.detail.famille,
-      fournisseur: location.state.detail.fournisseur,
-      "designation d'article": location.state.detail.article,
-      article: location.state.detail["designation d'article"],
-      "prix unitaire": location.state.detail["prix unitaire"],
-      "quantite de stock": location.state.detail["qte stock"],
-      "valeur de stock": location.state.detail["valeur de stock"],
-      "stock min": location.state.detail["stock min"],
-      alert: location.state.detail.alert
+      id_fournisseur: location.state.id_fournisseur,
+      id_famille: location.state.id_famille,
+      deleted_article: location.state.deleted_article,
+      id_article: location.state.id_article,
+      nom_article: location.state.nom_article,
+      fournisseur: location.state.nom_fournisseur,
+      'prix achat': location.state.prix_achat,
+      'prix vente': location.state.prix_vente,
+      'prix moyenne': location.state.prix_moyenne,
+      'quantite de stock': location.state.quantite_stock,
+      'stock min': location.state.stock_min,
+      'valeur de stock': location.state.valeur_stock,
+      'mode de gestion': location.state.mode_de_gestion,
     })
 
     return (
         <>
-          <NavigationBar name={location.state.nom}/>
+          <NavigationBar name={data.nom_article}/>
           <div className="add">
-            {Object.keys(data).slice(1).map(value => (
+            {Object.keys(data).slice(4).map(value => (
                    <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
@@ -53,7 +56,6 @@ const UpdateArticle = () => {
                    }}
                    name={value}
                    className={colors.root}
-                   onChange={() => {}}
                    value={data[value]}
                    disabled
                    />
@@ -71,23 +73,22 @@ const UpdateArticle = () => {
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>
-            <ModalUpdate
+            {modal && <ModalUpdate
               setShowModal={setModal}
               showModal={modal}
               detail={data}
               colors={colors.root}
               setDetail={setData}
-              famille={location.state.id}
-            />
-            <ModalDelete
+            />}
+            {m_delete && <ModalDelete
               setDelete={setM_Delete}
               _delete={m_delete}
               detail={data}
               colors={colors.root}
               famille={location.state.id}
-            />
+            />}
           </div>
-          <TableData nom={location.state.nom} />
+          <TableData reste={data} />
         </>
     )
 }

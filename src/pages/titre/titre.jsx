@@ -2,16 +2,14 @@ import { Button } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { makeStyles } from "@mui/styles";
 import ModalAdd from "./addTitre";
-import ModalDelete from "./deleteTitre";
-import ModalUpdate from "./updateTitre";
+import { titres } from "../../backend";
 
 
 const useStyle = makeStyles({
@@ -29,9 +27,7 @@ const useStyle = makeStyles({
 
 const Titre = () => {
   const [add, setAdd] = useState(false)
-  const [update, setUpdate] = useState(false)
-  const [supprimer, setSupprimer] = useState(false)
-  const [data, setData] = useState('')
+  const navigate = useNavigate()
 
   const columns_titre = [
     {
@@ -52,49 +48,23 @@ const Titre = () => {
       cellRenderer : (params) => 
         <Button
         sx={{
-          background: 'var(--brand-1)',
+          background: `${!params.data.is_deleted ? 'var(--brand-1)' : 'transparent'} `,
           marginBottom: '5px',
           padding: '15px',
           '&:hover' : {
-            border: '1px solid var(--brand-1)',
+            border: `${!params.data.is_deleted ? '1px solid var(--brand-1)' : 'transparent'}`,
           }
         }} 
         onClick={() => {
-          setData(params.data)
-          setUpdate(true)
+          !params.data.is_deleted ? cellClickListner(params) : console.log()
         }}
         >
-          <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
-        </Button>
-    },
-    {
-      field: "plus details",
-      headerName: "",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 100,
-      headerAlign: 'left',
-      cellRenderer : (params) => 
-        <Button
-        sx={{
-          background: 'red',
-          marginBottom: '5px',
-          padding: '15px',
-          '&:hover' : {
-            border: '1px solid red',
-          }
-        }} 
-        onClick={() => {
-          setData(params.data)
-          setSupprimer(true)
-        }}
-        >
-          <i className="fa-solid fa-trash fa-xl" style={{color: 'white'}} ></i>
+          {!params.data.is_deleted && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
         </Button>
     },
   ];
 
-  const [titre, setTitre] = useState([])
+  const [titre, setTitre] = useState(titres)
   const gridRef = useRef();
   const colors = useStyle()
 
@@ -103,15 +73,22 @@ const Titre = () => {
     filter: true,
     enableRowGroup: true,
   }))
+  useEffect(() => {
+  }, [2000])
 
-  const fetchAllData = () => {
-    const data = result.data.titre
-    setTitre(data)
+
+
+  const cellClickListner = (params) => {
+    navigate(`/titres/${params.data.id_titre}`, {state: params.data})
   }
 
-  useEffect(() => {
-    fetchAllData()
-  }, [2000])
+
+  const getRowStyle = (params) => {
+    if (params.data.is_deleted) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
  
 
   return (
@@ -122,24 +99,6 @@ const Titre = () => {
               detail={titre}
               colors={colors.root}
               setDetail={setTitre}
-            />
-      
-            <ModalDelete
-              setDelete={setSupprimer}
-              _delete={supprimer}
-              detail={data}
-              all={titre}
-              colors={colors.root}
-              setDetail={setTitre}
-            />
-        
-            <ModalUpdate
-              setShowModal={setUpdate}
-              showModal={update}
-              detail={data}
-              colors={colors.root}
-              setDetail={setTitre}
-              all={titre}
             />
       <NavigationBar name="les titres" />
         <div 
@@ -167,6 +126,7 @@ const Titre = () => {
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
+              getRowStyle={getRowStyle}
             />
             </div>
     </>

@@ -56,12 +56,13 @@ export default function ModalUpdate({showModal, setShowModal, detail, ...props})
     const handleClose = () => setShowModal(false);
     const [inter, setInter] = useState(detail)
     const [confirm, setConfirm] = useState(false)
+    console.log(inter)
 
 
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `titres`, data)
+          const result = await axios.put(api + `titres/${data.id_titre}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
@@ -71,15 +72,11 @@ export default function ModalUpdate({showModal, setShowModal, detail, ...props})
   
   
     const hanldeConfirm = async () => {
-      let __inter = []
-      Object.keys(props.all).map(e => {
-        (props.all[e].id === inter.id) ? __inter.push(inter) : __inter.push(props.all[e])
-      })
-      props.setDetail(__inter)
+      props.setDetail(inter)
       setInter({})
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
       await update(inter)
@@ -98,7 +95,7 @@ export default function ModalUpdate({showModal, setShowModal, detail, ...props})
             minHeight: 200,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Update {detail.titre}
+              Update {inter.titre}
             </Typography>
             <TextField 
               id={"outlined-controlled"}
@@ -109,8 +106,8 @@ export default function ModalUpdate({showModal, setShowModal, detail, ...props})
               className={props.colors}
               onChange={(e) => {
                 setInter(c => ({
-                    id: detail.id,
-                    titre: e.target.value,
+                    id_titre: detail.id_titre,
+                    titre: parseFloat(e.target.value),
                 }))
               }}
               value={inter.titre}

@@ -4,13 +4,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import SelectedMenu from '../home/SelectedMenu';
+import { wilayas, display } from '../../wilaya';
 import { FormControl } from '@mui/material';
 import { api } from '../../backend';
 import axios from 'axios';
 import Notification from '../home/notification';
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material"
-import SelectedClient from '../home/SelectedClient';
+import SelectedFournisseur from '../home/SelectedFournisseur';
 import { result } from "../../backend";
 
 const style = {
@@ -56,30 +57,20 @@ const style_textField = {
   margin: '10px',
 }
 
-export default function ModalUpdate({showModal, setShowModal, ...props}) {
+export default function ModalUpdate({showModal, setShowModal, detail, ...props}) {
     const handleClose = () => setShowModal(false);
-    const [inter, setInter] = useState(props.detail)
+    const [inter, setInter] = useState(detail)
     const [confirm, setConfirm] = useState(false)
-    const [client, setClient] = useState([])
-    const [famille, setFamille] = useState([])
-    const [articles, setArticles] = useState([])
+    console.log(props.detail)
+    console.log(detail)
 
     useEffect(() => {
-        const fetchAllData = async () => {
-            let data = result.data.articles
-            setArticles(data)
-            let __client = result.data.clients
-            setClient(__client)
-            const famille = [...new Set(
-                data.map(item => item.famille))]
-                setFamille(famille)
-            }
-            fetchAllData()
+      setInter(detail)
     }, [])
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `ventes/${props.detail.id}`, data)
+          const result = await axios.put(api + `ventes/${inter.id_total_vente}/${inter.id_vente}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
@@ -87,31 +78,19 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       }
     }
   
-  
     const hanldeConfirm = async () => {
       props.setDetail(d => ({
         ...d,
         ...inter,
       }))
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
       await update(inter)
-    }
-
-    function displayFamille(name) {
-        const result = []
-        Object.keys(articles).map((e, i) => {
-          if (articles[e].famille === name) {
-            result.push(articles[e]["designation d'article"] )
-          }
-        })
-        return result
-    }
+    } 
     console.log(inter)
-    
     return (
       <div>
         <Modal
@@ -127,15 +106,6 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
               Update {inter['vente n=°']}
             </Typography>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedMenu name='famille' options={famille} setValue={setInter} valeur={inter}/>
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedMenu name="article" options={displayFamille(inter.famille)} setValue={setInter} valeur={inter}/>
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedClient name='client' options={client} setValue={setInter} valeur={inter} show={false}/>
-            </FormControl>
             <TextField 
               id={"outlined-controlled"}
               label='quantite' variant="outlined"
@@ -146,8 +116,8 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    quantite: parseInt(e.target.value),
-                    total: Math.abs(parseInt(e.target.value)) * inter['prix unitaire']
+                    quantite: parseFloat(e.target.value),
+                    total: Math.abs(parseFloat(e.target.value)) * parseFloat(inter.prix_unitaire)
                 }))
               }}
               value={inter.quantite}
@@ -157,16 +127,16 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               label='prix unitaire' variant="outlined"
               type='number'
               sx={style_textField}
-              name='prix unitaire'
+              name='prix_unitaire'
               className={props.colors}
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    'prix unitaire': parseInt(e.target.value),
-                    total: Math.abs(inter.quantite) * parseInt(e.target.value)
+                    prix_unitaire: parseFloat(e.target.value),
+                    total: Math.abs(inter.quantite) * parseFloat(e.target.value)
                 }))
               }}
-              value={inter['prix unitaire']}
+              value={inter.prix_unitaire}
              />
             <TextField 
               id={"outlined"}
@@ -175,7 +145,6 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               sx={style_textField}
               name='total'
               className={props.colors}
-              onChange={() => {}}
               value={inter.total}
               disabled
               />
@@ -184,7 +153,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.famille === "" || inter["designation d'article"] === '' || inter.fournisseur == '' || inter.quantite === 0 || inter['prix unitaire'] === 0}
+                disabled={inter.total === 0 || typeof(inter.total) !== 'number'}
               >confirmer</Button>
             </Box>
           </Box>

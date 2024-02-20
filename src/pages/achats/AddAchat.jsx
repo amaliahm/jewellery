@@ -1,19 +1,18 @@
 import { Button, FormControl, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useMemo, useRef, useState, useReducer} from "react";
-import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
-import NavigationBar from "../home/NavigationBar";
-import SelectedFournisseur from "../home/SelectedFournisseur";
-import SelectedArticle from "../home/SelectedArticle";
-import SelectedMenu from "../home/SelectedMenu";
-import { add_achat, columns_add_achat } from "./data";
-import { api_add_achat } from "../../backend";
-import axios from "axios";
-import Notification from "../home/notification";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
+import axios from "axios";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api_add_achat, fournisseur, result, view_achat_articles_fournisseur } from "../../backend";
+import NavigationBar from "../home/NavigationBar";
+import SelectedArticle from "../home/SelectedArticle";
+import SelectedFournisseur from "../home/SelectedFournisseur";
+import SelectedMenu from "../home/SelectedMenu";
+import Notification from "../home/notification";
+import { add_achat, columns_add_achat } from "./data";
 
 const useStyle = makeStyles({
     root: {
@@ -31,7 +30,6 @@ const useStyle = makeStyles({
 const AddAchat = () => {
     const colors = useStyle()
     const [achat, setAchat] = useState(add_achat)
-    const [fournisseur, setFournisseur] = useState([])
     const [famille, setFamille] = useState([])
     const [articles, setArticles] = useState([])
     const [done, setDone] = useState(false)
@@ -47,35 +45,13 @@ const AddAchat = () => {
     }))
 
     useEffect(() => {
-        setAchat(a => ({
-            ...a,
-            jour: String(currentDate.getDate()).padStart(2, '0'),
-            mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
-            annee : String(currentDate.getFullYear())
-        }))
         const fetchAllData = async () => {
-            let data = result.data.articles
-            setArticles(data)
-            let __fournisseur = result.data.fournisseurs
-            setFournisseur(__fournisseur)
-            data = result.data.familles
-            const famille = [...new Set(
-                data.map(item => item.famille))]
-                setFamille(famille)
-            
-              }
-              fetchAllData()
-    }, [])
-
-    function displayFamille(name) {
-        const result = []
-        Object.keys(articles).map((e, i) => {
-          if (articles[e].famille === name) {
-            result.push(articles[e]["designation d'article"] )
+          if (achat.id_fournisseur) {
+            console.log(view_achat_articles_fournisseur)
           }
-        })
-        return result
-    }
+            }
+            fetchAllData()
+    }, [])
     
     const handleClick = async e => {
       setDone(true)
@@ -84,6 +60,22 @@ const AddAchat = () => {
     const handleValidate = async e => {
       e.preventDefault();
       console.log(allAchat)
+      let total_quantite = 0
+      let total_argent = 0
+      let ancien_solde = articles[0].solde
+      Object.keys(allAchat).map((e, i) => {
+        total_quantite += allAchat[e].quantite
+        total_argent += allAchat[e].total
+      })
+      allAchat.unshift({
+        jour: String(currentDate.getDate()).padStart(2, '0'),
+        mois: String(currentDate.getMonth() + 1).padStart(2, '0'),
+        annee: String(currentDate.getFullYear()),
+        total_argent: total_argent,
+        total_quantite: total_quantite,
+        ancien_solde: ancien_solde,
+        nombre_piece: allAchat.length
+      })
       setVal(true)
       setTimeout(() => {
         setDone(false)
@@ -119,7 +111,7 @@ const AddAchat = () => {
                 <TextField 
                     disabled
                     id="outlined-disabled"
-                    label={`${achat.jour}-${achat.mois}-${achat.annee}`} variant="outlined"
+                    label={`${String(currentDate.getDate()).padStart(2, '0')}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getFullYear())}`} variant="outlined"
                     type='text'
                     sx={{
                       borderColor: "transparent",
@@ -130,21 +122,18 @@ const AddAchat = () => {
                 ></TextField>
               </form>
               <FormControl sx={{ m: 1, minWidth: 150 }}>
-                <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setAchat} valeur={achat}/>
+                <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setAchat} valeur={achat} setArticles={setArticles}/>
               </FormControl>
               <div className="select-article">
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedMenu name="famille"  options={famille} setValue={setAchat} valeur={achat}/>
-                </FormControl>
-                <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedArticle name="article"  options={displayFamille(achat.famille)} setValue={setAchat} valeur={achat} rest={articles}/>
+                    <SelectedArticle name="nom d'article"  options={articles} setValue={setAchat} valeur={achat}/>
                 </FormControl>
               </div>
               <div className="select-article">
 
                 <TextField 
                     id={"outlined-controlled"}
-                    label='prix unitaire' variant="outlined"
+                    label='prix_unitaire' variant="outlined"
                     type='number'
                     sx={{
                       borderColor: "transparent",
@@ -154,11 +143,11 @@ const AddAchat = () => {
                     onChange={(e) => {
                       setAchat(r => ({
                         ...r,
-                        'prix unitaire': parseFloat(e.target.value),
-                        total: Math.abs(achat.quantite) * parseFloat(e.target.value),
+                        prix_unitaire: parseFloat(e.target.value),
+                        total: Math.abs(parseFloat(achat.quantite)) * parseFloat(e.target.value),
                       }))
                     }}
-                    value={achat['prix unitaire']}
+                    value={achat.prix_unitaire}
                 ></TextField>
                 <TextField 
                     id="outlined-controlled"
@@ -173,7 +162,7 @@ const AddAchat = () => {
                       setAchat(r => ({
                         ...r,
                         quantite: parseFloat(e.target.value),
-                        total: Math.abs(parseFloat(e.target.value)) * achat['prix unitaire'],
+                        total: Math.abs(parseFloat(e.target.value)) * parseFloat(achat.prix_unitaire),
                       }))
                     }}
                     value={achat.quantite}
@@ -203,7 +192,7 @@ const AddAchat = () => {
                     bottom: '0',
                 }} 
                 onClick={handleClick}
-                disabled={achat.famille === "" || achat.article === '' || achat.fournisseur === '' || achat.quantite === '' || achat.quantite == 0 || achat['prix unitaire'] == 0 || achat['prix unitaire'] === ''}
+                disabled={achat.nom_article === '' || achat.id_fournisseur === '' ||achat.total == 0 || achat.total === ''}
                 >ajouter achat</Button>
            
             </div>

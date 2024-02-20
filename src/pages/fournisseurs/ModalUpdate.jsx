@@ -11,6 +11,7 @@ import axios from 'axios';
 import Notification from '../home/notification';
 import { useState } from "react";
 import { TextField } from "@mui/material"
+import { useEffect } from 'react';
 
 const style = {
   position: 'absolute',
@@ -55,14 +56,27 @@ const style_textField = {
   margin: '10px',
 }
 
-export default function ModalUpdate({showModal, setShowModal, ...props}) {
+export default function ModalUpdate({showModal, setShowModal,detail, ...props}) {
     const handleClose = () => setShowModal(false);
-    const [inter, setInter] = useState(props.detail)
+    const [inter, setInter] = useState({})
+
+    useEffect(() => {
+      setInter({
+        id_fournisseur: detail.id_fournisseur,
+        nom: detail.nom,
+        telephone: detail.telephone,
+        email: detail.email,
+        adresse: detail.adresse,
+        ville: detail.ville,
+        wilaya: detail.wilaya,
+      });
+    }, [detail]);
+
     const [confirm, setConfirm] = useState(false)
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `fournisseurs/${props.detail.id}`, data)
+          const result = await axios.put(api + `fournisseurs/${detail.id}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
@@ -131,6 +145,15 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               onChange={handleChange}
               defaultValue={inter.email}
               />
+            <TextField 
+              id={"outlined-read-only-input"}
+              label='adresse' variant="outlined"
+              sx={style_textField}
+              name='adresse'
+              className={props.colors}
+              onChange={handleChange}
+              defaultValue={inter.adresse}
+              />
               <FormControl sx={{ m: 1, minWidth: 200 }}>
                 <SelectedMenu name='wilaya' options={wilayas} setValue={setInter} valeur={inter}/>
               </FormControl>
@@ -142,7 +165,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.wilaya === "" || inter.ville === '' || inter.nom == '' || inter.telephone === '' || inter.telephone.length > 10}
+                disabled={inter.wilaya === "" || inter.ville === '' || inter.nom == '' || inter.telephone === ''}
               >confirmer</Button>
             </Box>
           </Box>

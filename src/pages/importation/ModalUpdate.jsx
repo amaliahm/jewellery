@@ -61,7 +61,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `importations/${props.detail.id}`, data)
+          const result = await axios.put(api + `importations/${props.detail.id_importation}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
@@ -75,9 +75,9 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
         ...d,
         ...inter,
       }))
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
       await update(inter)
@@ -96,7 +96,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             minHeight: 200,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Update {inter.importateur}
+              Update {inter.nom_importateur}
             </Typography>
             <TextField 
               id={"outlined-controlled"}
@@ -108,17 +108,17 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
               onChange={(e) => {
                 setInter(c => ({
                     ...c,
-                    importateur: e.target.value.toUpperCase(),
+                    nom_importateur: e.target.value.toUpperCase(),
                 }))
               }}
-              value={inter.importateur}
+              value={inter.nom_importateur}
              />
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={inter.importateur === "" }
+                disabled={inter.nom_importateur === "" }
               >confirmer</Button>
             </Box>
           </Box>

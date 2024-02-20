@@ -7,6 +7,21 @@ const api = 'http://localhost:8800/'
 /* to store data */
 
 let result
+let fournisseur
+let client
+let view_achat_articles_fournisseur
+let view_vente_articles_client
+let view_versement_client
+let view_versement_fournisseur
+let view_importation
+let view_retour_client
+let view_retour_fournisseur
+let view_reparation
+let view_charge
+let magasin
+let titres
+let importation
+let view_produits
 
 /* to add data */
 
@@ -14,19 +29,36 @@ const api_add_client = api + 'clients/add-client'
 const api_add_achat = api + 'achats/add-achat'
 const api_add_vente = api + 'ventes/add-vente'
 const api_add_fournisseur = api + 'fournisseurs/add-fournisseur'
-const api_add_versement = api + 'versements/add-versement'
+const api_add_versement_client = api + 'versements/add-versement-client'
+const api_add_versement_fournisseur = api + 'versements/add-versement-fournisseur'
+const api_add_retour = api + 'retours/add-retour'
 const api_add_achat_importation = api + 'importations/achat_importation/add'
 const api_add_versement_importation = api + 'importations/versement_importation/add'
 const api_add_article = api + 'produits/:id/add'
 const api_add_mouvement = api + 'bourse/add'
-let titres = []
+const api_add_reparation = api + 'magasins/:id/add-reparation'
+
 
 
 
 async function getData() {
     try {
         result = await axios.get(api)
-        titres = result.data.titre
+        fournisseur = result.data.fournisseur
+        client = result.data.client
+        view_achat_articles_fournisseur = result.data.view_achat_articles_fournisseur
+        view_vente_articles_client = result.data.view_vente_articles_client
+        view_versement_client = result.data.view_versement_client
+        view_versement_fournisseur = result.data.view_versement_fournisseur
+        view_importation = result.data.view_importation
+        view_retour_client = result.data.view_retour_client
+        view_retour_fournisseur = result.data.view_retour_fournisseur
+        view_reparation = result.data.view_reparation
+        view_charge = result.data.view_charge
+        titres = result.data.titres
+        importation = result.data.importation
+        magasin = result.data.magasin
+        view_produits = result.data.view_produits
     } catch (e) {
         console.log(e)
     }
@@ -40,11 +72,28 @@ export {
     api_add_achat,
     api_add_vente,
     api_add_fournisseur,
-    api_add_versement,
+    api_add_versement_client,
+    api_add_versement_fournisseur,
     api_add_achat_importation,
     api_add_versement_importation,
     api_add_article,
     api_add_mouvement,
-    titres,
+    api_add_reparation,
+    importation,
+    magasin,
     result,
+    fournisseur,
+    client,
+    view_achat_articles_fournisseur,
+    view_vente_articles_client,
+    view_versement_client,
+    view_versement_fournisseur,
+    api_add_retour,
+    view_importation,
+    view_retour_client,
+    view_retour_fournisseur,
+    view_reparation,
+    view_charge,
+    view_produits,
+    titres,
 }

@@ -31,7 +31,8 @@ const AddAchatImportation = () => {
     const location = useLocation()
     const [achatImp, setAchatImp] = useState({
         ...add_achat_importation,
-        importateur: location.state,
+        nom_importateur: location.state.nom_importateur,
+        id_importation: location.state.id_importation,
     })
     const [done, setDone] = useState(false)
     const [allAchat, setAllAchat] = useState([])
@@ -44,6 +45,7 @@ const AddAchatImportation = () => {
       filter: true,
       enableRowGroup: true,
     }))
+    console.log(location.state)
 
     useEffect(() => {
         setAchatImp(a => ({
@@ -70,7 +72,10 @@ const AddAchatImportation = () => {
       setVal(true)
       setTimeout(() => {
         setDone(false)
-        navigate('/importations/achat_importation', {state: allAchat[0].importateur})
+        navigate('/importations/achat_importation', {state: {
+          nom_importateur: allAchat[0].nom_importateur,
+          id_importation: allAchat[0].id_importation,
+        }})
       }, 2000)
       try {
           const result = await axios.post(api_add_achat_importation, allAchat)
@@ -96,7 +101,7 @@ const AddAchatImportation = () => {
 
     return (
         <>
-            <NavigationBar name={`ajouter achat pour ${location.state}`} />
+            <NavigationBar name={`ajouter achat pour ${location.state.nom_importateur}`} />
             <div className="text-field-done" >
               <form>
                 <TextField 
@@ -126,8 +131,8 @@ const AddAchatImportation = () => {
                       setAchatImp(r => ({
                         ...r,
                         'poid 18k': parseFloat(e.target.value),
-                        'poid 24k': (parseFloat(e.target.value) * 750 / 1000).toFixed(3),
-                        total: (parseFloat(e.target.value) * achatImp['prix unitaire']).toFixed(3),
+                        'poid 24k': (parseFloat(e.target.value) * 750 / 1000).toFixed(2),
+                        total: (parseFloat(e.target.value) * achatImp['prix unitaire']).toFixed(2),
                       }))
                     }}
                     value={achatImp['poid 18k']}
@@ -158,7 +163,7 @@ const AddAchatImportation = () => {
                       setAchatImp(r => ({
                         ...r,
                         'prix unitaire': parseFloat(e.target.value),
-                        total: (achatImp['poid 18k'] * parseFloat(e.target.value)).toFixed(3),
+                        total: (achatImp['poid 18k'] * parseFloat(e.target.value)).toFixed(2),
                       }))
                     }}
                     value={achatImp['prix unitaire']}
@@ -188,7 +193,7 @@ const AddAchatImportation = () => {
                     bottom: '0',
                 }} 
                 onClick={handleClick}
-                disabled={achatImp.importateur === "" || achatImp['poid 18k'] === 0 || achatImp['poid 18k'] === '' || achatImp['prix unitaire'] == 0 || achatImp['prix unitaire'] === ''}
+                disabled={achatImp.nom_importateur === "" || achatImp['poid 18k'] === 0 || achatImp['poid 18k'] === '' || achatImp['prix unitaire'] == 0 || achatImp['prix unitaire'] === ''}
                 >ajouter</Button>
            
             </div>

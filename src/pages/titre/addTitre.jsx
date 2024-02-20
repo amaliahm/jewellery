@@ -78,11 +78,11 @@ export default function ModalAdd({showModal, setShowModal, ...props}) {
             ...props.detail,
         ]
         props.setDetail(__inter)
-      setShowModal(false)
-      setConfirm(true)
-      setTimeout(() => {
-        setConfirm(false)
-      }, 2000)
+        setConfirm(true)
+        setTimeout(() => {
+          setShowModal(false)
+          setConfirm(false)
+        }, 2000)
       console.log(inter)
       await update(inter)
       setInter('')

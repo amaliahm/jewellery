@@ -38,7 +38,7 @@ const add_achat_importation = {
     jour: '',
     mois: '',
     annee: '',
-    importateur: '',
+    id_importation: '',
     'poid 18k': 0,
     'poid 24k': 0,
     'prix unitaire': 0,

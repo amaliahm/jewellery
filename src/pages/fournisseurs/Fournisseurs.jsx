@@ -4,13 +4,15 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
+import { fournisseur } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
+import { exportDataToPdf } from "../home/telecharger_table";
+import { RowNode } from "ag-grid-community";
 
 const Fournisseurs = () => {
   const columns_fournisseurs = [
     {
-      field: "nom",
+      field: "nom_fournisseur",
       headerName: "NOM",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -19,8 +21,8 @@ const Fournisseurs = () => {
       headerAlign: 'left',
     },
     {
-      field: "ville",
-      headerName: "VILLE",
+      field: "wilaya",
+      headerName: "WILAYA",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 200,
@@ -28,8 +30,8 @@ const Fournisseurs = () => {
       headerAlign: 'left'
     },
     {
-      field: "wilaya",
-      headerName: "WILAYA",
+      field: "ville",
+      headerName: "VILLE",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 200,
@@ -45,8 +47,8 @@ const Fournisseurs = () => {
       headerAlign: 'left'
     },
     {
-      field: "titre",
-      headerName: "TITRE",
+      field: "solde",
+      headerName: "solde",
       flex: 1,
       minWidth: 100,
       maxWidth: 150,
@@ -75,19 +77,28 @@ const Fournisseurs = () => {
         </Button>
     },
   ]
+  
 
   const cellClickListner = (params) => {
-    navigate(`/fournisseurs/${params.data.id}`, {state: params.data})
+    navigate(`/fournisseurs/${params.data.id_fournisseur}`, {state: params.data.id_fournisseur})
   }
+
+  const getRowStyle = (params) => {
+    if (params.data.is_deleted) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
 
   const gridRef = useRef();
   const navigate = useNavigate()
   const [data, setData] = useState([])
+  const [gridApi, setGridApi] = useState(null);
+  const [filtered, setFiltered] = useState(false)
 
   useEffect(() => {
     const fetchAllData = async () => {
-      const data = result.data.fournisseurs
-      setData(data)
+      setData(fournisseur)
     }
     fetchAllData()
   }, [2000])
@@ -95,12 +106,30 @@ const Fournisseurs = () => {
   const defaultColDef = useMemo(() => ({
     sortable: true,
     filter: true,
-    enableRowGroup: true,
   }))
 
-  const onBtExport = useCallback(() => {
-    gridRef.current.api.exportDataAsExcel();
-  }, []);
+
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+  }
+
+  
+
+  const onFilterChanged = () => {
+    const filteredRows = gridApi.getModel().rowsToDisplay;
+    setFiltered(true)
+    let inter = []
+    Object.keys(filteredRows).map((e, i) => {
+      inter.push(filteredRows[e].data)
+    })
+    return inter
+  };
+
+
+
+  
+
+ 
 
   return (
     <>
@@ -128,8 +157,23 @@ const Fournisseurs = () => {
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              onClick={onBtExport}
-              >telecharger excel</Button>
+              onClick={() => {
+                const inter = filtered ? onFilterChanged() : data
+                let download_data = []
+                Object.keys(inter).map((e, i) => {
+                  download_data.push({
+                    nom: inter[e].nom_fournisseur,
+                    ville: inter[e].ville,
+                    wilaya: inter[e].wilaya,
+                    solde: inter[e].solde,
+                    or: inter[e].total_or,
+                  })
+                })
+                console.log(data)
+                console.log(download_data)
+                exportDataToPdf(download_data, gridApi, 'les fournisseurs')
+              }}
+              >telecharger pdf</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
@@ -137,6 +181,9 @@ const Fournisseurs = () => {
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
+              getRowStyle={getRowStyle}
+              onGridReady={onGridReady}
+              onFilterChanged={onFilterChanged}
             />
             </div>
     </>

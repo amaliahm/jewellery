@@ -52,22 +52,17 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
     const handleClose = () => setDelete(false);
     const [supprimer, setSupprimer] = useState(false)
     const navigate = useNavigate()
+    console.log(props.detail)
   
     const hanldeDelete = async () => {
       setSupprimer(true)
-      setDelete(false)
       setTimeout(() => {
+        setDelete(false)
         setSupprimer(false)
+        navigate('/titres')
       }, 2000)
-      let inter = []
-      Object.keys(props.all).map((e, i) => {
-        if (props.all[e].id !== props.detail.id) {
-            inter.push(props.all[e])
-        }
-      })
-      props.setDetail(inter)
       try {
-        const result = await axios.delete(api + `titres`, {data: props.detail})
+        const result = await axios.delete(api + `titres/${props.detail.id_titre}`, {data: props.detail})
         if(result.status === 200) {
         }
       } catch (error) {

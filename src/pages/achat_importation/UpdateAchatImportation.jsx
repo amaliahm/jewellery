@@ -29,9 +29,9 @@ const UpdateAchatImportation = () => {
 
     return (
         <>
-          <NavigationBar name={`achat de ${data.importateur}`}/>
+          <NavigationBar name={`achat de ${data.nom_importateur}`}/>
           <div className="add">
-            {Object.keys(data).slice(1).map(value => (
+            {Object.keys(data).slice(4).map(value => (
                    <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
@@ -59,19 +59,19 @@ const UpdateAchatImportation = () => {
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>
-            <ModalUpdate
+            {modal && <ModalUpdate
               setShowModal={setModal}
               showModal={modal}
               detail={data}
               colors={colors.root}
               setDetail={setData}
-            />
-            <ModalDelete
+            />}
+            {m_delete && <ModalDelete
               setDelete={setM_Delete}
               _delete={m_delete}
               detail={data}
               colors={colors.root}
-            />
+            />}
           </div>
         </>
     )

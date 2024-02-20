@@ -59,7 +59,7 @@ export default function ModalDelete({showModal, setShowModal, ...props}) {
 
     const update = async () => {
       try {
-          const result = await axios.delete(api + `produits/${props.id}`)
+          const result = await axios.delete(api + `produits/${props.id}`, {data:{id: props.id}})
           if(result.status === 200) {
           }
       } catch (error) {
@@ -69,9 +69,9 @@ export default function ModalDelete({showModal, setShowModal, ...props}) {
   
   
     const hanldeConfirm = async () => {
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
         navigate('/produits')
       }, 2000)
@@ -91,7 +91,7 @@ export default function ModalDelete({showModal, setShowModal, ...props}) {
             minHeight: 100,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Supprimer la famille {props.detail} !!
+              Supprimer la famille de {props.detail} !!
             </Typography>
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>

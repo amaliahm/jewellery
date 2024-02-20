@@ -67,26 +67,9 @@ const style_textField = {
 export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const handleClose = () => setShowModal(false);
     const [inter, setInter] = useState(props.detail)
+    console.log(props.detail)
     const [confirm, setConfirm] = useState(false)
-    const [fournisseur, setFournisseur] = useState([])
-    const [client , setClient] = useState([])
-    const [titre, setTitre] = useState([])
 
-    useEffect(() => {
-        const fetchAllData = async () => {
-            let __fournisseur = result.data.fournisseurs
-            setFournisseur(__fournisseur)
-            __fournisseur = result.data.clients
-            setClient(__fournisseur)
-            __fournisseur = result.data.titre
-            let __inter = []
-            Object.keys(__fournisseur).map(e => {
-              inter.push(__fournisseur[e].titre)
-            })
-            setTitre(__inter)
-          }
-            fetchAllData()
-    }, [])
   
     const update = async (data) => {
       try {
@@ -110,20 +93,20 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       props.setDetail(d => ({
         ...d,
         ...inter,
-        'net 750': ((parseFloat(inter['or v']) - parseFloat(inter.fonte)) * parseFloat(inter.titre) / 750).toFixed(3),
-        ecart: (parseFloat(inter['or v']) - ((parseFloat(inter['or v']) - parseFloat(inter.fonte)) * parseFloat(inter.titre) / 750)).toFixed(3),
+        'net 750': ((parseFloat(inter['or v']) - parseFloat(inter.fonte)) * parseFloat(inter.titre) / 750).toFixed(2),
+        ecart: (parseFloat(inter['or v']) - ((parseFloat(inter['or v']) - parseFloat(inter.fonte)) * parseFloat(inter.titre) / 750)).toFixed(2),
       }))
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
         setConfirm(false)
+        setShowModal(false)
       }, 2000)
       await update(inter)
     }
-    console.log(inter['versement n=°'].split('-')[1])
     
     return (
       <div>
+        {confirm && <Notification name={'Les modifications sont été enregitrées'}/>}
         <Modal
           open={showModal}
           onClose={handleClose}
@@ -135,20 +118,13 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             minHeight: 300,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px',}}>
-              Update {inter['versement n=°']}
+              Update {inter.type === 'client' ? inter['versement client n=°'] : inter['versement fournisseur n=°']}
             </Typography>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              {(inter['versement n=°'].split('-')[1] == 'FOURNISSEUR') && <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setInter} valeur={inter} show={false}/>}
-              {(inter['versement n=°'].split('-')[1] == 'CLIENT') &&<SelectedClient name='client' options={client} setValue={setInter} valeur={inter} show={false}/>}
-            </FormControl>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedMenu name='titre' options={titre} setValue={setInter} valeur={inter}/>
-            </FormControl>
             <div className={div_style}>
 
-            {Object.keys(inter).slice(4).map((e, i) => (
+            {Object.keys(inter).slice(7).map((e, i) => (
                 <>
-                {(i <= 5) && <TextField 
+                {(i === 0 || i === 1 || i === 4 || i === 8 || i === 10) && <TextField 
                   id={"outlined-controlled"}
                   label={e} variant="outlined"
                   type='number'
@@ -170,7 +146,6 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             </Box>
           </Box>
         </Modal>
-        {confirm && <Notification name={'Les modifications sont été enregitrées'}/>}
       </div>
     );
   }

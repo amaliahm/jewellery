@@ -7,10 +7,11 @@ import Versement from "../versements/Versement"
 import Importation from "../importation/Importation"
 import Bourse from "../bourse/bourse"
 import Command from "../command/Command"
-import Reparation from "../reparation/Reparation"
+import Magasin from "../magasin/Magasin"
 import Charge from "../charge/Charge"
 import Reception from "../reception/Reception"
 import Utilisateurs from "../utilisateurs/Users"
+import Retour from "../retours/Retour"
 
 const routes = [
     {
@@ -78,16 +79,17 @@ const routes = [
     },
     {
         icon: 'link-slash',
-        to: 'casse',
-        name: 'la casse',
-        key: 'casse',
+        to: '/retours',
+        name: 'les retours',
+        key: 'retour',
+        component: <Retour />
     },
     {
         icon: 'arrow-rotate-right',
-        to: '/reparations',
-        name: 'les réparations',
-        key: 'reparation',
-        component: <Reparation />
+        to: '/magasins',
+        name: 'les magasins',
+        key: 'magasin',
+        component: <Magasin />
     },
     {
         icon: 'dollar-sign',

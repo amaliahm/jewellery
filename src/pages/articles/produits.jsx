@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavigationBar from "../home/NavigationBar";
 import "ag-grid-community/styles/ag-grid.css";
@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 import ModalUpdate from './ModalUpdateFamille';
 import ModalDelete from './ModalDeleteFamille';
 import { makeStyles } from "@mui/styles";
+import { view_produits } from '../../backend';
 
 const useStyle = makeStyles({
   root: {
@@ -24,26 +25,19 @@ const useStyle = makeStyles({
 
 
 const Produits = () => {
-  const colors = useStyle()
-  const gridRef = useRef();
-  const location = useLocation();
-  const navigate = useNavigate()
-  const [modal, setModal] = useState(false)
-  const [nom, setNom] = useState(location.state.nom)
-  const [del, setDel] = useState(false)
 
   const display_famille =[
     {
-      field: "article",
-      headerName: "DESIGNATION",
+      field: "id_article",
+      headerName: "ARTICLE N=°",
       flex: 1,
       cellClassName: "name-column--cell",
-      minWidth: 250,
-      maxWidth: 350,
+      minWidth: 150,
+      maxWidth: 200,
       headerAlign: 'left'
     },
     {
-      field: "designation d'article",
+      field: "nom_article",
       headerName: "ARTICLE",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -52,8 +46,16 @@ const Produits = () => {
       headerAlign: 'left'
     },
     {
-      field: "fournisseur",
+      field: "nom_fournisseur",
       headerName: "FOURNISSEUR",
+      flex: 1,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "quantite_stock",
+      headerName: "QUANTITE DE STOCK",
       flex: 1,
       minWidth: 200,
       maxWidth: 300,
@@ -69,49 +71,91 @@ const Produits = () => {
       cellRenderer : (params) => 
         <Button
         sx={{
-          background: 'var(--brand-1)',
+          background: `${!params.data.deleted_article ? 'var(--brand-1)' : 'transparent'} `,
           marginBottom: '5px',
           padding: '15px',
           '&:hover' : {
-            border: '1px solid var(--brand-1)',
+            border: `${!params.data.deleted_article ? '1px solid var(--brand-1)' : 'transparent'}`,
           }
         }} 
-        onClick={() => {cellClickListner(params)}}
+        onClick={() => {
+          !params.data.deleted_article ? cellClickListner(params) : console.log()
+        }}
         >
-          <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
+          {!params.data.deleted_article && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
         </Button>
     },
   ];
 
-  
-  const defaultColDef = useMemo(() => ({
+  const getRowStyle = (params) => {
+    if (params.data.deleted_article) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
+
+  const colors = useStyle()
+  const gridRef = useRef();
+  const location = useLocation();
+  const navigate = useNavigate()
+  const [modal, setModal] = useState(false)
+  const [state, setState] = useState(location.state.nom_famille)
+  const [article, setArticle] = useState([])
+  const [del, setDel] = useState(false)
+
+  useEffect(() => {
+    const fetchAllData = () => {
+      let inter = []
+      Object.keys(view_produits).map((e, i) => {
+        if (view_produits[e].id_famille === location.state.id_famille && view_produits[e].id_article !== null) {
+          inter.push(view_produits[e])
+        }
+      })
+      const uniqueObjectsSet = new Set();
+
+      const uniqueArray = inter.filter(obj => {
+        const stringRepresentation = JSON.stringify(obj);
+        if (!uniqueObjectsSet.has(stringRepresentation)) {
+          uniqueObjectsSet.add(stringRepresentation);
+          return true;
+        }
+        return false;
+      });
+      console.log(uniqueArray)
+      setArticle(uniqueArray)
+    }
+    fetchAllData()
+  }, [2000])
+
+    const defaultColDef = useMemo(() => ({
     sortable: true,
     filter: true,
     enableRowGroup: true,
   }))
 
-  const cellClickListner = useCallback(e => {
-    navigate(`/produits/${location.state.id}/${e.data.id}`, { state : { nom: e.data["designation d'article"],id: location.state.id, detail: e.data } })
-  })
+
+  const cellClickListner = (params) => {
+    navigate(`/produits/${location.state.id_famille}/${params.data.id_article}`, {state: params.data})
+  }
 
     return (
       <>
-      <ModalUpdate
+      {modal && <ModalUpdate
               setShowModal={setModal}
               showModal={modal}
-              detail={nom}
+              detail={state}
               colors={colors.root}
-              setDetail={setNom}
-              id={location.state.id}
-            />
-      <ModalDelete
+              setDetail={setState}
+              id={location.state.id_famille}
+            />}
+      {del && <ModalDelete
               setShowModal={setDel}
               showModal={del}
-              detail={nom}
+              detail={state}
               colors={colors.root}
-              id={location.state.id}
-            />
-        <NavigationBar name={`famille : ${nom}`} />
+              id={location.state.id_famille}
+            />}
+        <NavigationBar name={`famille : ${state}`} />
         
         <div 
         className="ag-theme-quartz-dark"
@@ -127,7 +171,7 @@ const Produits = () => {
           marginBottom: '10px',
           marginRight: '10px'
         }} 
-        onClick={(e) => { navigate(`/produits/${location.state.id}/add`, {state: {nom: location.state.nom, id: location.state.id, articles: location.state.articles}}) }}
+        onClick={() => { navigate(`/produits/${location.state.id_famille}/add`, {state: location.state}) }}
         >ajouter article</Button>
         <Button sx={{
           color: 'var(--brand-1)',
@@ -154,11 +198,12 @@ const Produits = () => {
         >telecharger excel</Button>
             <AgGridReact className="clear"
               ref={gridRef}
-              rowData={location.state.articles}
+              rowData={article}
               columnDefs={display_famille}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
+              getRowStyle={getRowStyle}
             />
             </div>
       </>

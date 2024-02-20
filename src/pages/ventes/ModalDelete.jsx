@@ -48,20 +48,25 @@ const confirme_button_style = {
 };
 
 
-export default function ModalDelete({_delete, setDelete, ...props}) {
+export default function ModalDelete({_delete, setDelete, type, ...props}) {
     const handleClose = () => setDelete(false);
     const [supprimer, setSupprimer] = useState(false)
     const navigate = useNavigate()
+    console.log(props.detail)
   
     const hanldeDelete = async () => {
       setSupprimer(true)
       setTimeout(() => {
         setDelete(false)
         setSupprimer(false)
-        navigate('/ventes')
+        navigate( '/ventes')
       }, 2000)
+      let to_delete = {
+        type: type,
+        ...props.detail
+      }
       try {
-        const result = await axios.delete(api + `ventes/${props.detail.id}`)
+        const result = await axios.delete(type === 'total_ventes' ? api + `ventes/${props.detail.id_total_vente}` : api + `ventes/${props.detail.id_vente}/${props.detail.id_vente}` , {data: to_delete})
         if(result.status === 200) {
         }
       } catch (error) {
@@ -83,7 +88,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             p: 4
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Supprimer {props.detail['vente n=°']} !!
+              Supprimer le vente!!
             </Typography>
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
@@ -94,7 +99,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             </Box>
           </Box>
         </Modal>
-        {supprimer && <Notification name={`${props.detail['vente n=°']} a été supprimée'`}/>}
+        {supprimer && <Notification name={`cette vente a été supprimée'`}/>}
       </div>
     );
   }

@@ -4,15 +4,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import SelectedMenu from '../home/SelectedMenu';
-import { wilayas, display } from '../../wilaya';
 import { FormControl } from '@mui/material';
 import { api } from '../../backend';
 import axios from 'axios';
 import Notification from '../home/notification';
 import { useState, useEffect } from "react";
 import { TextField } from "@mui/material"
-import SelectedFournisseur from '../home/SelectedFournisseur';
-import { result } from "../../backend";
 
 const style = {
   position: 'absolute',
@@ -59,35 +56,16 @@ const style_textField = {
 
 export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const handleClose = () => setShowModal(false);
-    const [verImp, setVerImp] = useState(props.detail)
+    const [inter, setInter] = useState(props.detail)
     const [confirm, setConfirm] = useState(false)
-    const [fournisseur, setFournisseur] = useState([])
-    const [famille, setFamille] = useState([])
-    const [articles, setArticles] = useState([])
-    const [titre, setTitre] = useState([])
+    const devise = ['$', '€']
 
     useEffect(() => {
-        const fetchAllData = async () => {
-            let data = result.data.articles
-            setArticles(data)
-            let __fournisseur = result.data.fournisseurs
-            setFournisseur(__fournisseur)
-            const famille = [...new Set(
-                data.map(item => item.famille))]
-                setFamille(famille)
-            data = result.data.titre
-            let inter = []
-            Object.keys(data).map(e => {
-              inter.push(data[e].titre)
-            })
-            setTitre(inter)
-            }
-            fetchAllData()
     }, [])
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `importations/versement_importation/${props.detail.id}`, data)
+          const result = await axios.put(api + `importations/versement_importation/${props.detail.id_versement_importation}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
@@ -95,28 +73,29 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       }
     }
   
-    const handleChange = (e) => {
-      setVerImp(c => ({
-        ...c,
-        [e.target.name] : e.target.value,
-        total: verImp.qte * verImp.pu
-      }))
-    }
-  
     const hanldeConfirm = async () => {
+      setInter(i => ({
+        ...i,
+        'poid 24k' : inter['poid 18k'] * inter.titre / 1000,
+        versement : inter.devise === '$' ? inter['versement $'] : (inter['change €/$'] * inter['versement €']),
+      }))
       props.setDetail(d => ({
         ...d,
-        ...verImp,
+        'change €/$': inter['change €/$'],
+        'poid 18k': inter['poid 18k'],
+        'poid 24k': inter['poid 24k'],
+        titre: inter.titre,
+        versement: inter.versement,
+        'versement $': inter['versement $'],
+        'versement €': inter['versement €'],
       }))
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
-      await update(verImp)
+      await update(inter)
     }
-
-    
     return (
       <div>
         <Modal
@@ -130,26 +109,26 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             minHeight: 300,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Update cet versement
+              Update {inter['versement importation n=°']}
             </Typography>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <SelectedMenu name='titre' options={titre} setValue={setVerImp} valeur={verImp}/>
-            </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                  <SelectedMenu name='devise' options={devise} setValue={setInter} valeur={inter}/>
+                </FormControl>
                 <TextField 
                     id="outlined-controlled"
                     label='poid 18k' variant="outlined"
                     onChange={(e) => {
-                      setVerImp(v => ({
+                      setInter(v => ({
                         ...v,
                         'poid 18k': parseFloat(e.target.value),
-                        'poid 24k': (parseFloat(e.target.value) * verImp.titre / 1000).toFixed(3),
+                        'poid 24k': parseFloat(e.target.value) * inter.titre / 1000,
                       }))
                     }}
                     type='number'
                     sx={style_textField}
                     name='poid 18k'
                     className={props.colors}
-                    value={verImp['poid 18k']}
+                    value={inter['poid 18k']}
                 />
                 <TextField 
                     disabled
@@ -159,59 +138,75 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
                     sx={style_textField}
                     name='poid 24k'
                     className={props.colors}
-                    value={verImp['poid 24k']}
+                    value={inter['poid 24k']}
                 />
-                <TextField 
-                    id="outlined-controlled"
-                    label='versement €' variant="outlined"
-                    onChange={(e) => {
-                      setVerImp(v => ({
-                        ...v,
-                        'versement €': parseFloat(e.target.value),
-                        versement: parseFloat(e.target.value) === 0 ? verImp['versement $'] : (parseFloat(e.target.value) * verImp['change €/$']),
-                      }))}}
-                    type='number'
-                    sx={style_textField}
-                    name='versement €'
-                    className={props.colors}
-                    value={verImp['versement €']}
-                />
-                <TextField 
-                    id="outlined-controlled"
-                    label='change €/$' variant="outlined"
-                    onChange={(e) => {
-                      setVerImp(v => ({
-                        ...v,
-                        'change €/$': parseFloat(e.target.value),
-                        versement: verImp['versement €'] === 0 ? verImp['versement $'] : (verImp['versement €'] * parseFloat(e.target.value)),
-                      }))}}
-                    type='number'
-                    sx={style_textField}
-                    name='change €/$'
-                    className={props.colors}
-                    value={verImp['change €/$']}
-                />
-                <TextField 
+                {inter.devise === '$' && <TextField 
                     id="outlined-controlled"
                     label='versement $' variant="outlined"
                     onChange={(e) => {
-                      setVerImp(v => ({
+                      setInter(v => ({
                         ...v,
-                        'versement $': parseFloat(e.target.value),
-                        versement: verImp['versement €'] === 0 ? parseFloat(e.target.value) : (verImp['versement €'] * verImp['change €/$']),
+                        'versement $' : inter.devise === '€' ? (inter['change €/$'] * inter['versement €']) : parseFloat(e.target.value),
+                        versement : inter.devise === '$' ? parseFloat(e.target.value) : (inter['change €/$'] * inter['versement €']),
+
                       }))}}
                     type='number'
                     sx={style_textField}
                     name='versement $'
                     className={props.colors}
-                    value={verImp['versement $']}
+                    value={inter['versement $']}
+                />}
+
+                
+                {inter.devise === '€' && <>
+                <TextField 
+                    id="outlined-controlled"
+                    label='versement €' variant="outlined"
+                    onChange={(e) => {
+                      setInter(v => ({
+                        ...v,
+                        'versement €': parseFloat(e.target.value),
+                        versement : inter.devise === '$' ? inter['versement $'] : (inter['change €/$'] * parseFloat(e.target.value)),
+                      }))}}
+                    type='number'
+                    sx={style_textField}
+                    name='versement €'
+                    className={props.colors}
+                    value={inter['versement €']}
+                />
+                <TextField 
+                    id="outlined-controlled"
+                    label='change €/$' variant="outlined"
+                    onChange={(e) => {
+                      setInter(v => ({
+                        ...v,
+                        'change €/$': parseFloat(e.target.value),
+                        versement : inter.devise === '$' ? inter['versement $'] : (parseFloat(e.target.value) * inter['versement €']),
+                      }))}}
+                    type='number'
+                    sx={style_textField}
+                    name='change €/$'
+                    className={props.colors}
+                    value={inter['change €/$']}
+                />
+                </>}
+                
+                <TextField 
+                    disabled
+                    id="outlined"
+                    label='versement' variant="outlined"
+                    type='number'
+                    sx={style_textField}
+                    name='versement'
+                    className={props.colors}
+                    value={inter.versement}
                 />
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
               <Button 
                 sx={confirme_button_style}
                 onClick={hanldeConfirm}
-                disabled={verImp.famille === "" || verImp["designation d'article"] === '' || verImp.fournisseur == '' || verImp.qte === 0 || verImp.pu === 0}
+                disabled={inter['poid 18k'] === 0 || inter.versement === 0}
               >confirmer</Button>
             </Box>
           </Box>

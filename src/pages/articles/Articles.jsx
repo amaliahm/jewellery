@@ -6,6 +6,7 @@ import { TextField } from '@mui/material';
 import {Button} from '@mui/material';
 import AddFamille from './AddFamille';
 import { makeStyles } from "@mui/styles";
+import { view_produits } from '../../backend';
 
 const useStyle = makeStyles({
   root: {
@@ -23,31 +24,42 @@ const useStyle = makeStyles({
 const Articles = () => {
   const colors = useStyle()
   const [famille, setFamille] = useState([])
-  const [articles, setArticles] = useState({})
   const [search, setSearch] = useState('')
   const [modal, setModal] = useState(false)
 
   useEffect(() => {
+    console.log(view_produits)
     const fetchAllData = async () => {
-      let data = result.data.articles
-      setArticles(data)
-      // const __data = result.data.familles
-      // const famille = [...new Set(
-      //   __data.map(item => item.famille))]
-        setFamille(result.data.familles)
+     let inter = []
+     Object.keys(view_produits).map(e => {
+      inter.push({
+        nombre_piece: view_produits[e].nombre_piece,
+        nom_famille: view_produits[e].nom_famille,
+        id_famille: view_produits[e].id_famille,
+        deleted_famille: view_produits[e].deleted_famille
+      })
+     })
+      const uniqueObjectsSet = new Set();
+
+      const uniqueArray = inter.filter(obj => {
+        const stringRepresentation = JSON.stringify(obj);
+        if (!uniqueObjectsSet.has(stringRepresentation)) {
+          uniqueObjectsSet.add(stringRepresentation);
+          return true;
+        }
+        return false;
+      });
+      setFamille(uniqueArray)
+      console.log(uniqueArray)
     }
     fetchAllData()
   }, [2000])
 
-  function displayFamille(name) {
-    const result = []
-    Object.keys(articles).map((e, i) => {
-      if (articles[e].famille === name) {
-        result.push(articles[e] )
-      }
-    })
-    return result
-  }
+  const filteredFamille = famille.filter(obj =>
+    Object.keys(obj).some(key =>
+      obj[key].toString().toLowerCase().includes(search)
+    )
+  );
 
     return (
       <>
@@ -81,14 +93,16 @@ const Articles = () => {
           ></TextField>
         </div>
         <div className="add" style={{
-          marginTop: '10px'
+          marginTop: '10px',
+          background: 'rgba(255, 255, 255, 0)',
         }}>
-          {Object.keys(famille).filter(f => f.includes(search)).map((e, i) => (
+          {filteredFamille.map((e, i) => (
             <Famille 
               key={i} 
-              nom={famille[e].famille} 
-              id={famille[e].id}
-              famille={displayFamille(famille[e].famille)}
+              piece={e.nombre_piece}
+              nom={e.nom_famille} 
+              id={e.id_famille}
+              deleted={e.deleted_famille}
               />
           ))}
         </div>

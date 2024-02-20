@@ -61,26 +61,13 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
     const handleClose = () => setShowModal(false);
     const [inter, setInter] = useState(props.detail)
     const [confirm, setConfirm] = useState(false)
-    const [fournisseur, setFournisseur] = useState([])
-    const [famille, setFamille] = useState([])
-    const [articles, setArticles] = useState([])
 
     useEffect(() => {
-        const fetchAllData = async () => {
-            let data = result.data.articles
-            setArticles(data)
-            let __fournisseur = result.data.fournisseurs
-            setFournisseur(__fournisseur)
-            const famille = [...new Set(
-                data.map(item => item.famille))]
-                setFamille(famille)
-            }
-            fetchAllData()
     }, [])
   
     const update = async (data) => {
       try {
-          const result = await axios.put(api + `importations/achat_importation/${props.detail.id}`, data)
+          const result = await axios.put(api + `importations/achat_importation/${props.detail.id_achat_importation}`, data)
           if(result.status === 200) {
           }
       } catch (error) {
@@ -88,37 +75,18 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
       }
     }
   
-    const handleChange = (e) => {
-      setInter(c => ({
-        ...c,
-        [e.target.name] : e.target.value,
-        total: inter.qte * inter.pu
-      }))
-    }
-  
     const hanldeConfirm = async () => {
       props.setDetail(d => ({
         ...d,
         ...inter,
       }))
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
       await update(inter)
     }
-
-    function displayFamille(name) {
-        const result = []
-        Object.keys(articles).map((e, i) => {
-          if (articles[e].famille === name) {
-            result.push(articles[e]["designation d'article"] )
-          }
-        })
-        return result
-    }
-    
     return (
       <div>
         <Modal
@@ -132,7 +100,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
             minHeight: 300,
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Update cet achat
+              Update {inter['achat importation n=°']}
             </Typography>
             <TextField 
               id={"outlined-controlled"}
@@ -145,7 +113,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
                 setInter(c => ({
                     ...c,
                     'poid 18k': parseFloat(e.target.value),
-                    'poid 24k': (parseFloat(e.target.value) * 750 / 1000).toFixed(3),
+                    'poid 24k': (parseFloat(e.target.value) * 750 / 1000).toFixed(2),
                     total: parseFloat(e.target.value) * inter['prix unitaire']
                 }))
               }}
@@ -173,7 +141,7 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
                 setInter(c => ({
                     ...c,
                     'prix unitaire': parseFloat(e.target.value),
-                    total: (inter['poid 18k'] * parseFloat(e.target.value)).toFixed(3)
+                    total: (inter['poid 18k'] * parseFloat(e.target.value)).toFixed(2)
                 }))
               }}
               value={inter['prix unitaire']}

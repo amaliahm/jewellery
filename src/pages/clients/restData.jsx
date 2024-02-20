@@ -3,11 +3,12 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { result } from "../../backend";
-import { columns_achats } from "../achats/data";
-import { columns_versement_f } from "../versements/data";
-import { columns_versement_c } from "../versements/data";
+import { view_vente_articles_client, view_versement_client, view_retour_client } from "../../backend";
 import { columns_ventes } from "../ventes/data";
+import { columns_versement_c } from "../versements/data";
+import { columns_retours_client } from "../retours/data";
+import { columns_article } from "../articles/data";
+import { useLocation } from "react-router-dom";
 
 const style = {
     color: 'var(--brand-1)',
@@ -27,37 +28,108 @@ const style_clicked = {
     }
 }
 
-const TableData = ({nom}) => {
+const TableData = () => {
+  const location = useLocation()
   const gridRef = useRef();
   const [vente, setVente] = useState([])
-  const [ver, setVer] = useState([])
-  const [click, setClick] = useState(0)
+  const [versement, setVersement] = useState([])
+  const [retour, setRetour] = useState([])
+  const [article, setArticle] = useState([])
+  const [click, setClick] = useState(0)  
+  const id = parseInt(location.pathname.split('/')[2])
 
   const getVente = () => {
-    const data = result.data.ventes
+
+    console.log(view_vente_articles_client)
     const inter = []
-    Object.keys(data).map((e, i) => {
-        if (data[e].client === nom) {
-            inter.push(data[e])
+    const __inter = []
+    Object.keys(view_vente_articles_client).map(e => {
+        if (view_vente_articles_client[e].id_client === id) {
+          inter.push({
+            'vente total n=°': view_vente_articles_client[e]['vente total n=°'],
+            'date total vente': view_vente_articles_client[e].date_total_vente,
+            id_total_vente: view_vente_articles_client[e].id_total_vente,
+            piece_vente: view_vente_articles_client[e].piece_ventes,
+            total_vente: view_vente_articles_client[e].nouveau_solde_ventes - view_vente_articles_client[e].anciene_solde_ventes,
+            ancien_solde_vente: view_vente_articles_client[e].anciene_solde_ventes,
+            nouveau_solde_vente: view_vente_articles_client[e].nouveau_solde_ventes,
+          })
+          __inter.push({
+            'vente total n=°': view_vente_articles_client[e]['vente total n=°'],
+            nom_famille: view_vente_articles_client[e].nom_famille,
+            nom_article: view_vente_articles_client[e].nom_article,
+            prix_unitaire_vente: view_vente_articles_client[e].prix_unitaire_vente,
+            quantite_stock: view_vente_articles_client[e].quantite_stock,
+          })
         }
     })
-    setVente(inter)
+
+    const uniqueObjectsSet = new Set();
+
+    const uniqueArray = inter.filter(obj => {
+      const stringRepresentation = JSON.stringify(obj);
+      if (!uniqueObjectsSet.has(stringRepresentation)) {
+        uniqueObjectsSet.add(stringRepresentation);
+        return true;
+      }
+      return false;
+    });
+    setVente(uniqueArray)
+    
+    const uniqueObjectsSet__ = new Set();
+
+    const uniqueArray__ = __inter.filter(obj => {
+      const stringRepresentation = JSON.stringify(obj);
+      if (!uniqueObjectsSet__.has(stringRepresentation)) {
+        uniqueObjectsSet__.add(stringRepresentation);
+        return true;
+      }
+      return false;
+    });
+
+    setArticle(uniqueArray__)
   }
 
   const getVersement = () => {
-    const data = result.data.versement_c
     const inter = []
-    Object.keys(data).map((e, i) => {
-        if (data[e].client === nom) {
-            inter.push(data[e])
+    console.log(view_versement_client)
+    Object.keys(view_versement_client).map(e => {
+        if (view_versement_client[e].id_client === id) {
+            inter.push({
+              'versement client n=°': view_versement_client[e]['versement client n=°'],
+              date: view_versement_client[e].date,
+              versement_or: view_versement_client[e].versement_or,
+              versement_argent: view_versement_client[e].versement_argent,
+              ancien_solde: view_versement_client[e].ancien_solde,
+              nouveau_solde: view_versement_client[e].nouveau_solde,
+            })
         }
     })
-    setVer(inter)
+    setVersement(inter)
+  }
+
+
+  const getRetour = () => {
+    const inter = []
+    Object.keys(view_retour_client).map(e => {
+        if (view_retour_client[e].id_client === id) {
+            inter.push({
+              'retour client n=°': view_retour_client[e]['retour client n=°'],
+              date: view_retour_client[e].date,
+              retour_or: view_retour_client[e].retour_or,
+              retour_argent: view_retour_client[e].retour_argent,
+              ancien_solde: view_retour_client[e].ancien_solde,
+              nouveau_solde: view_retour_client[e].nouveau_solde,
+            })
+        }
+    })
+    setRetour(inter)
   }
 
   useEffect(() => {
     getVente()
     getVersement()
+    getRetour()
   }, [2000])
 
   const defaultColDef = useMemo(() => ({
@@ -80,11 +152,13 @@ const TableData = ({nom}) => {
         }}>
               <Button sx={click == 0 ? style_clicked : style} onClick={() => {setClick(0)}}>les ventes</Button>
               <Button sx={click == 1 ? style_clicked : style} onClick={() => {setClick(1)}}>les versements</Button>
+              <Button sx={click == 2 ? style_clicked : style} onClick={() => {setClick(2)}}>les retours</Button>
+              <Button sx={click == 3 ? style_clicked : style} onClick={() => {setClick(3)}}>les articles</Button>
 
             <AgGridReact className="clear"
               ref={gridRef}
-              rowData={click == 0 ? vente : ver}
-              columnDefs={click == 0 ? columns_ventes : columns_versement_c}
+              rowData={click == 0 ? vente : click == 1 ? versement : click == 2 ? retour : article}
+              columnDefs={click == 0 ? columns_ventes : click == 1 ? columns_versement_c : click == 2 ? columns_retours_client : columns_article}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}

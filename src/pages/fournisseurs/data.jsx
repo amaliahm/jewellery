@@ -1,6 +1,6 @@
 const columns_fournisseurs = [
     {
-      field: "nom",
+      field: "nom_fournisseur",
       headerName: "NOM",
       flex: 1,
       cellClassName: "name-column--cell",
@@ -35,91 +35,11 @@ const columns_fournisseurs = [
       headerAlign: 'left'
     },
     {
-      field: "email",
-      headerName: "EMAIL",
-      flex: 1,
-      minWidth: 300,
-      maxWidth: 350,
-      headerAlign: 'left'
-    },
-    {
-      field: "titre",
-      headerName: "TITRE",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 150,
-      headerAlign: 'left'
-    },
-    {
-      field: "chiffre d'affaire",
-      headerName: "CHIFFRE D'AFFAIRE",
+      field: "solde",
+      headerName: "SOLDE",
       flex: 1,
       minWidth: 200,
       maxWidth: 250,
-      headerAlign: 'left'
-    },
-    {
-      field: "total or",
-      headerName: "TOTAL OR",
-      flex: 1,
-      minWidth: 100,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total vo",
-      headerName: "TOTAL VERSEMENT OR",
-      flex: 1,
-      minWidth: 200,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "total va",
-      headerName: "TOTAL VERSEMENT ARGENT",
-      flex: 1,
-      minWidth: 250,
-      maxWidth: 300,
-      headerAlign: 'left'
-    },
-    {
-      field: "total perte",
-      headerName: "TOTAL PERTE",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "total ro",
-      headerName: "TOTAL RETOUR OR",
-      flex: 1,
-      minWidth: 200,
-      maxWidth: 250,
-      headerAlign: 'left'
-    },
-    {
-      field: "total ra",
-      headerName: "TOTAL RETOUR ARGENT",
-      flex: 1,
-      minWidth: 250,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "reste o",
-      headerName: "RESTE OR",
-      flex: 1,
-      minWidth: 130,
-      maxWidth: 200,
-      headerAlign: 'left'
-    },
-    {
-      field: "reste a",
-      headerName: "RESTE ARGENT",
-      flex: 1,
-      minWidth: 150,
-      maxWidth: 200,
       headerAlign: 'left'
     },
   ];
@@ -144,12 +64,18 @@ const columns_fournisseurs = [
   }
   
   const add_fournisseur = {
+    id_titre: 0,
     nom: '',
     wilaya: '',
     ville: '',
     telephone: '',
     titre: '',
     email: '',
+    adresse: '',
+    NRC: '',
+    NIF: '',
+    NIS: '',
+    N_art: ''
   }
   
   

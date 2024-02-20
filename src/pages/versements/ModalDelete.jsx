@@ -54,9 +54,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
     const navigate = useNavigate()
   
     const hanldeDelete = async () => {
-        const inter = (props.detail['versement n=°']).split('-')['1']
-        const table = inter == 'CLIENT' ? 'versement_c' : inter == 'FOURNISSEUR' ? 'versement_f' : ''
-        const data = {table: table, id: props.detail.id}
+        const data = {type: props.detail.type, id: props.detail.id}
       console.log(data)
       setSupprimer(true)
       setTimeout(() => {
@@ -87,7 +85,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             p: 4
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Supprimer {props.detail['versement n=°']} !!
+              Supprimer {props.detail.type === 'client' ? props.detail['versement client n=°'] : props.detail['versement fournisseur n=°']} !!
             </Typography>
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
@@ -98,7 +96,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             </Box>
           </Box>
         </Modal>
-        {supprimer && <Notification name={`${props.detail['versement n=°']} a été supprimée'`}/>}
+        {supprimer && <Notification name={`${props.detail.type === 'client' ? props.detail['versement client n=°'] : props.detail['versement fournisseur n=°']} a été supprimée'`}/>}
       </div>
     );
   }

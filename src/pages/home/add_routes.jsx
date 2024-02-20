@@ -2,11 +2,14 @@ import AddClient from "../clients/AddClient"
 import AddAchat from "../achats/AddAchat"
 import AddFournissuer from "../fournisseurs/AddFournisseur"
 import AddVente from "../ventes/AddVente"
-import AddVersement from "../versements/AddVersement"
+import AddVersementClient from "../versements/AddVersementClient"
 import AddAchatImportation from "../achat_importation/AddAchatImportation"
 import AddVersementImportation from "../versement_importation/AddVersementImportation"
 import AddArticle from "../articles/AddArticle"
 import AddMouvement from "../bourse/AddMouvement"
+import AddVersementFournisseur from "../versements/AddVersementFournisseur"
+import AddRetour from "../retours/AddRetour"
+import AddReparation from "../reparation/AddReparation"
 
 const add_routes = [
     {
@@ -26,8 +29,12 @@ const add_routes = [
         component: <AddVente />
     },
     {
-        to: '/versements/add-versement',
-        component: <AddVersement />
+        to: '/versements/add-versement-client',
+        component: <AddVersementClient />
+    },
+    {
+        to: '/versements/add-versement-fournisseur',
+        component: <AddVersementFournisseur />
     },
     {
         to: '/importations/achat_importation/add',
@@ -36,6 +43,14 @@ const add_routes = [
     {
         to: '/importations/versement_importation/add',
         component: <AddVersementImportation />
+    },
+    {
+        to: '/retours/add-retour',
+        component: <AddRetour />
+    },
+    {
+        to: '/magasins/:id/add-reparation',
+        component: <AddReparation />
     },
     {
         to: '/produits/:id/add',

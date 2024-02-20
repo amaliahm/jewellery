@@ -52,17 +52,20 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
     const handleClose = () => setDelete(false);
     const [supprimer, setSupprimer] = useState(false)
     const navigate = useNavigate()
-    console.log(props.detail.id)
+    console.log(props.detail)
   
     const hanldeDelete = async () => {
       setSupprimer(true)
       setTimeout(() => {
         setDelete(false)
         setSupprimer(false)
-        navigate('/importations/achat_importation', {state: props.detail.importateur})
+        navigate('/importations/achat_importation', {state: {
+          nom_importateur: props.detail.nom_importateur,
+          id_importation: props.detail.id_importation,
+        }})
       }, 2000)
       try {
-        const result = await axios.delete(api + `importations/achat_importation/${props.detail.id}`)
+        const result = await axios.delete(api + `importations/achat_importation/${props.detail.id_achat_importation}`, {data: props.detail})
         if(result.status === 200) {
         }
       } catch (error) {
@@ -84,7 +87,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             p: 4
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Supprimer cet achat !!
+              Supprimer {props.detail['achat importation n=°']}
             </Typography>
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>

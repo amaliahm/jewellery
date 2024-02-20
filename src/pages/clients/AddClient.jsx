@@ -4,12 +4,13 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api_add_client } from "../../backend";
-import { result } from "../../backend";
+import { result, titres } from "../../backend";
 import { display, wilayas } from "../../wilaya";
 import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
 import { add_client } from "./data";
+import SelectedTitre from "../home/SelectedTitre";
 
 
 const useStyle = makeStyles({
@@ -30,15 +31,9 @@ const AddClient = () => {
     const [client, setClient] = useState(add_client)
     const [done, setDone] = useState(false)
     const navigate = useNavigate()
-    const [titre, setTitre] = useState([])
+
     useEffect(() => {
         const fetchAllData = () => {
-            const data = result.data.titre
-            let inter = []
-            Object.keys(data).map(e => {
-                inter.push(data[e].titre)
-            })
-            setTitre(inter)
         }
         fetchAllData()
     }, [2000])
@@ -75,9 +70,9 @@ const AddClient = () => {
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
                     <SelectedMenu name='ville' options={display(client.wilaya)} setValue={setClient} valeur={client}/>
                 </FormControl>
-                {Object.keys(client).map((key, index) => (
+                {Object.keys(client).slice(1).map((key, index) => (
                     <>
-                    {(index == 0 || (index > 2 && index != 4)) 
+                    {index != 1 && index != 2 && index != 4 
                     ? <TextField 
                         id={"outlined-read-only-input"}
                         label={key} variant="outlined"
@@ -94,7 +89,7 @@ const AddClient = () => {
                     : <>
                       {index == 4 &&
                         <FormControl sx={{ m: 1, minWidth: 150 }}>
-                            <SelectedMenu name={key} options={titre} setValue={setClient} valeur={client}/>
+                            <SelectedTitre id='id_titre' name='titre' options={titres} setValue={setClient} valeur={client}/>
                         </FormControl>}
                     </>}
                 </>))}
@@ -109,7 +104,7 @@ const AddClient = () => {
                     bottom: '0',
                 }} 
                 onClick={handleClick}
-                disabled={client.wilaya === "" || client.ville === '' || client.titre === '' || client.nom === '' || client.telephone === '' || client.telephone.length > 10}
+                disabled={client.wilaya === "" || client.ville === '' || client.id_titre === '' || client.nom === '' || client.telephone === ''}
                 >ajouter client</Button>
             </div>
         </>

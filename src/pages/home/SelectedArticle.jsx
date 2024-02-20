@@ -1,27 +1,18 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React, {useState} from "react";
 
-function SelectedArticle({name, options, setValue ,valeur, rest}) {
+function SelectedArticle({name, options, setValue ,valeur}) {
+
     const onSelect = (e) => {
-      // setValue({
-        // ...valeur, 
-        // [name] : options[e.target.value],
-        // 'prix unitaire': parseInt(options[e.target.value]["prix unitaire"]),
-        // quantite: parseInt(options[e.target.value]["qte stock"]),
-        // total : Math.abs(options[e.target.value]["qte stock"]) * options[e.target.value]["prix unitaire"],
-      // })
-      Object.keys(rest).map((key, i) => {
-        if (rest[key].famille === valeur.famille && rest[key]["designation d'article"] === options[e.target.value]) {
-          setValue({
-            ...valeur,
-            [name] : options[e.target.value],
-            'prix unitaire': parseInt(rest[key]["prix unitaire"]),
-            quantite: parseInt(rest[key]["qte stock"]),
-            total : Math.abs(rest[key]["qte stock"]) * rest[key]["prix unitaire"],
-          })
-        }
+      setValue({
+        ...valeur, 
+        nom_famille : options[e.target.value].nom_famille,
+        id_article : options[e.target.value].id_article,
+        nom_article : options[e.target.value].nom_article,
+        prix_unitaire: parseInt(options[e.target.value].prix_vente),
+        quantite: parseInt(options[e.target.value].quantite_stock),
+        total : Math.abs(parseFloat(options[e.target.value].quantite_stock)) * parseFloat(options[e.target.value].prix_vente),
       })
-      console.log(valeur)
     }
   
     return (
@@ -31,13 +22,13 @@ function SelectedArticle({name, options, setValue ,valeur, rest}) {
           }}>
           <InputLabel id="demo-simple-select-label" >{name}</InputLabel>
             <Select
-              labelId="demo-simple-select-helper-label"
+              labelId="demo-simple-select-label"
               id="demo-simple-select-helper"
               label={name}
               onChange={onSelect}
             >
               {Object.keys(options).map((e, i) => (
-                 <MenuItem value={e} key={i} >{options[e]}</MenuItem>
+                 <MenuItem value={e} key={i} >{options[e].nom_article}</MenuItem>
               ))}
             </Select>
           </FormControl>

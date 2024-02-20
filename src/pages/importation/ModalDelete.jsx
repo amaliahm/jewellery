@@ -52,6 +52,17 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
     const handleClose = () => setDelete(false);
     const [supprimer, setSupprimer] = useState(false)
     const navigate = useNavigate()
+    console.log(props.detail)
+
+    const functionDelete = async (id) => {
+      try {
+        const result = await axios.delete(api + `importations/${id}`, {data: { id: id}})
+        if(result.status === 200) {
+        }
+      } catch (error) {
+          return
+      }
+    }
   
     const hanldeDelete = async () => {
       setSupprimer(true)
@@ -60,13 +71,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
         setSupprimer(false)
         navigate('/importations')
       }, 2000)
-      try {
-        const result = await axios.delete(api + `importations/${props.detail.id}`)
-        if(result.status === 200) {
-        }
-      } catch (error) {
-          return
-      }
+      await functionDelete(props.detail.id_importation)
     }
   
     return (
@@ -83,7 +88,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             p: 4
           }}>
             <Typography id="modal-modal-title" variant="h5" component="h2" sx={{mb: '20px'}}>
-              Supprimer {props.detail.importateur} !!
+              Supprimer {props.detail.nom_importateur} !!
             </Typography>
             <Box sx={button_box}>
               <Button sx={button_style} onClick={handleClose}>annuler</Button>
@@ -94,7 +99,7 @@ export default function ModalDelete({_delete, setDelete, ...props}) {
             </Box>
           </Box>
         </Modal>
-        {supprimer && <Notification name={`${props.detail.importateur} a été supprimée'`}/>}
+        {supprimer && <Notification name={`${props.detail.nom_importateur} a été supprimée'`}/>}
       </div>
     );
   }

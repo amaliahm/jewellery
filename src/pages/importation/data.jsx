@@ -69,14 +69,11 @@ const columns_importation = [
 ];
 
 const add_importation = {
-    importateur: '',
-    'total poid 18': '0.000',
-    'total poid 24': '0.000',
-    'total facon': '0.000',
-    'total versement or 24k': '0.000',
-    'total versement $': '0.000',
-    'reste poid 24k': '0.000',
-    'reste $': '0.000',
+    nom_importateur: '',
+    total_poid_18: '0.000',
+    total_poid_24: '0.000',
+    total_versement_argent: '0.000',
+    total_versement_or_24: '0.000',
 }
 
 export {

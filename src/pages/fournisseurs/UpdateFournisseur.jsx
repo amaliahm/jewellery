@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationBar from "../home/NavigationBar"
 import { useLocation } from "react-router-dom"
 import { TextField } from "@mui/material"
@@ -7,6 +7,8 @@ import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
 import TableData from './restData';
+import { fournisseur } from '../../backend';
+import { export_details_to_pdf } from '../home/telecharger_details';
 
 const useStyle = makeStyles({
     root: {
@@ -26,30 +28,50 @@ const UpdateFournisseur = () => {
     const location = useLocation()
     const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
-    const [data, setData] = useState({
-      id: location.state.id,
-      nom: location.state.nom,
-      wilaya: location.state.wilaya,
-      ville: location.state.ville,
-      telephone: location.state.telephone,
-      email: location.state.email,
-      titre: location.state.titre,
-      'chiffre d\'affaire': location.state['chiffre d\'affaire'],
-      'total or': location.state['total or'],
-      'total versement or': location.state['total vo'],
-      'total versement argent': location.state['total va'],
-      'total perte': location.state['total perte'],
-      'total retour or': location.state['total ro'],
-      'total retour argent': location.state['total ra'],
-      'reste or': location.state['reste o'],
-      'reste argent': location.state['reste a'],})
-      
+    const [data, setData] = useState({})
+    const [supprimer, setSupprimer] = useState(false)
+
+    useEffect(() => {
+      const fetchAllData = () => {
+        Object.keys(fournisseur).map((e, i) => {
+          if (fournisseur[i].id_fournisseur === location.state) {
+            setData({
+              id_fournisseur: fournisseur[i].id_fournisseur,
+              is_deleted: fournisseur[i].is_deleted,
+              nom: fournisseur[i].nom_fournisseur,
+              wilaya: fournisseur[i].wilaya,
+              ville: fournisseur[i].ville,
+              adresse: fournisseur[i].adresse,
+              titre: fournisseur[i].valeur,
+              telephone: fournisseur[i].telephone,
+              email: fournisseur[i].email,
+              solde: fournisseur[i].solde,
+              'or': fournisseur[i].total_or,
+              'versement or': fournisseur[i].total_versement_or,
+              'versement argent': fournisseur[i].total_versement_argent,
+              'perte': fournisseur[i].total_perte,
+              'retour or': fournisseur[i].total_retour_or,
+              'retour argent': fournisseur[i].total_retour_argent,
+              'reste or': fournisseur[i].reste_or,
+              'reste argent': fournisseur[i].reste_argent,
+              NRC: fournisseur[i].NRC,
+              NIF: fournisseur[i].NIF,
+              NIS: fournisseur[i].NIS,
+              'n=° article': fournisseur[i].N_art,
+            })
+          }
+        })
+      }
+      fetchAllData()
+    }, [2000])
+    
     return (
         <>
           <NavigationBar name={data.nom}/>
           <div className="add">
-            {Object.keys(data).slice(1).map(value => (
+            {Object.keys(data).slice(2).map((value, index) => (
                    <TextField 
+                   key={index}
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
                    sx={{
@@ -73,8 +95,11 @@ const UpdateFournisseur = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => export_details_to_pdf(data)}></i>
+              {!supprimer && !data.is_deleted &&  <>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
+              </>}
             </div>
             <ModalUpdate
               setShowModal={setModal}
@@ -88,9 +113,11 @@ const UpdateFournisseur = () => {
               _delete={m_delete}
               detail={data}
               colors={colors.root}
+              supprimer={supprimer}
+              setSupprimer={setSupprimer}
             />
           </div>
-          <TableData nom={data.nom} />
+          <TableData />
         </>
     )
 }

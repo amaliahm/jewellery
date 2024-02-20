@@ -70,9 +70,9 @@ export default function ModalUpdate({showModal, setShowModal, ...props}) {
   
     const hanldeConfirm = async () => {
       props.setDetail(inter)
-      setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
+        setShowModal(false)
         setConfirm(false)
       }, 2000)
       await update(inter)

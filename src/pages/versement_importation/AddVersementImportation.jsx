@@ -8,8 +8,9 @@ import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
 import { add_versement_importation } from "./data";
-import { result } from "../../backend";
+import { titres } from "../../backend";
 import { useLocation } from "react-router-dom";
+import SelectedTitre from "../home/SelectedTitre";
 
 
 const useStyle = makeStyles({
@@ -31,36 +32,47 @@ const style = {
 }
 
 const AddVersementImportation = () => {
-    const colors = useStyle()
+
+  const colors = useStyle()
     const location = useLocation()
     const [verImp, setVerImp] = useState({
       ...add_versement_importation,
-      importateur: location.state,
+      nom_importateur: location.state.nom_importateur,
+      id_importation: location.state.id_importation,
+      devise: '$',
     })
     const [done, setDone] = useState(false)
     const navigate = useNavigate()
     const currentDate = new Date();
-    const [titre, setTitre] = useState([])
+    console.log(location.state)
+    const devise = ['$', '€']
 
 
-    const fetchAllData = async () => {
-      let inter = []
-      let data = result.data.titre
-      Object.keys(data).map((e, i) => {
-        inter.push(data[e].titre)
-      })
-      setTitre(inter)
-    }
+
     useEffect(() => {
-      setVerImp(v => ({
-        ...v,
-        jour: String(currentDate.getDate()).padStart(2, '0'),
-        mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
-        annee : String(currentDate.getFullYear()),
-        'poid 24k' : verImp['poid 18k'] * verImp.titre / 1000,
-        versement : verImp['versement €'] === 0 ? verImp['versement $'] : (verImp['change €/$'] * verImp['versement €']),
-      }))
-      fetchAllData()
+
+    const url__ = 'https://v6.exchangerate-api.com/v6/fa05ca6ac00994824abd2edd/latest/EUR'
+
+    fetch(url__)
+       .then(response => response.json())
+       .then(data => {
+        const valeur = data.conversion_rates.USD
+        console.log(valeur)
+        setVerImp(v => ({
+          ...v,
+          'change €/$': valeur,
+          jour: String(currentDate.getDate()).padStart(2, '0'),
+          mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
+          annee : String(currentDate.getFullYear()),
+          'poid 24k' : verImp['poid 18k'] * verImp.titre / 1000,
+          'versement $' : verImp.devise === '€' ? (verImp['change €/$'] * verImp['versement €']) : (verImp['change €/$'] * verImp['versement €']),
+          versement : verImp.devise === '$' ? verImp['versement $'] : (verImp['change €/$'] * verImp['versement €']),
+        }))
+       })
+       .catch(error => {
+          console.error('Error fetching exchange rates:', error);
+       });
+      
     }, [2000])
     
     const handleClick = async e => {
@@ -82,7 +94,7 @@ const AddVersementImportation = () => {
     
     return (
         <>
-            <NavigationBar name={`ajouter versement pour ${location.state}`} />
+            <NavigationBar name={`ajouter versement pour ${location.state.nom_importateur}`} />
             <div className="add">
                 {done && <Notification name={'le versement a été ajoutée'} />}
                 <TextField 
@@ -95,7 +107,10 @@ const AddVersementImportation = () => {
                     className={colors.root}
                 />
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
-                  <SelectedMenu name='titre' options={titre} setValue={setVerImp} valeur={verImp}/>
+                  <SelectedTitre id='titre' name='titre' options={titres} setValue={setVerImp} valeur={verImp}/>
+                </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                  <SelectedMenu name='devise' options={devise} setValue={setVerImp} valeur={verImp}/>
                 </FormControl>
                 <TextField 
                     id="outlined-controlled"
@@ -104,7 +119,7 @@ const AddVersementImportation = () => {
                       setVerImp(v => ({
                         ...v,
                         'poid 18k': parseFloat(e.target.value),
-                        'poid 24k': (parseFloat(e.target.value) * verImp.titre / 1000).toFixed(3),
+                        'poid 24k': parseFloat(e.target.value) * verImp.titre / 1000,
                       }))
                     }}
                     type='number'
@@ -123,6 +138,24 @@ const AddVersementImportation = () => {
                     className={colors.root}
                     value={verImp['poid 24k']}
                 />
+                {verImp.devise === '$' && <TextField 
+                    id="outlined-controlled"
+                    label='versement $' variant="outlined"
+                    onChange={(e) => {
+                      setVerImp(v => ({
+                        ...v,
+                        'versement $': parseFloat(e.target.value),
+                        versement: verImp['versement €'] === 0 ? parseFloat(e.target.value) : (verImp['versement €'] * verImp['change €/$']),
+                      }))}}
+                    type='number'
+                    sx={style}
+                    name='versement $'
+                    className={colors.root}
+                    value={verImp['versement $']}
+                />}
+
+                
+                {verImp.devise === '€' && <>
                 <TextField 
                     id="outlined-controlled"
                     label='versement €' variant="outlined"
@@ -153,21 +186,8 @@ const AddVersementImportation = () => {
                     className={colors.root}
                     value={verImp['change €/$']}
                 />
-                <TextField 
-                    id="outlined-controlled"
-                    label='versement $' variant="outlined"
-                    onChange={(e) => {
-                      setVerImp(v => ({
-                        ...v,
-                        'versement $': parseFloat(e.target.value),
-                        versement: verImp['versement €'] === 0 ? parseFloat(e.target.value) : (verImp['versement €'] * verImp['change €/$']),
-                      }))}}
-                    type='number'
-                    sx={style}
-                    name='versement $'
-                    className={colors.root}
-                    value={verImp['versement $']}
-                />
+                </>}
+                
                 <TextField 
                     disabled
                     id="outlined"

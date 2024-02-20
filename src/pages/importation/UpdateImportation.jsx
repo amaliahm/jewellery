@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationBar from "../home/NavigationBar"
 import { useLocation } from "react-router-dom"
 import { TextField, Button } from "@mui/material"
@@ -7,6 +7,7 @@ import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
 import { useNavigate } from 'react-router-dom';
+
 
 const useStyle = makeStyles({
     root: {
@@ -38,24 +39,24 @@ const UpdateImportation = () => {
 
     return (
         <>
-          <NavigationBar name={data.importateur}/>
+          <NavigationBar name={data.nom_importateur}/>
           <div style={style}>
             <Button sx={{
               color: 'var(--brand-1)',
               border: '1px solid var(--brand-1)',
               marginRight: '20px'
             }} 
-            onClick={() => { navigate('/importations/achat_importation', {state: data.importateur}) }}
+            onClick={() => { navigate('/importations/achat_importation', {state: data}) }}
             >les achats</Button>
             <Button sx={{
               color: 'var(--brand-1)',
               border: '1px solid var(--brand-1)',
             }} 
-            onClick={() => { navigate('/importations/versement_importation', {state: data.importateur}) }}
+            onClick={() => { navigate('/importations/versement_importation', {state: data}) }}
             >les versements</Button>
           </div>
           <div className="add" style={{marginTop: '10px'}} >
-            {Object.keys(data).slice(2).map(value => (
+            {Object.keys(data).slice(3).map(value => (
                    <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
@@ -83,19 +84,19 @@ const UpdateImportation = () => {
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>
-            <ModalUpdate
+            {modal && <ModalUpdate
               setShowModal={setModal}
               showModal={modal}
               detail={data}
               colors={colors.root}
               setDetail={setData}
-            />
-            <ModalDelete
+            />}
+            {m_delete && <ModalDelete
               setDelete={setM_Delete}
               _delete={m_delete}
               detail={data}
               colors={colors.root}
-            />
+            />}
           </div>
         </>
     )

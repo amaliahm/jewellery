@@ -3,12 +3,12 @@ import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { api_add_versement} from "../../backend";
+import { api_add_versement_client } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
-import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
 import { add_versement } from "./data";
-import { result } from "../../backend";
+import { client } from "../../backend";
+import SelectedClient from "../home/SelectedClient";
 
 
 const useStyle = makeStyles({
@@ -29,37 +29,13 @@ const style = {
   margin: '10px'
 }
 
-const AddVersement = () => {
+const AddVersementClient = () => {
     const colors = useStyle()
     const [versement, setVersement] = useState(add_versement)
     const [done, setDone] = useState(false)
-    const [client, setClient] = useState()
-    const [fournisseur, setFournisseur] = useState()
     const navigate = useNavigate()
     const currentDate = new Date();
-    const person = ['client', 'fournisseur']
-    const [titre, setTitre] = useState([])
 
-    const fetchAllData = async () => {
-      let inter = []
-      let data = result.data.fournisseurs
-      Object.keys(data).map((e, i) => {
-        inter.push(data[e].nom)
-      })
-      setFournisseur(inter)
-      data = result.data.clients
-      inter = []
-      Object.keys(data).map((e, i) => {
-        inter.push(data[e].nom)
-      })
-      setClient(inter)
-      data = result.data.titre
-      inter = []
-      Object.keys(data).map((e, i) => {
-        inter.push(data[e].titre)
-      })
-      setTitre(inter)
-    }
     useEffect(() => {
       setVersement(v => ({
         ...v,
@@ -67,7 +43,6 @@ const AddVersement = () => {
         mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
         annee : String(currentDate.getFullYear())
       }))
-      fetchAllData()
     }, [2000])
 
     const handleChange = (e) => {
@@ -77,7 +52,6 @@ const AddVersement = () => {
         }))
         console.log(versement)
     }
-    
     const handleClick = async e => {
         e.preventDefault();
         try {
@@ -86,7 +60,7 @@ const AddVersement = () => {
                 setDone(false)
                 navigate('/versements')
             }, 2000)
-            const result = await axios.post(api_add_versement, versement)
+            const result = await axios.post(api_add_versement_client, versement)
             if(result.status === 200) {
             }
         } catch (e) {
@@ -114,17 +88,11 @@ const AddVersement = () => {
                     className={colors.root}
                 />
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedMenu name='person' options={person} setValue={setVersement} valeur={versement} />
+                    <SelectedClient name='client' options={client} setValue={setVersement} valeur={versement}/>
                 </FormControl>
-                <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedMenu name='nom' options={versement.person == 'client' ? client : versement.person == 'fournisseur' ? fournisseur : []} setValue={setVersement} valeur={versement}/>
-                </FormControl>
-                <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedMenu name='titre' options={titre} setValue={setVersement} valeur={versement}/>
-                </FormControl>
-                {Object.keys(versement).slice(6).map((key, index) => (
+                {Object.keys(versement).slice(7).map((key, index) => (
                     <>
-                    {(index <= 3) && 
+                    { (index <= 2) &&
                     <TextField 
                         key={index}
                         id={"outlined-controlled"}
@@ -182,6 +150,15 @@ const AddVersement = () => {
                     <TextField 
                        disabled
                        id={"outlined"}
+                       label= 'titre' variant="outlined"
+                       type='number'
+                       sx={style}
+                       className={colors.root}
+                       value={versement.titre}
+                    />
+                    <TextField 
+                       disabled
+                       id={"outlined"}
                        label= 'ecart' variant="outlined"
                        type='number'
                        sx={style}
@@ -199,11 +176,11 @@ const AddVersement = () => {
                     bottom: '0',
                 }}
                 onClick={handleClick}
-                disabled={versement.titre === "" || versement.person === '' || versement.nom === '' }
+                disabled={versement.id_client === ''}
                 >ajouter versement</Button>
             </div>
         </>
     )
 }
 
-export default AddVersement
+export default AddVersementClient

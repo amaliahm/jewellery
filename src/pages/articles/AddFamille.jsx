@@ -56,10 +56,7 @@ export default function AddFamille({showModal, setShowModal, ...props}) {
     const handleClose = () => setShowModal(false);
     const [inter, setInter] = useState('')
     const [confirm, setConfirm] = useState(false)
-    console.log(props.detail)
-
-
-  
+    
     const update = async (data) => {
       try {
           const result = await axios.post(api + 'produits', {famille: data})
@@ -73,14 +70,17 @@ export default function AddFamille({showModal, setShowModal, ...props}) {
   
     const hanldeConfirm = async () => {
       const local_var = props.detail
-      local_var.unshift(inter)
+      local_var.unshift({
+        nom_famille: inter,
+        nombre_piece: 0
+      })
       setShowModal(false)
       setConfirm(true)
       setTimeout(() => {
         setConfirm(false)
       }, 2000)
-      await update(inter)
       setInter('')
+      await update(inter)
     }
 
     return (
