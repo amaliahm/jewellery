@@ -30,7 +30,7 @@ const NavigationBar = ({name = 'home'}) => {
                 <div className="where-me" >
                   <div className="nav-items"
                     style={{
-                      height: !notOpen ? '570px' : '40px'
+                      height: !notOpen ? `calc(${routes.length} * 35px + 45px)` : '40px'
                     }}
                   >
                     <div className="humberger" data-name="home" onClick={() => setNotOpen(!notOpen)}>

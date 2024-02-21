@@ -78,18 +78,25 @@ const routes = [
         component: <Importation />
     },
     {
-        icon: 'link-slash',
+        icon: 'arrow-rotate-right',
         to: '/retours',
         name: 'les retours',
         key: 'retour',
         component: <Retour />
     },
     {
-        icon: 'arrow-rotate-right',
+        icon: 'shop',
         to: '/magasins',
         name: 'les magasins',
         key: 'magasin',
         component: <Magasin />
+    },
+    {
+        icon: 'question',
+        to: '/charges',
+        name: 'les charges',
+        key: 'charge',
+        component: <Charge />
     },
     {
         icon: 'dollar-sign',
@@ -106,10 +113,10 @@ const routes = [
         component: <Utilisateurs />
     },
     {
-        icon: 'arrow-right-from-bracket',
-        to: 'logout',
-        name: 'quitter site',
-        key: 'home',
+        icon: 'trash',
+        to: 'trash',
+        name: 'trash',
+        key: 'trash',
     },
 ]
 

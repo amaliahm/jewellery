@@ -13,6 +13,8 @@ import UpdateReparation from "../reparation/UpdateReparation"
 import UpdateAchatDetail from "../achats/UpdateAchatDetail"
 import UpdateVenteDetail from "../ventes/UpdateVenteDetail"
 import UpdateTitre from "../titre/DataTitre"
+import Type from "../charge/Type"
+import UpdateType from "../charge/UpdateType"
 
 const update_routes = [
     {
@@ -74,6 +76,14 @@ const update_routes = [
     {
         to: '/produits/:id/:id',
         component: <UpdateArticle />
+    },
+    {
+        to: '/charges/types',
+        component: <Type />
+    },
+    {
+        to: '/charges/types/:id',
+        component: <UpdateType />
     },
 ]
 

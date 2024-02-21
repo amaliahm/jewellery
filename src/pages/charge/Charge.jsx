@@ -5,6 +5,7 @@ import { AgGridReact } from "ag-grid-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { result } from "../../backend";
+import { view_charge } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 
 
@@ -12,8 +13,8 @@ const Charge = () => {
 
 const columns_charge = [
   {
-    field: "reference de charge",
-    headerName: "REFERENCE DE CHARGE",
+    field: "charge n=°",
+    headerName: "CHARGE N°",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -39,8 +40,17 @@ const columns_charge = [
     headerAlign: 'left',
   },
   {
-    field: "type",
+    field: "nom_type",
     headerName: "TYPE",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left',
+  },
+  {
+    field: "nom_sous_type",
+    headerName: "SOUS TYPE",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -50,6 +60,15 @@ const columns_charge = [
   {
     field: "montant",
     headerName: "MONTANT",
+    flex: 1,
+    cellClassName: "name-column--cell",
+    minWidth: 200,
+    maxWidth: 300,
+    headerAlign: 'left',
+  },
+  {
+    field: "utilisateur",
+    headerName: "UTILISATEUR",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -81,37 +100,16 @@ const columns_charge = [
 ];
   const gridRef = useRef();
   const navigate = useNavigate()
-  const [data, setData] = useState([])
-
-  const fetchAllData = async () => {
-  //   const data = result.data.charges
-  //   setData(data)
-  }
-  useEffect(() => {
-    fetchAllData()
-  }, [2000])
+  const [data, setData] = useState(view_charge)
 
   const defaultColDef = useMemo(() => ({
     sortable: true,
     filter: true,
-    // floatingFilter: true,
   })) 
 
   const cellClickListner = (params) => {
     // navigate(`/charges/${params.data.id}`, {state: params.data})
   }
-
-  const processRowGroup = (params) => {
-    // You can customize the row data here
-    // For example, you can format the date or manipulate the data before exporting
-    return params.node.group ? params.node.key : params.data;
-  };
-
-  const processHeader = (params) => {
-    // You can customize the header names here
-    // For example, you can change the header names or add additional information
-    return params.column.getColDef().headerName;
-  };
 
   let gridApi;
 
@@ -119,39 +117,6 @@ const columns_charge = [
     gridApi = params.api
   }
 
-
-
-  const exportFilteredDataToHtml = () => {
-    let filteredData = [];
-
-    if (gridApi && gridApi.isAnyFilterPresent()) {
-      gridApi.forEachNodeAfterFilter((node) => {
-        filteredData.push(node.data);
-      });
-    } else {
-      filteredData = data
-    }
-    
-    // Iterate over filtered rows
-
-      const htmlContent = generateHtmlTable(filteredData);
-      const blob = new Blob([htmlContent], { type: 'text/html' });
-
-      // Create a URL for the Blob
-      const blobUrl = URL.createObjectURL(blob);
-
-      // Create a downloadable link
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = 'eurl bhn zahav.html';
-      document.body.appendChild(a);
-
-      // Trigger a click on the link to start the download
-      a.click();
-
-      // Remove the link from the DOM
-      document.body.removeChild(a);
-  };
 
   
   return (
@@ -178,10 +143,8 @@ const columns_charge = [
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              onClick={() => {
-                // exportDataToPdf(data, gridApi, 'les charges')
-              }}
-              >telecharger pdf</Button>
+              onClick={() => navigate('/charges/types')}
+              >les types</Button>
             <AgGridReact 
               ref={gridRef}
               rowData={data}
