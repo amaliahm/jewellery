@@ -16,6 +16,7 @@ import UpdateTitre from "../titre/DataTitre"
 import Type from "../charge/Type"
 import UpdateType from "../charge/UpdateType"
 import UpdateCharge from "../charge/UpdateCharge"
+import UpdateCommand from "../command/UpdateCommand"
 
 const update_routes = [
     {
@@ -89,6 +90,10 @@ const update_routes = [
     {
         to: '/charges/:id',
         component: <UpdateCharge />
+    },
+    {
+        to: '/commands/:id',
+        component: <UpdateCommand />
     },
 ]
 

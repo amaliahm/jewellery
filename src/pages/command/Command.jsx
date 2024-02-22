@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { view_command } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
@@ -30,8 +30,8 @@ const columns_command = [
     headerAlign: 'left',
   },
   {
-    field: "designation",
-    headerName: "DESIGNATION",
+    field: "nom_fournisseur",
+    headerName: "FOURNISSEUR",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -39,8 +39,8 @@ const columns_command = [
     headerAlign: 'left',
   },
   {
-    field: "nom_type",
-    headerName: "TYPE",
+    field: "nom_article",
+    headerName: "ARTICLE",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -48,8 +48,8 @@ const columns_command = [
     headerAlign: 'left',
   },
   {
-    field: "nom_sous_type",
-    headerName: "SOUS TYPE",
+    field: "nom_client",
+    headerName: "CLIENT",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -57,8 +57,8 @@ const columns_command = [
     headerAlign: 'left',
   },
   {
-    field: "montant",
-    headerName: "MONTANT",
+    field: "nom_magasin",
+    headerName: "MAGASIN",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,
@@ -66,8 +66,8 @@ const columns_command = [
     headerAlign: 'left',
   },
   {
-    field: "utilisateur",
-    headerName: "UTILISATEUR",
+    field: "observation",
+    headerName: "OBSERVATION",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 200,

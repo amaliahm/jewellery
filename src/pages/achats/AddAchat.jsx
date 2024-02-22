@@ -43,15 +43,6 @@ const AddAchat = () => {
       filter: true,
       enableRowGroup: true,
     }))
-
-    useEffect(() => {
-        const fetchAllData = async () => {
-          if (achat.id_fournisseur) {
-            console.log(view_achat_articles_fournisseur)
-          }
-            }
-            fetchAllData()
-    }, [])
     
     const handleClick = async e => {
       setDone(true)

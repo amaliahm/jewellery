@@ -1,21 +1,25 @@
 import { Button, FormControl, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import axios from "axios";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api_add_charge } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 import Notification from "../home/notification";
-import SelectedType from "../home/SelectedType";
+import { fournisseur, client, magasin, api_add_command } from "../../backend";
+import SelectedArticle from "../home/SelectedArticle";
+import SelectedFournisseur from "../home/SelectedFournisseur";
+import SelectedClient from "../home/SelectedClient";
+import SelectedMagasin from "../home/SelectedMagasin";
 
-const add_charge = {
+const add_command = {
     jour: '',
     mois: '',
     annee: '',
-    id_type: '',
-    designation: '',
-    montant: 0,
-    utilisateur: '',
+    id_magasin: '',
+    id_article: '',
+    id_client: '',
+    id_fournisseur: '',
+    observation : '',
   }
 
 const useStyle = makeStyles({
@@ -33,13 +37,14 @@ const useStyle = makeStyles({
 
 const AddCommand = () => {
     const colors = useStyle()
-    const [charge, setCharge] = useState(add_charge)
+    const [command, setCommand] = useState(add_command)
     const [done, setDone] = useState(false)
     const navigate = useNavigate()
     const currentDate = new Date();
+    const [articles, setArticles] = useState([])
 
     useEffect(() => {
-        setCharge(v => ({
+        setCommand(v => ({
           ...v,
           jour: String(currentDate.getDate()).padStart(2, '0'),
           mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
@@ -49,14 +54,14 @@ const AddCommand = () => {
 
     const handleValidate = async e => {
       e.preventDefault();
-      console.log(charge)
+      console.log(command)
       setDone(true)
       setTimeout(() => {
         setDone(false)
-        navigate('/charges')
+        navigate('/commands')
       }, 2000)
       try {
-          const result = await axios.post(api_add_charge, charge)
+          const result = await axios.post(api_add_command, command)
           if(result.status === 200) {
           }
       } catch (e) {
@@ -67,13 +72,13 @@ const AddCommand = () => {
 
     return (
         <>
-            <NavigationBar name="ajouter charge" />
+            <NavigationBar name="ajouter command" />
             <div className="text-field-done" >
               <form>
                 <TextField 
                     disabled
                     id="outlined-disabled"
-                    label={`${charge.jour}-${charge.mois}-${charge.annee}`} variant="outlined"
+                    label={`${command.jour}-${command.mois}-${command.annee}`} variant="outlined"
                     type='text'
                     sx={{
                       borderColor: "transparent",
@@ -83,14 +88,27 @@ const AddCommand = () => {
                     className={colors.root}
                 ></TextField>
               </form>
-              <FormControl sx={{ m: 1, minWidth: 150 }}>
-                    <SelectedType setValue={setCharge} valeur={charge} />
-                </FormControl>
-              <div className="select-article">
 
+              <FormControl sx={{ m: 1, minWidth: 150 }}>
+                <SelectedFournisseur name='fournisseur' options={fournisseur} setValue={setCommand} valeur={command} setArticles={setArticles} show={false}/>
+              </FormControl>
+              <div className="select-article">
+                <FormControl sx={{ m: 1, minWidth: 150 }}>
+                    <SelectedArticle name="nom d'article"  options={articles} setValue={setCommand} valeur={command}/>
+                </FormControl>
+              </div>
+
+               <FormControl sx={{ m: 1, minWidth: 150 }}>
+                 <SelectedClient name='client' options={client} setValue={setCommand} valeur={command} show={false}/>
+               </FormControl>
+
+               <FormControl sx={{ m: 1, minWidth: 150 }}>
+                 <SelectedMagasin name='magasin' options={magasin} setValue={setCommand} valeur={command}/>
+               </FormControl>
+              <div className="select-article">
                 <TextField 
                     id={"outlined-controlled"}
-                    label='designation' variant="outlined"
+                    label='observation' variant="outlined"
                     type='text'
                     sx={{
                       borderColor: "transparent",
@@ -98,46 +116,12 @@ const AddCommand = () => {
                     }}
                     className={colors.root}
                     onChange={(e) => {
-                      setCharge(r => ({
+                      setCommand(r => ({
                         ...r,
-                        designation: e.target.value,
+                        observation: e.target.value,
                       }))
                     }}
-                    value={charge.designation}
-                ></TextField>
-                <TextField 
-                    id="outlined-controlled"
-                    label='montant' variant="outlined"
-                    type='number'
-                    sx={{
-                      borderColor: "transparent",
-                      margin: '10px'
-                    }}
-                    className={colors.root}
-                    onChange={(e) => {
-                      setCharge(r => ({
-                        ...r,
-                        montant: parseFloat(e.target.value)
-                      }))
-                    }}
-                    value={charge.montant}
-                ></TextField>
-                <TextField 
-                    id={"outlined-controlled"}
-                    label='utilisateur' variant="outlined"
-                    type='text'
-                    sx={{
-                      borderColor: "transparent",
-                      margin: '10px'
-                    }}
-                    className={colors.root}
-                    onChange={(e) => {
-                      setCharge(r => ({
-                        ...r,
-                        utilisateur: e.target.value,
-                      }))
-                    }}
-                    value={charge.utilisateur}
+                    value={command.observation}
                 ></TextField>
               </div>
                 <Button
@@ -151,11 +135,11 @@ const AddCommand = () => {
                     bottom: '0',
                 }} 
                 onClick={handleValidate}
-                disabled={charge.id_sous_type === ''||charge.montant === 0 || charge.utilisateur === '' || charge.designation === ''}
-                >ajouter charge</Button>
+                disabled={command.id_fournisseur === ''|| command.id_client === '' || command.id_article === '' || command.id_magasin === '' || command.observation === ''}
+                >ajouter command</Button>
            
             </div>
-            {done && <Notification name={"Charge a été ajoutée"}/>}
+            {done && <Notification name={"Command a été ajoutée"}/>}
         </>
     )
 }

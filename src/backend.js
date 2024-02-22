@@ -39,6 +39,7 @@ const api_add_article = api + 'produits/:id/add'
 const api_add_mouvement = api + 'bourse/add'
 const api_add_reparation = api + 'magasins/:id/add-reparation'
 const api_add_charge = api + 'charges/add-charge'
+const api_add_command = api + 'commands/add-command'
 
 
 
@@ -83,6 +84,7 @@ export {
     api_add_mouvement,
     api_add_reparation,
     api_add_charge,
+    api_add_command,
     importation,
     magasin,
     result,
