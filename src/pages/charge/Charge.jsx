@@ -2,9 +2,8 @@ import { Button } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { result } from "../../backend";
 import { view_charge } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 
@@ -85,22 +84,49 @@ const columns_charge = [
     cellRenderer : (params) => 
       <Button
       sx={{
-        background: 'var(--brand-1)',
+        background: `${!params.data.deleted_charge ? 'var(--brand-1)' : 'transparent'} `,
         marginBottom: '5px',
         padding: '15px',
         '&:hover' : {
-          border: '1px solid var(--brand-1)',
+          border: `${!params.data.deleted_charge ? '1px solid var(--brand-1)' : 'transparent'}`,
         }
       }} 
-      onClick={() => {cellClickListner(params)}}
+      onClick={() => {
+        !params.data.deleted_charge ? cellClickListner(params) : console.log()
+      }}
       >
-        <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
+        {!params.data.deleted_charge && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
       </Button>
   },
 ];
   const gridRef = useRef();
   const navigate = useNavigate()
-  const [data, setData] = useState(view_charge)
+  const [data, setData] = useState([])
+  console.log(view_charge)
+
+  useEffect(() => {
+    const fetchAllData = () => {
+      let inter = []
+      Object.keys(view_charge).map((e, i) => {
+        console.log(view_charge[e])
+        if(view_charge[e].id_charge !== null && view_charge[e].id_charge !== undefined) {
+          inter.push(view_charge[e])
+        }
+      })
+      const uniqueObjectsSet = new Set();
+
+      const uniqueArray = inter.filter(obj => {
+        const stringRepresentation = JSON.stringify(obj);
+        if (!uniqueObjectsSet.has(stringRepresentation)) {
+          uniqueObjectsSet.add(stringRepresentation);
+          return true;
+        }
+        return false;
+      });
+      setData(uniqueArray)
+    }
+    fetchAllData()
+  }, [2000])
 
   const defaultColDef = useMemo(() => ({
     sortable: true,
@@ -108,7 +134,7 @@ const columns_charge = [
   })) 
 
   const cellClickListner = (params) => {
-    // navigate(`/charges/${params.data.id}`, {state: params.data})
+    navigate(`/charges/${params.data.id_charge}`, {state: params.data})
   }
 
   let gridApi;
@@ -116,6 +142,13 @@ const columns_charge = [
   const onGridReady = (params) => {
     gridApi = params.api
   }
+
+  const getRowStyle = (params) => {
+    if (params.data.deleted_charge) {
+      return { background: '#db4f4a' };
+    }
+    return null;
+  };
 
 
   
@@ -135,7 +168,7 @@ const columns_charge = [
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              // onClick={() => { navigate('/charges/add-charge') }}
+              onClick={() => { navigate('/charges/add-charge') }}
               >ajouter charge</Button>
               <Button sx={{
                 color: 'var(--brand-1)',
@@ -153,6 +186,7 @@ const columns_charge = [
               rowGroupPanelShow='always'
               pagination={true}
               onGridReady={onGridReady}
+              getRowStyle={getRowStyle}
             />
             </div>
     </>

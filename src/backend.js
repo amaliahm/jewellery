@@ -22,6 +22,7 @@ let magasin
 let titres
 let importation
 let view_produits
+let view_command
 
 /* to add data */
 
@@ -37,6 +38,7 @@ const api_add_versement_importation = api + 'importations/versement_importation/
 const api_add_article = api + 'produits/:id/add'
 const api_add_mouvement = api + 'bourse/add'
 const api_add_reparation = api + 'magasins/:id/add-reparation'
+const api_add_charge = api + 'charges/add-charge'
 
 
 
@@ -59,6 +61,7 @@ async function getData() {
         importation = result.data.importation
         magasin = result.data.magasin
         view_produits = result.data.view_produits
+        view_command = result.data.view_command
     } catch (e) {
         console.log(e)
     }
@@ -79,6 +82,7 @@ export {
     api_add_article,
     api_add_mouvement,
     api_add_reparation,
+    api_add_charge,
     importation,
     magasin,
     result,
@@ -95,5 +99,6 @@ export {
     view_reparation,
     view_charge,
     view_produits,
+    view_command,
     titres,
 }

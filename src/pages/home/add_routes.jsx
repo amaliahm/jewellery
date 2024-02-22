@@ -10,6 +10,8 @@ import AddMouvement from "../bourse/AddMouvement"
 import AddVersementFournisseur from "../versements/AddVersementFournisseur"
 import AddRetour from "../retours/AddRetour"
 import AddReparation from "../reparation/AddReparation"
+import AddCharge from "../charge/AddCharge"
+import AddCommand from "../command/AddCommand"
 
 const add_routes = [
     {
@@ -55,6 +57,14 @@ const add_routes = [
     {
         to: '/produits/:id/add',
         component: <AddArticle />
+    },
+    {
+        to: '/charges/add-charge',
+        component: <AddCharge />
+    },
+    {
+        to: '/commands/add-command',
+        component: <AddCommand />
     },
     {
         to: '/bourse/add',

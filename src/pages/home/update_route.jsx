@@ -15,6 +15,7 @@ import UpdateVenteDetail from "../ventes/UpdateVenteDetail"
 import UpdateTitre from "../titre/DataTitre"
 import Type from "../charge/Type"
 import UpdateType from "../charge/UpdateType"
+import UpdateCharge from "../charge/UpdateCharge"
 
 const update_routes = [
     {
@@ -84,6 +85,10 @@ const update_routes = [
     {
         to: '/charges/types/:id',
         component: <UpdateType />
+    },
+    {
+        to: '/charges/:id',
+        component: <UpdateCharge />
     },
 ]
 
