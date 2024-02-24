@@ -4,25 +4,60 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { view_reception } from "../../backend";
+import { casse } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 
+const style = {
+  color: 'var(--brand-1)',
+  border: '1px solid var(--brand-1)',
+  marginBottom: '10px',
+  marginRight: '10px'
+}
 
+const style_clicked = {
+  color: 'var(--bg-color-1)',
+  background: 'var(--brand-1)',
+  border: '1px solid var(--brand-1)',
+  marginBottom: '10px',
+  marginRight: '10px',
+  '&:hover': {
+      background: 'var(--brand-1)',
+  }
+}
 
-const Reception = () => {
+const Casse = () => {
 
-  const columns_receptions = [
-    { 
-        field: "bon n=°", 
-        headerName: "BON N=°", 
-        flex: 0.5,
-        minWidth: 200,
-        maxWidth: 300,
-        headerAlign: 'left'
+  const columns_casse = [
+    {
+      field: "casse n=°",
+      headerName: "CASSE N=°",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 250,
+      maxWidth: 300,
+      headerAlign: 'left'
     },
     {
       field: "date",
       headerName: "DATE",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "operation",
+      headerName: "OPERATION",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "nom_client",
+      headerName: "CLIENT",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 200,
@@ -39,36 +74,28 @@ const Reception = () => {
       headerAlign: 'left'
     },
     {
-      field: "nombre_piece",
-      headerName: "NOMBRE DES PIECES",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 250,
-      maxWidth: 350,
-      headerAlign: 'left'
-    },
-    {
-      field: "poid",
-      headerName: "POID",
-      flex: 1,
-      cellClassName: "name-column--cell",
-      minWidth: 250,
-      maxWidth: 350,
-      headerAlign: 'left'
-    },
-    {
       field: "ancien_solde",
       headerName: "ANCIEN SOLDE",
       flex: 1,
       cellClassName: "name-column--cell",
-      minWidth: 250,
-      maxWidth: 350,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
+      field: "total",
+      headerName: "TOTAL",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 200,
+      maxWidth: 300,
       headerAlign: 'left'
     },
     {
       field: "nouveau_solde",
       headerName: "NOUVEAU SOLDE",
       flex: 1,
+      cellClassName: "name-column--cell",
       minWidth: 200,
       maxWidth: 300,
       headerAlign: 'left'
@@ -83,49 +110,32 @@ const Reception = () => {
       cellRenderer : (params) => 
         <Button
         sx={{
-          background: `${!params.data.deleted_total_repection ? 'var(--brand-1)' : 'transparent'} `,
+          background: `${!params.data.is_deleted ? 'var(--brand-1)' : 'transparent'} `,
           marginBottom: '5px',
           padding: '15px',
           '&:hover' : {
-            border: `${!params.data.deleted_total_repection ? '1px solid var(--brand-1)' : 'transparent'}`,
+            border: `${!params.data.is_deleted ? '1px solid var(--brand-1)' : 'transparent'}`
           }
         }} 
         onClick={() => {
-          !params.data.deleted_total_repection ? cellClickListner(params) : console.log()
+          !params.data.is_deleted ? cellClickListner(params) : console.log()
         }}
         >
-          {!params.data.deleted_total_repection && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
+          {!params.data.is_deleted && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
         </Button>
     },
-  ];
-  
+  ];  
 
 
   const gridRef = useRef();
   const navigate = useNavigate()
-
-
-  const [data, setData] = useState(view_reception)
+  const [data, setData] = useState(casse)
 
   useEffect(() => {
-    // const fetchAllData = () => {
-    //   let inter = []
-    //   Object.keys(view_reception).map((e, i) => {
-    //     inter.push()
-    //   })
-    //   const uniqueObjectsSet = new Set();
-
-    //   const uniqueArray = inter.filter(obj => {
-    //     const stringRepresentation = JSON.stringify(obj);
-    //     if (!uniqueObjectsSet.has(stringRepresentation)) {
-    //       uniqueObjectsSet.add(stringRepresentation);
-    //       return true;
-    //     }
-    //     return false;
-    //   });
-    //   setData(uniqueArray)
-    // }
-    // fetchAllData()
+    const fetchAllData = async () => {
+    
+    }
+    fetchAllData()
   }, [2000])
 
   const defaultColDef = useMemo(() => ({
@@ -135,11 +145,11 @@ const Reception = () => {
   }))
 
   const cellClickListner = (params) => {
-    // navigate(`/receptions/${params.data.id_total_reception}`)
+    navigate(`/casse/${params.data.id_casse}`, {state: params.data})
   }
 
   const getRowStyle = (params) => {
-    if (params.data.deleted_total_repection) {
+    if (params.data.is_deleted) {
       return { background: '#db4f4a' };
     }
     return null;
@@ -147,27 +157,22 @@ const Reception = () => {
 
   return (
     <>
-      <NavigationBar name="les receptions" />
+      <NavigationBar name="casse" />
         <div 
         className="ag-theme-quartz-dark"
         style={{
-            marginTop: "50px",
+            marginTop: "90px",
             height: '75vh',
             width: '95vw',
-            marginBottom: '20px'
+            marginBottom: '100px'
         }}>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={() => { navigate('/receptions/add-reception') }}
-              >ajouter reception</Button>
+              <Button sx={style} 
+              onClick={() => { navigate('/casse/add-casse') }}
+              >ajouter operation </Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
-              columnDefs={columns_receptions}
+              columnDefs={columns_casse}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
@@ -178,6 +183,6 @@ const Reception = () => {
   );
 };
 
-export default Reception;
+export default Casse;
 
 

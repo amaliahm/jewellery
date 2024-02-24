@@ -12,6 +12,7 @@ import Charge from "../charge/Charge"
 import Reception from "../reception/Reception"
 import Utilisateurs from "../utilisateurs/Users"
 import Retour from "../retours/Retour"
+import Casse from "../casse/Casse"
 
 const routes = [
     {
@@ -90,6 +91,13 @@ const routes = [
         name: 'les magasins',
         key: 'magasin',
         component: <Magasin />
+    },
+    {
+        icon: 'link-slash',
+        to: '/casse',
+        name: 'casses',
+        key: 'casse',
+        component: <Casse />
     },
     {
         icon: 'question',

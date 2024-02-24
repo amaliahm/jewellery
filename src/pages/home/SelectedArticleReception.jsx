@@ -1,17 +1,20 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from "react";
 
-function SelectedArticle({name, options, setValue ,valeur}) {
+function SelectedArticleReception({name, options, setValue ,valeur}) {
 
     const onSelect = (e) => {
       setValue({
         ...valeur, 
-        nom_famille : options[e.target.value].nom_famille,
         id_article : options[e.target.value].id_article,
         nom_article : options[e.target.value].nom_article,
-        prix_unitaire: parseInt(options[e.target.value].prix_vente),
+        'prix vente': parseInt(options[e.target.value].prix_vente),
+        'prix achat': parseInt(options[e.target.value].prix_achat),
+        'prix vente facon': parseInt(options[e.target.value].prix_vente),
+        'prix achat facon': parseInt(options[e.target.value].prix_achat),
         quantite: parseInt(options[e.target.value].quantite_stock),
-        total : Math.abs(parseFloat(options[e.target.value].quantite_stock)) * parseFloat(options[e.target.value].prix_vente),
+        'montant achat' : Math.abs(parseFloat(options[e.target.value].quantite_stock)) * parseFloat(options[e.target.value].prix_achat),
+        'montant vente' : Math.abs(parseFloat(options[e.target.value].quantite_stock)) * parseFloat(options[e.target.value].prix_vente),
       })
     }
   
@@ -36,4 +39,4 @@ function SelectedArticle({name, options, setValue ,valeur}) {
     );
   }
 
-export default SelectedArticle
+export default SelectedArticleReception
