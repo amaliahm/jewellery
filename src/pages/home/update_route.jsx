@@ -18,6 +18,7 @@ import UpdateType from "../charge/UpdateType"
 import UpdateCharge from "../charge/UpdateCharge"
 import UpdateCommand from "../command/UpdateCommand"
 import UpdateCasse from "../casse/UpdateCasse"
+import UpdateReception from "../reception/UpdateReception"
 
 const update_routes = [
     {
@@ -99,6 +100,10 @@ const update_routes = [
     {
         to: '/casse/:id',
         component: <UpdateCasse />
+    },
+    {
+        to: '/receptions/:id',
+        component: <UpdateReception />
     },
 ]
 

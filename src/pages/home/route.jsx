@@ -1,18 +1,18 @@
-import Clients from "../clients/Clients"
 import Achat from "../achats/Achat"
 import Articles from "../articles/Articles"
+import Caisse from "../bourse/bourse"
+import Casse from "../casse/Casse"
+import Charge from "../charge/Charge"
+import Clients from "../clients/Clients"
+import Command from "../command/Command"
 import Fournisseurs from "../fournisseurs/Fournisseurs"
+import Importation from "../importation/Importation"
+import Magasin from "../magasin/Magasin"
+import Reception from "../reception/Reception"
+import Retour from "../retours/Retour"
+import Utilisateurs from "../utilisateurs/Users"
 import Ventes from "../ventes/Ventes"
 import Versement from "../versements/Versement"
-import Importation from "../importation/Importation"
-import Bourse from "../bourse/bourse"
-import Command from "../command/Command"
-import Magasin from "../magasin/Magasin"
-import Charge from "../charge/Charge"
-import Reception from "../reception/Reception"
-import Utilisateurs from "../utilisateurs/Users"
-import Retour from "../retours/Retour"
-import Casse from "../casse/Casse"
 
 const routes = [
     {
@@ -108,10 +108,10 @@ const routes = [
     },
     {
         icon: 'dollar-sign',
-        to: '/bourse',
-        name: 'la bourse d\'or',
-        key: 'bourse',
-        component: <Bourse />
+        to: '/caisse',
+        name: 'caisse',
+        key: 'caisse',
+        component: <Caisse />
     },
     {
         icon: 'user-group',

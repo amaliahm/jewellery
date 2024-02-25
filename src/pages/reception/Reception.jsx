@@ -105,27 +105,37 @@ const Reception = () => {
   const navigate = useNavigate()
 
 
-  const [data, setData] = useState(view_reception)
+  const [data, setData] = useState([])
 
   useEffect(() => {
-    // const fetchAllData = () => {
-    //   let inter = []
-    //   Object.keys(view_reception).map((e, i) => {
-    //     inter.push()
-    //   })
-    //   const uniqueObjectsSet = new Set();
+    const fetchAllData = () => {
+      let inter = []
+      Object.keys(view_reception).map((e, i) => {
+        inter.push({
+          deleted_total_repection: view_reception[e].deleted_total_repection,
+          id_total_reception: view_reception[e].id_total_reception,
+          'bon n=°': view_reception[e]['bon n=°'],
+          nom_fournisseur: view_reception[e].nom_fournisseur,
+          poid: view_reception[e].poid,
+          nombre_piece: view_reception[e].nombre_piece,
+          date: view_reception[e].date,
+          ancien_solde: view_reception[e].ancien_solde,
+          nouveau_solde: view_reception[e].nouveau_solde,
+        })
+      })
+      const uniqueObjectsSet = new Set();
 
-    //   const uniqueArray = inter.filter(obj => {
-    //     const stringRepresentation = JSON.stringify(obj);
-    //     if (!uniqueObjectsSet.has(stringRepresentation)) {
-    //       uniqueObjectsSet.add(stringRepresentation);
-    //       return true;
-    //     }
-    //     return false;
-    //   });
-    //   setData(uniqueArray)
-    // }
-    // fetchAllData()
+      const uniqueArray = inter.filter(obj => {
+        const stringRepresentation = JSON.stringify(obj);
+        if (!uniqueObjectsSet.has(stringRepresentation)) {
+          uniqueObjectsSet.add(stringRepresentation);
+          return true;
+        }
+        return false;
+      });
+      setData(uniqueArray)
+    }
+    fetchAllData()
   }, [2000])
 
   const defaultColDef = useMemo(() => ({
@@ -135,7 +145,7 @@ const Reception = () => {
   }))
 
   const cellClickListner = (params) => {
-    // navigate(`/receptions/${params.data.id_total_reception}`)
+    navigate(`/receptions/${params.data.id_total_reception}`, {state: params.data.id_total_reception})
   }
 
   const getRowStyle = (params) => {

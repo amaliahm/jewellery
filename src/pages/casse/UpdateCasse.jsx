@@ -4,8 +4,8 @@ import NavigationBar from "../home/NavigationBar"
 import { useLocation } from "react-router-dom"
 import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
-// import ModalDelete from './ModalDelete';
-// import ModalUpdate from './ModalUpdate';
+import ModalDelete from './ModalDelete';
+import ModalUpdate from './ModalUpdate';
 
 const useStyle = makeStyles({
     root: {
@@ -26,6 +26,7 @@ const UpdateCasse = () => {
     const [modal, setModal] = useState(false);
     const [m_delete, setM_Delete] = useState(false)
     const [data, setData] = useState(location.state)
+    console.log(location.state)
 
     return (
         <>
@@ -45,7 +46,9 @@ const UpdateCasse = () => {
                    />
             {Object.keys(data).slice(2).map((value, index) => (
                 <>
-                  {(index !== 2 && index !== 3 && index !== 4 && index < 12 && (index !== 5 && (data.operation !== 'achat' || data.operation !== 'vente'))) && <TextField 
+                  {
+                  (index !== 2 && index !== 3 && index !== 4 && index < 12 ) 
+                   && <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
                    sx={{

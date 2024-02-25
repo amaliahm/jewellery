@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
@@ -7,9 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { result } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 import { columns_bourse } from "./data";
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
-import { makeStyles } from "@mui/styles";
 
 
 const style = {
@@ -44,7 +42,7 @@ const useStyle = makeStyles({
     }
 })
 
-const Bourse = () => {
+const Caisse = () => {
   const gridRef = useRef();
   const navigate = useNavigate()
   const colors = useStyle()
@@ -112,14 +110,6 @@ const Bourse = () => {
               }} 
               onClick={() => { navigate('/bourse/add')}}
               >ajouter mouvement</Button>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={onBtExport}
-              >telecharger excel</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data == 1 ? entrer : data == 2 ? sortie : tous}
@@ -133,6 +123,6 @@ const Bourse = () => {
   );
 };
 
-export default Bourse;
+export default Caisse;
 
 

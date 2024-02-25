@@ -24,6 +24,13 @@
     align-items: center;
     gap: 20px;
     transition: 0.5s;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; 
+}
+
+.where-me .nav-items::-webkit-scrollbar {
+  display: none;
 }
 
 
