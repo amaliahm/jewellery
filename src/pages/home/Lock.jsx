@@ -36,7 +36,7 @@ export default function Lock() {
   texture.mapping = THREE.EquirectangularReflectionMapping
   return (
     <>
-    <i style={{
+    {/* <i style={{
       position: 'absolute',
       zIndex: '20',
       top: '10px',
@@ -46,8 +46,8 @@ export default function Lock() {
     onClick={() => {
       navigate('/home')
     }}
-    ></i>
-    <Canvas style={{ width: '100vw', height: '100vh' }} shadows camera={{ position: [0, 0, 15], fov: 25, near: 0.1, far: 1000, aspect: window.innerWidth / window.innerHeight }}>
+    ></i> */}
+    <Canvas style={{ width: '100vw', height: '100vh', marginTop: '80px', position: 'fixed' }} shadows camera={{ position: [0, 0, 15], fov: 25, near: 0.1, far: 1000, aspect: window.innerWidth / window.innerHeight }}>
       <color attach="background" args={['#000000']} />
       <ambientLight intensity={0.5} />
 

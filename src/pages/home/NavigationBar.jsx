@@ -41,6 +41,7 @@ const NavigationBar = ({name = 'home'}) => {
                          <i 
                           key={index}
                           className={`fa-solid fa-1x fa-` + e.icon }
+                          id='icons-element'
                           data-name={e.name}
                           onClick={() => {
                             navigate(e.to)
@@ -60,12 +61,12 @@ const NavigationBar = ({name = 'home'}) => {
                   <Header
                     title={name}
                   />
-                  <i 
-                    className='fa-solid fa-lock fa-2x'
+                  {/* <i 
+                    className='fa-solid fa-arrow-right-from-bracket fa-2x'
                     onClick={() => {
                       navigate('/lock')
                     }}
-                    ></i>
+                    ></i> */}
                 </div>
             </Toolbar>
           </AppBar>

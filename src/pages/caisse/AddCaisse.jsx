@@ -8,7 +8,8 @@ import NavigationBar from "../home/NavigationBar";
 import SelectedMenu from "../home/SelectedMenu";
 import Notification from "../home/notification";
 import { add_movment } from "./data";
-import { result } from "../../backend";
+import { useLocation } from "react-router-dom";
+import { caisse } from "../../backend";
 
 
 const useStyle = makeStyles({
@@ -29,39 +30,42 @@ const style = {
   margin: '10px'
 }
 
-const AddMouvement = () => {
+const AddCaisse = () => {
     const colors = useStyle()
     const [data, setData] = useState(add_movment)
     const [done, setDone] = useState(false)
     const navigate = useNavigate()
     const currentDate = new Date();
     const mouvement = ['ENTRER', 'SORTIE']
-
+    console.log(caisse)
+    
     useEffect(() => {
       setData(v => ({
         ...v,
         jour: String(currentDate.getDate()).padStart(2, '0'),
         mois : String(currentDate.getMonth() + 1).padStart(2, '0'),
-        annee : String(currentDate.getFullYear())
+        annee : String(currentDate.getFullYear()),
+        ancien_quantite: caisse.length === 0 ? 0 : parseFloat(caisse[0].quantite_restant),
+        ancien_valeur: caisse.length === 0 ? 0 : parseFloat(caisse[0].valeur_restant),
       }))
     }, [2000])
-
-    const handleChange = (e) => {
-        setData(c => ({
-          ...c,
-          [e.target.name] : parseFloat(e.target.value),
-        }))
-    }
     
     const handleClick = async e => {
         e.preventDefault();
         console.log(data)
+        setData(v => ({
+          ...v,
+          quantite_restant: caisse.mouvement === 'ENTRER' ? caisse.ancien_quantite + caisse.quantite : caisse.ancien_quantite - caisse.quantite,
+        }))
+
+        console.log(data)
+        
+        setDone(true)
+        setTimeout(() => {
+            setDone(false)
+            navigate('/caisse')
+        }, 2000)
         try {
-            // setDone(true)
-            // setTimeout(() => {
-            //     setDone(false)
-            //     navigate('/bourse')
-            // }, 2000)
             const result = await axios.post(api_add_mouvement, data)
             if(result.status === 200) {
             }
@@ -92,18 +96,49 @@ const AddMouvement = () => {
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
                     <SelectedMenu name='mouvement' options={mouvement} setValue={setData} valeur={data} />
                 </FormControl>
-                {Object.keys(data).slice(4).map((key, index) => (
-                    <TextField 
-                        key={index}
+                <TextField 
                         id={"outlined-controlled"}
-                        label={key} variant="outlined"
+                        label='quantite' variant="outlined"
                         type='number'
                         sx={style}
-                        name={key}
+                        name='quantite'
                         className={colors.root}
-                        onChange={handleChange}
-                        value={data[key]}
-                    />))}
+                        onChange={(e) => {
+                            setData(c => ({
+                                ...c,
+                                quantite : parseFloat(e.target.value),
+                                total : parseFloat(e.target.value) * data['prix unitaire'],
+                                quantite_restant: data.mouvement === "ENTRER" ? data.ancien_quantite + parseFloat(e.target.value) : data.ancien_quantite - parseFloat(e.target.value),
+                            }))
+                        }}
+                        value={data.quantite}
+                    />
+                <TextField 
+                        id={"outlined-controlled"}
+                        label='prix unitaire' variant="outlined"
+                        type='number'
+                        sx={style}
+                        name='prix unitaire'
+                        className={colors.root}
+                        onChange={(e) => {
+                            setData(c => ({
+                                ...c,
+                                'prix unitaire' : parseFloat(e.target.value),
+                                total : parseFloat(e.target.value) * data.quantite,
+                            }))
+                        }}
+                        value={data['prix unitaire']}
+                    />
+                <TextField
+                        id={"outlined-controlled"}
+                        label='total' variant="outlined"
+                        type='number'
+                        sx={style}
+                        name='total'
+                        className={colors.root}
+                        value={data.total}
+                        disabled
+                    />
                 <Button 
                 sx={{
                     color: 'var(--brand-1)',
@@ -115,14 +150,14 @@ const AddMouvement = () => {
                     bottom: '0',
                 }}
                 onClick={handleClick}
-                disabled={data.mouvement === ''}
+                disabled={data.mouvement === '' || data.total === 0}
                 >ajouter mouvement</Button>
             </div>
         </>
     )
 }
 
-export default AddMouvement
+export default AddCaisse
 
 
 

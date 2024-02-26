@@ -2,13 +2,15 @@ import React from "react";
 import NavigationBar from "./NavigationBar";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Lock from "./Lock";
 
 function Home() {
   const navigate = useNavigate()
     return (
                 <>
+                  {/* <Lock /> */}
                   <NavigationBar />
-                  <div className="add">
+                  {/* <div className="add" >
                     <Button sx={{
                       color: 'var(--bg-color-1)',
                       background: 'var(--brand-1)',
@@ -21,7 +23,7 @@ function Home() {
                     }}
                     onClick={() => { navigate('/titres') }}
                     >les titres</Button>
-                  </div>
+                  </div> */}
                 </>
     )
 }

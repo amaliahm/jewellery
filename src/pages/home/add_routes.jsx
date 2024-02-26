@@ -6,7 +6,7 @@ import AddVersementClient from "../versements/AddVersementClient"
 import AddAchatImportation from "../achat_importation/AddAchatImportation"
 import AddVersementImportation from "../versement_importation/AddVersementImportation"
 import AddArticle from "../articles/AddArticle"
-import AddMouvement from "../bourse/AddMouvement"
+import AddCaisse from "../caisse/AddCaisse"
 import AddVersementFournisseur from "../versements/AddVersementFournisseur"
 import AddRetour from "../retours/AddRetour"
 import AddReparation from "../reparation/AddReparation"
@@ -77,8 +77,8 @@ const add_routes = [
         component: <AddCasse />
     },
     {
-        to: '/bourse/add',
-        component: <AddMouvement />
+        to: '/caisse/add',
+        component: <AddCaisse />
     },
 ]
 

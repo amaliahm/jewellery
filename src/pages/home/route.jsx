@@ -1,6 +1,6 @@
 import Achat from "../achats/Achat"
 import Articles from "../articles/Articles"
-import Caisse from "../bourse/bourse"
+import Caisse from "../caisse/caisse"
 import Casse from "../casse/Casse"
 import Charge from "../charge/Charge"
 import Clients from "../clients/Clients"

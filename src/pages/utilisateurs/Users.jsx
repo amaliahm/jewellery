@@ -155,15 +155,17 @@ const Utilisateurs = () => {
                   // onClick={() => { navigate('/utilisateurs/add-utilisateur') }}
                   >ajouter utilisateur</Button>
                   <Button sx={{
-                    color: 'var(--brand-1)',
-                    border: '1px solid var(--brand-1)',
-                    marginBottom: '10px',
-                    marginRight: '10px'
-                  }} 
-                  onClick={() => {
-                    // exportDataToPdf(data, gridApi, 'les utilisateurs')
-                  }}
-                  >telecharger pdf</Button>
+                      color: 'var(--bg-color-1)',
+                      background: 'var(--brand-1)',
+                      border: '1px solid var(--brand-1)',
+                      marginBottom: '10px',
+                      marginRight: '10px',
+                      '&:hover': {
+                          background: 'var(--brand-1)',
+                      }
+                    }}
+                    onClick={() => { navigate('/titres') }}
+                    >les titres</Button>
                 <AgGridReact 
                   ref={gridRef}
                   rowData={utilisateurs}
