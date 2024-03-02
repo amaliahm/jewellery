@@ -40,7 +40,7 @@ const Achat = () => {
     },
     {
       field: "piece_achats",
-      headerName: "NOMBRE DES PIECES",
+      headerName: "NOMBRE DES ARTICLESID",
       flex: 1,
       cellClassName: "name-column--cell",
       minWidth: 250,
