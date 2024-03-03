@@ -1,35 +1,35 @@
-import add_client from './add_client.svg'
-import suivi_fournissuer from './suivi_fournisseur.svg'
-import add_fournisseur from './add_fournisseur.svg'
-import suivi_client from './suivi_client.svg'
 import user from './person.png'
 import password from './password.png'
 import email from './email.png'
 import logoutButton from './logout.gif'
-import home from './home.png'
-import articles from './articles.png'
-import ventes from './ventes.png'
+import articles from './produits.png'
 import versement from './versement.png'
 import bourse from './bourse.png'
-import achat from './achat.png'
+import achat from './achats.png'
 import vente from './vente.png'
-import fournisseurs from './fournisseurs.png'
-import clients from './clients.png'
+import fournisseurs from './fournisseur.png'
+import clients from './client.png'
 import gestion_utilisateurs from './gestion_utilisateurs.png'
+import retours from './retours.png'
+import magasin from './magasin.png'
+import command from './command.png'
+import importation from './importation.png'
+import trash from './trash.png'
+import charge from './charge.png'
 
 
 export {
-    add_client,
-    suivi_fournissuer,
-    add_fournisseur,
-    suivi_client,
+    command,
+    importation,
+    trash,
+    charge,
+    magasin,
+    retours,
     email,
     password,
     user,
     logoutButton,
-    home,
     articles,
-    ventes,
     versement,
     bourse,
     achat,

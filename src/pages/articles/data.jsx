@@ -18,8 +18,8 @@ const columns_article =[
     headerAlign: 'left'
   },
   {
-    field: "prix_unitaire_vente",
-    headerName: "prix de vente",
+    field: "prix_vente",
+    headerName: "PRIX DE VENTE",
     flex: 1,
     cellClassName: "name-column--cell",
     minWidth: 250,

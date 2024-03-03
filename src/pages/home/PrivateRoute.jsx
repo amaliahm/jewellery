@@ -6,7 +6,7 @@ const PrivateRoute = () => {
     const user = getAuth(app);
     let auth = user.currentUser == null ? false : true
     return (
-        auth ? <Outlet /> : <Navigate to='/auth'/>
+        auth ? <Outlet /> : <Navigate to='/'/>
     )
 }
 

@@ -2,13 +2,10 @@ import { AppBar, CssBaseline, Toolbar } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from './Header';
-import routes from './route';
-import { auth } from '../../firebase';
+import LogOutComponent from './logout';
 
 const NavigationBar = ({name = 'home'}) => {
-  
-  const [notOpen, setNotOpen] = useState(true)
-  const navigate = useNavigate()
+  const [logout, setLogout] = useState(false)
 
 
     return (
@@ -28,48 +25,19 @@ const NavigationBar = ({name = 'home'}) => {
           >
             <Toolbar >
                 <div className="where-me" >
-                  <div className="nav-items"
-                    style={{
-                      height: !notOpen ? `calc(${routes.length} * 35px + 45px)` : '40px'
-                    }}
-                  >
-                    <div className="humberger" data-name="home" onClick={() => setNotOpen(!notOpen)}>
-                      {notOpen ?  <i className="fa-solid fa-bars fa-xl"></i> : <i className="fa-solid fa-xmark fa-xl"></i>}
-                      
-                    </div>
-                      {routes.map((e, index) => (
-                         <i 
-                          key={index}
-                          className={`fa-solid fa-1x fa-` + e.icon }
-                          id='icons-element'
-                          data-name={e.name}
-                          onClick={() => {
-                            navigate(e.to)
-                            setNotOpen(true)
-                          }}
-                        ></i>
-                      ))}
-                      <i key='logout'
-                          className='arrow-right-from-bracket'
-                          onClick={() => {
-                            auth.signOut()
-                            navigate('/')
-                            setNotOpen(true)
-                          }}
-                      ></i>
-                  </div>
                   <Header
                     title={name}
                   />
-                  {/* <i 
+                  <i 
                     className='fa-solid fa-arrow-right-from-bracket fa-2x'
                     onClick={() => {
-                      navigate('/lock')
+                      setLogout(true)
                     }}
-                    ></i> */}
+                    ></i>
                 </div>
             </Toolbar>
           </AppBar>
+            {logout && <LogOutComponent out={logout} setOut={setLogout} />}
         </React.Fragment>
     )
 }

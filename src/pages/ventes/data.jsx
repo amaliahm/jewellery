@@ -18,7 +18,7 @@ const columns_ventes = [
   },
   {
     field: "piece_vente",
-    headerName: "nombre de piece",
+    headerName: "NOMBRE DES ARTICLES",
     flex: 1,
     minWidth: 250,
     maxWidth: 300,

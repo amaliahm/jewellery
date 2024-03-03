@@ -37,41 +37,18 @@ function App() {
           <Router>
           
             <Routes>
+              {/* <Route path="*" element={<PageNotFound />} /> */}
               <Route key='/private route' element={<PrivateRoute />}>
-              <Route key='home' element={<Home />} path='/home' exact/>
-              <Route key='lock' element={<Lock />} path='/lock' exact/>
-              <Route key='titre' element={<Titre />} path='/titres' exact/>
-              <Route key='/produits/*'  path='/produits/*' exact/>
-              <Route key='/clients/*'  path='/clients/*' exact/>
-              <Route key='/fournisseurs/*'  path='/fournisseurs/*' exact/>
-              <Route key='/versements/*'  path='/versements/*' exact/>
-              <Route key='/ventes/*'  path='/ventes/*' exact/>
-              <Route key='/achats/*'  path='/achats/*' exact/>
-              <Route key='/importations/*'  path='/importations/*' exact/>
-              <Route key='produits-nom'
-                path='/produits/:nom'
-                action={({ params }) => {}}
-                element={<Produits />}
-                exact/>
-                <Route key='/importations/achat'
-                path='/importations/achat_importation'
-                action={({ params }) => {}}
-                element={<AchatImportation />}
-                exact/>
-                <Route key='/importations/versement'
-                path='/importations/versement_importation'
-                action={({ params }) => {}}
-                element={<VersementImportation />}
-                exact/>
+                <Route key='home' element={<Home />} path='/home' exact/>
+                <Route key='titre' element={<Titre />} path='/titres' exact/>
+                <Route key='produits-nom' path='/produits/:id'action={({ params }) => {}} element={<Produits />} exact/>
+                <Route key='/importations/achat' path='/importations/achat_importation' action={({ params }) => {}} element={<AchatImportation />} exact/>
+                <Route key='/importations/versement' path='/importations/versement_importation' action={({ params }) => {}} element={<VersementImportation />} exact/>
                 {update_routes.map((e, i) => (
-                  <Route key={i}
-                  path={e.to}
-                  action={({ params }) => {}}
-                  element={e.component}
-                  exact/>
+                  <Route key={i} path={e.to} action={({ params }) => {}} element={e.component} exact/>
                 ))}
-              {add_routes.map((e, i) => (
-                  <Route key={i} element={e.component} path={e.to} exact/>
+                {add_routes.map((e, i) => (
+                    <Route key={i} element={e.component} path={e.to} exact/>
                 ))}
                 {routes.map((e) => (
                   <>

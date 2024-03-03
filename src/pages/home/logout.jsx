@@ -3,10 +3,35 @@ import React, {useState} from "react";
 import { FiMail } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
+const button_box = {
+    display: 'flex',
+    width: '70%',
+    justifyContent: 'space-between',
+    p: 1,
+    margin: 'auto',
+}
+
+const button_style = {
+  color: 'white',
+  bgcolor: 'var(--bg-color-1)',
+  border: '1px solid var(--brand-1)',
+};
+
+const confirme_button_style = {
+  bgcolor: 'var(--brand-1)',
+  border: '1px solid var(--brand-1)',
+  '&:hover' : {
+    color: 'white',
+  },
+  '&:disabled' : {
+    bgcolor: 'transparent',
+  }
+};
 const LogOutComponent = ({ out, setOut }) => {
     const navigate = useNavigate()
-    const [resetEmail, setEmail] = useState('')
     return (
         <AnimatePresence>
             {out && (
@@ -14,7 +39,7 @@ const LogOutComponent = ({ out, setOut }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => setOut(false)}
                     className="modal">
                     <motion.div
                         initial={{ scale: 0, rotate: "14.5deg" }}
@@ -25,22 +50,17 @@ const LogOutComponent = ({ out, setOut }) => {
                         <FiMail className="modal-bg-icon" />
                         <div className="modal-content">
                             <p className="modal-content__titre">Want to log out!!</p>
-                            <div className="modal-content__btns">
-                            <button onClick={() => {
-                                    setOut(false)
-                                }}
-                                    className="btn-secondary">
-                                    return
-                                </button>
-                                <button onClick={() => {
+                            <Box sx={button_box}>
+                              <Button sx={button_style} onClick={() => setOut(false)}>annuler</Button>
+                              <Button 
+                                sx={confirme_button_style}
+                                onClick={() => {
                                     setOut(false)
                                     auth.signOut()
-                                    navigate('/auth')
+                                    navigate('/')
                                 }}
-                                    className="btn-primary">
-                                    log out
-                                </button>
-                            </div>
+                              >log out</Button>
+                            </Box>
                         </div>
                     </motion.div>
                 </motion.div>

@@ -3,6 +3,7 @@ import NavigationBar from "./NavigationBar";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Lock from "./Lock";
+import Elements from "./elements";
 
 function Home() {
   const navigate = useNavigate()
@@ -10,6 +11,7 @@ function Home() {
                 <>
                   {/* <Lock /> */}
                   <NavigationBar />
+                  <Elements />
                   {/* <div className="add" >
                     <Button sx={{
                       color: 'var(--bg-color-1)',

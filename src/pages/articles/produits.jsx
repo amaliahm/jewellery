@@ -189,13 +189,6 @@ const Produits = () => {
         }} 
         onClick={() => { setDel(true) }}
         >supprimer</Button>
-        <Button sx={{
-          color: 'var(--brand-1)',
-          border: '1px solid var(--brand-1)',
-          marginBottom: '10px',
-          marginRight: '10px'
-        }} 
-        >telecharger excel</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={article}

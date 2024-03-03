@@ -57,7 +57,7 @@ const TableData = () => {
             __inter.push({
               nom_famille: view_achat_articles_fournisseur[e].nom_famille,
               nom_article: view_achat_articles_fournisseur[e].nom_article,
-              prix_achat: view_achat_articles_fournisseur[e].prix_achat,
+              prix_vente: view_achat_articles_fournisseur[e].prix_vente,
               quantite_stock: view_achat_articles_fournisseur[e].quantite_stock,
             })
         }

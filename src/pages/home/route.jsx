@@ -1,3 +1,4 @@
+import { achat, articles, bourse, clients, fournisseurs, gestion_utilisateurs, vente, versement, retours, magasin, command, importation, trash, charge, } from "../../assets/icons";
 import Achat from "../achats/Achat"
 import Articles from "../articles/Articles"
 import Caisse from "../caisse/caisse"
@@ -8,7 +9,6 @@ import Command from "../command/Command"
 import Fournisseurs from "../fournisseurs/Fournisseurs"
 import Importation from "../importation/Importation"
 import Magasin from "../magasin/Magasin"
-import Reception from "../reception/Reception"
 import Retour from "../retours/Retour"
 import Utilisateurs from "../utilisateurs/Users"
 import Ventes from "../ventes/Ventes"
@@ -20,111 +20,119 @@ const routes = [
         to: '/clients',
         name: 'les clients',
         key: 'clients',
-        component: <Clients />
+        component: <Clients />,
+        image: clients
     },
     {
         icon: 'people-carry-box',
         to: '/fournisseurs',
         name: 'les fournisseurs',
         key: 'fournisseurs',
-        component: <Fournisseurs />
+        component: <Fournisseurs />,
+        image: fournisseurs
     },
     {
         icon: 'box-open',
         to: '/produits',
         name: 'les produits',
         key: 'produits',
-        component: <Articles />
+        component: <Articles />,
+        image: articles
     },
     {
         icon: 'cart-arrow-down',
         to: '/achats',
         name: 'les achats',
         key: 'achats',
-        component: <Achat />
+        component: <Achat />,
+        image: achat
     },
     {
         icon: 'hand-holding-dollar',
         to: '/ventes',
         name: 'les ventes',
         key: 'vente',
-        component: <Ventes />
+        component: <Ventes />,
+        image: vente
     },
     {
         icon: 'truck-field',
         to: '/commands',
         name: 'les commandes',
         key: 'commands',
-        component: <Command />
+        component: <Command />,
+        image: command
     },
     {
         icon: 'money-bill-transfer',
         to: '/versements',
         name: 'les versements',
         key: 'versement',
-        component: <Versement />
-    },
-    {
-        icon: 'receipt',
-        to: '/receptions',
-        name: 'les réceptions',
-        key: 'receptions',
-        component: <Reception />
+        component: <Versement />,
+        image: versement
     },
     {
         icon: 'plane',
         to: '/importations',
         name: 'les importations',
         key: 'importation',
-        component: <Importation />
+        component: <Importation />,
+        image: importation
     },
     {
         icon: 'arrow-rotate-right',
         to: '/retours',
         name: 'les retours',
         key: 'retour',
-        component: <Retour />
+        component: <Retour />,
+        image: retours
     },
     {
         icon: 'shop',
         to: '/magasins',
         name: 'les magasins',
         key: 'magasin',
-        component: <Magasin />
+        component: <Magasin />,
+        image: magasin
     },
     {
         icon: 'link-slash',
         to: '/casse',
         name: 'casses',
         key: 'casse',
-        component: <Casse />
+        component: <Casse />,
+        image: vente
     },
     {
         icon: 'question',
         to: '/charges',
         name: 'les charges',
         key: 'charge',
-        component: <Charge />
+        component: <Charge />,
+        image: charge
     },
     {
         icon: 'dollar-sign',
         to: '/caisse',
         name: 'caisse',
         key: 'caisse',
-        component: <Caisse />
+        component: <Caisse />,
+        image: bourse
     },
     {
         icon: 'user-group',
         to: '/utilisateurs',
         name: 'gestion des utilisateurs',
         key: 'utilisateur',
-        component: <Utilisateurs />
+        component: <Utilisateurs />,
+        image: gestion_utilisateurs
     },
     {
         icon: 'trash',
         to: 'trash',
         name: 'trash',
         key: 'trash',
+        image: trash
     },
 ]
 

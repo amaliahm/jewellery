@@ -7,7 +7,6 @@ import { view_vente_articles_client, view_versement_client, view_retour_client }
 import { columns_ventes } from "../ventes/data";
 import { columns_versement_c } from "../versements/data";
 import { columns_retours_client } from "../retours/data";
-import { columns_article } from "../articles/data";
 import { useLocation } from "react-router-dom";
 
 const style = {
@@ -34,7 +33,6 @@ const TableData = () => {
   const [vente, setVente] = useState([])
   const [versement, setVersement] = useState([])
   const [retour, setRetour] = useState([])
-  const [article, setArticle] = useState([])
   const [click, setClick] = useState(0)  
   const id = parseInt(location.pathname.split('/')[2])
 
@@ -42,7 +40,6 @@ const TableData = () => {
 
     console.log(view_vente_articles_client)
     const inter = []
-    const __inter = []
     Object.keys(view_vente_articles_client).map(e => {
         if (view_vente_articles_client[e].id_client === id) {
           inter.push({
@@ -53,13 +50,6 @@ const TableData = () => {
             total_vente: view_vente_articles_client[e].nouveau_solde_ventes - view_vente_articles_client[e].anciene_solde_ventes,
             ancien_solde_vente: view_vente_articles_client[e].anciene_solde_ventes,
             nouveau_solde_vente: view_vente_articles_client[e].nouveau_solde_ventes,
-          })
-          __inter.push({
-            'vente total n=°': view_vente_articles_client[e]['vente total n=°'],
-            nom_famille: view_vente_articles_client[e].nom_famille,
-            nom_article: view_vente_articles_client[e].nom_article,
-            prix_unitaire_vente: view_vente_articles_client[e].prix_unitaire_vente,
-            quantite_stock: view_vente_articles_client[e].quantite_stock,
           })
         }
     })
@@ -75,19 +65,6 @@ const TableData = () => {
       return false;
     });
     setVente(uniqueArray)
-    
-    const uniqueObjectsSet__ = new Set();
-
-    const uniqueArray__ = __inter.filter(obj => {
-      const stringRepresentation = JSON.stringify(obj);
-      if (!uniqueObjectsSet__.has(stringRepresentation)) {
-        uniqueObjectsSet__.add(stringRepresentation);
-        return true;
-      }
-      return false;
-    });
-
-    setArticle(uniqueArray__)
   }
 
   const getVersement = () => {
@@ -153,12 +130,11 @@ const TableData = () => {
               <Button sx={click == 0 ? style_clicked : style} onClick={() => {setClick(0)}}>les ventes</Button>
               <Button sx={click == 1 ? style_clicked : style} onClick={() => {setClick(1)}}>les versements</Button>
               <Button sx={click == 2 ? style_clicked : style} onClick={() => {setClick(2)}}>les retours</Button>
-              <Button sx={click == 3 ? style_clicked : style} onClick={() => {setClick(3)}}>les articles</Button>
 
             <AgGridReact className="clear"
               ref={gridRef}
-              rowData={click == 0 ? vente : click == 1 ? versement : click == 2 ? retour : article}
-              columnDefs={click == 0 ? columns_ventes : click == 1 ? columns_versement_c : click == 2 ? columns_retours_client : columns_article}
+              rowData={click == 0 ? vente : click == 1 ? versement : retour}
+              columnDefs={click == 0 ? columns_ventes : click == 1 ? columns_versement_c : columns_retours_client}
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
