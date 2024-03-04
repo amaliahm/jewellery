@@ -10,8 +10,6 @@ const div_style = {
 }
 
 const Elements = () => {
-  const [addClient, setAddClient] = useState(false)
-  const [addFournisseur, setAddFournisseur] = useState(false)
   const navigate = useNavigate()
  
     return (
@@ -19,16 +17,14 @@ const Elements = () => {
         background: 'rgba(255,255,255,0)'
       }}>
         {routes.map((e, index) => (
-          <div style={div_style}>
+          <div style={div_style} key={index}>
             <button 
-              key={index}
               className={`icon-btn icon-btn--${index % 3 === 0 ? 'red' : index % 3 === 1 ? 'purple' : 'indigo'}`}
               type="button"
               onClick={() => navigate(e.to)}
             >
               <span className="icon-btn__back"></span>
               <span className="icon-btn__front">
-                {/* <i className={`fa-solid fa-1x fa-` + e.icon } id='icons-element'></i> */}
                 <img src={e['image']} className="icon-btn__icon" />
               </span>
               <span className="icon-btn__label">{e['name']}</span>

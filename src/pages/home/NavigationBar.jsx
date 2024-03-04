@@ -1,4 +1,5 @@
-import { AppBar, CssBaseline, Toolbar } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import { AppBar, Toolbar } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from './Header';

@@ -9,6 +9,8 @@ import ModalUpdate from './ModalUpdate';
 import TableData from './restData';
 import { client } from '../../backend';
 import { export_details_to_pdf } from '../home/telecharger_details';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const useStyle = makeStyles({
     root: {
@@ -36,34 +38,46 @@ const UpdateClient = () => {
         Object.keys(client).map((e, i) => {
           if (client[i].id_client === location.state) {
             setData({
-              id_client: client[i].id_client,
-              is_deleted: client[i].is_deleted,
-              nom: client[i].nom_client,
-              wilaya: client[i].wilaya,
-              ville: client[i].ville,
-              adresse: client[i].adresse,
-              titre: client[i].valeur,
-              telephone: client[i].telephone,
-              email: client[i].email,
-              solde: client[i].solde,
-              'or': client[i].total_or,
-              'versement or': client[i].total_versement_or,
-              'versement argent': client[i].total_versement_argent,
-              'perte': client[i].total_perte,
-              'retour or': client[i].total_retour_or,
-              'retour argent': client[i].total_retour_argent,
-              'reste or': client[i].reste_or,
-              'reste argent': client[i].reste_argent,
-              NRC: client[i].NRC,
-              NIF: client[i].NIF,
-              NIS: client[i].NIS,
-              'n=° article': client[i].N_art,
+              id_client: client[i].id_client === null ? '' : client[i].id_client,
+              is_deleted: client[i].is_deleted === null ? '' : client[i].is_deleted,
+              nom: client[i].nom_client === null ? '' : client[i].nom_client,
+              wilaya: client[i].wilaya === null ? '' : client[i].wilaya,
+              ville: client[i].ville === null ? '' : client[i].ville,
+              adresse: client[i].adresse === null ? '' : client[i].adresse,
+              titre: client[i].valeur === null ? '' : client[i].valeur,
+              telephone: client[i].telephone === null ? '' : client[i].telephone,
+              email: client[i].email === null ? '' : client[i].email,
+              solde: client[i].solde === null ? '' : client[i].solde,
+              'or': client[i].total_or === null ? '' : client[i].total_or,
+              'versement or': client[i].total_versement_or === null ? '' : client[i].total_versement_or,
+              'versement argent': client[i].total_versement_argent === null ? '' : client[i].total_versement_argent,
+              'perte': client[i].total_perte === null ? '' : client[i].total_perte,
+              'retour or': client[i].total_retour_or === null ? '' : client[i].total_retour_or,
+              'retour argent': client[i].total_retour_argent === null ? '' : client[i].total_retour_argent,
+              'reste or': client[i].reste_or === null ? '' : client[i].reste_or,
+              'reste argent': client[i].reste_argent === null ? '' : client[i].reste_argent,
+              NRC: client[i].NRC === null ? '' : client[i].NRC,
+              NIF: client[i].NIF === null ? '' : client[i].NIF,
+              NIS: client[i].NIS === null ? '' : client[i].NIS,
+              'n=° article': client[i].N_art === null ? '' : client[i].N_art,
             })
           }
         })
       }
       fetchAllData()
     }, [2000])
+
+    const handleDownload = async () => {
+      const pdf = new jsPDF();
+      const content = document.getElementById('pdf-content');
+      const canvas = await html2canvas(content);
+      pdf.setFont('Courier Prime');
+      pdf.text('This is styled text', 10, 200, { align: 'right' });
+      pdf.text(`Date: ${new Date().toLocaleDateString()}`, 10, 20, { align: 'center' });
+      pdf.text(`Time: ${new Date().toLocaleTimeString()}`, 10, 30);
+      pdf.text('Name: John Doe', 10, 40);
+      pdf.save('eurl bn zahav.pdf');
+    };
     
     return (
         <>
@@ -95,7 +109,10 @@ const UpdateClient = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
-              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => export_details_to_pdf(data)}></i>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => 
+                // export_details_to_pdf(data)
+                handleDownload()
+                }></i>
               {!supprimer && !data.is_deleted &&  <>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
@@ -118,6 +135,7 @@ const UpdateClient = () => {
             />
           </div>
           <TableData />
+          <div id='pdf-content'></div>
         </>
     )
 }

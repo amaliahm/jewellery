@@ -95,14 +95,14 @@ const routes = [
         component: <Magasin />,
         image: magasin
     },
-    {
-        icon: 'link-slash',
-        to: '/casse',
-        name: 'casses',
-        key: 'casse',
-        component: <Casse />,
-        image: vente
-    },
+    // {
+    //     icon: 'link-slash',
+    //     to: '/casse',
+    //     name: 'casses',
+    //     key: 'casse',
+    //     component: <Casse />,
+    //     image: vente
+    // },
     {
         icon: 'question',
         to: '/charges',
