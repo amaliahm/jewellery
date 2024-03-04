@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { fournisseur } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 import { exportDataToPdf } from "../home/telecharger_table";
-import { RowNode } from "ag-grid-community";
 
 const Fournisseurs = () => {
   const columns_fournisseurs = [

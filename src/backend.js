@@ -20,7 +20,6 @@ let view_reparation
 let view_charge
 let magasin
 let titres
-let importation
 let view_produits
 let view_command
 let view_reception
@@ -64,7 +63,6 @@ async function getData() {
         view_reparation = result.data.view_reparation
         view_charge = result.data.view_charge
         titres = result.data.titres
-        importation = result.data.importation
         magasin = result.data.magasin
         view_produits = result.data.view_produits
         view_command = result.data.view_command
@@ -95,7 +93,6 @@ export {
     api_add_charge,
     api_add_command,
     api_add_casse,
-    importation,
     magasin,
     result,
     fournisseur,

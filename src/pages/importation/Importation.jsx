@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import NavigationBar from "../home/NavigationBar";
 import ModalAdd from "./ModalAdd";
 import { makeStyles } from "@mui/styles";
-import { importation } from "../../backend";
+import { view_importation } from "../../backend";
 
 const useStyle = makeStyles({
     root: {
@@ -105,21 +105,31 @@ const Importation = () => {
   useEffect(() => {
     const fetchAllData = () => {
       let inter = []
-      Object.keys(importation).map((e, i) => {
+      Object.keys(view_importation).map((e, i) => {
         inter.push({
-          id_importation: importation[e].id_importation,
-          deleted_importation: importation[e].is_delete,
-          nom_importateur: importation[e].nom_importateur,
-          'poid 18k': importation[e].poid_18,
-          'poid 24k': importation[e].poid_24,
-          'total facon': importation[e].total_facon,
-          'versement or 24k': importation[e].versement_or_24,
-          'versement argent': importation[e].versement_argent,
-          'reste poid 24k': importation[e].reste_poid_24,
-          'reste argent': importation[e].reste_argent,
+          id_importation: view_importation[e].id_importation,
+          deleted_importation: view_importation[e].deleted_importation,
+          nom_importateur: view_importation[e].nom_importateur,
+          'poid 18k': view_importation[e].total_poid_18,
+          'poid 24k': view_importation[e].total_poid_24,
+          'total facon': view_importation[e].total_facon,
+          'versement or 24k': view_importation[e].total_versement_or_24,
+          'versement argent': view_importation[e].total_versement_argent,
+          'reste poid 24k': view_importation[e].importation_reste_poid_24,
+          'reste argent': view_importation[e].importation_reste_argent,
         })
       })
-      setData(inter)
+      const uniqueObjectsSet = new Set();
+
+      const uniqueArray = inter.filter(obj => {
+        const stringRepresentation = JSON.stringify(obj);
+        if (!uniqueObjectsSet.has(stringRepresentation)) {
+          uniqueObjectsSet.add(stringRepresentation);
+          return true;
+        }
+        return false;
+      });
+      setData(uniqueArray)
     }
     fetchAllData()
   }, [2000])
