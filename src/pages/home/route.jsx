@@ -13,6 +13,7 @@ import Retour from "../retours/Retour"
 import Utilisateurs from "../utilisateurs/Users"
 import Ventes from "../ventes/Ventes"
 import Versement from "../versements/Versement"
+import TrashPage from "../delete/Delete";
 
 const routes = [
     {
@@ -129,9 +130,10 @@ const routes = [
     },
     {
         icon: 'trash',
-        to: 'trash',
+        to: '/trash',
         name: 'trash',
         key: 'trash',
+        component: <TrashPage />,
         image: trash
     },
 ]
