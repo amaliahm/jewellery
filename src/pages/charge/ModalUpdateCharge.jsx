@@ -75,8 +75,6 @@ export default function ModalUpdateCharge({showModal, setShowModal, ...props}) {
           return
       }
     }
-
-    console.log('heyyyyyyyyyyyyyyyyyy')
   
   
     const hanldeConfirm = async () => {

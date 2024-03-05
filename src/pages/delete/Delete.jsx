@@ -18,6 +18,22 @@ import { view_importation,
   titres,
   view_charge} from "../../backend";
 import NavigationBar from "../home/NavigationBar";
+import ModalDelete from "./ModalDelete";
+import ModalRestore from "./ModalRestore";
+import { makeStyles } from "@mui/styles";
+
+const useStyle = makeStyles({
+  root: {
+      "& label.Mui-focused": {
+        color: "white"
+      },
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "#12f7d6",
+        }
+      }
+    }
+})
 
 const TrashPage = () => {
   const columns = [
@@ -65,7 +81,10 @@ const TrashPage = () => {
             border: '1px solid var(--brand-1)',
           }
         }} 
-        onClick={() => {cellClickListner(params)}}
+        onClick={() => {
+          setR_data(params.data)
+          setRestore(true)
+        }}
         >
           <i className="fa-solid fa-trash-arrow-up fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
         </Button>
@@ -87,20 +106,23 @@ const TrashPage = () => {
             border: '1px solid red',
           }
         }} 
-        onClick={() => {cellClickListner(params)}}
+        onClick={() => {
+          setSupprimer(true)
+          setS_data(params.data)
+        }}
         >
           <i className="fa-solid fa-trash fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>
         </Button>
     },
   ]
   
-
-  const cellClickListner = (params) => {
-    
-  }
   const gridRef = useRef();
   const [data, setData] = useState([])
   const [gridApi, setGridApi] = useState(null);
+  const [restore, setRestore] = useState(false)
+  const [supprimer, setSupprimer] = useState(false)
+  const [r_data, setR_data] = useState([])
+  const [s_data, setS_data] = useState([])
 
   useEffect(() => {
     const inter = []
@@ -353,6 +375,7 @@ const TrashPage = () => {
     setGridApi(params.api);
   }
 
+  const colors = useStyle()
 
 
   
@@ -362,6 +385,22 @@ const TrashPage = () => {
   return (
     <>
       <NavigationBar name="trash" />
+      {supprimer && <ModalDelete
+              delete_={supprimer}
+              setDelete_={setSupprimer}
+              detail={s_data}
+              all_data={data}
+              setAllData={setData}
+              colors={colors.root}
+            />}
+      {restore && <ModalRestore
+              restore={restore}
+              setRestore={setRestore}
+              detail={r_data}
+              all_data={data}
+              setAllData={setData}
+              colors={colors.root}
+            />}
         <div 
         className="ag-theme-quartz-dark"
         style={{
