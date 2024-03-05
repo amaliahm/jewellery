@@ -8,7 +8,15 @@ import { view_importation,
   view_vente_articles_client,
   view_command ,
   view_versement_client,
-  view_versement_fournisseur} from "../../backend";
+  view_versement_fournisseur,
+  client, 
+  view_produits,
+  view_retour_fournisseur,
+  view_retour_client,
+  magasin,
+  view_reparation,
+  titres,
+  view_charge} from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 
 const TrashPage = () => {
@@ -97,6 +105,19 @@ const TrashPage = () => {
   useEffect(() => {
     const inter = []
     const fetchAllData = async () => {
+
+      Object.keys(client).map((e, i) => {
+        if (client[e].is_deleted) {
+          inter.push({
+            element: 'client',
+            data: client[e].nom_client,
+            id: client[e].id_client,
+            date: ''
+          })
+        }
+      })
+
+
       Object.keys(view_importation).map((e, i) => {
         if (view_importation[e].deleted_importation) {
           inter.push({
@@ -199,6 +220,107 @@ const TrashPage = () => {
             data: view_versement_fournisseur[e]['versement fournisseur n=°'],
             id: view_versement_fournisseur[e].id_versement_fournisseur,
             date: view_versement_fournisseur[e].date,
+          })
+        }
+      })
+
+      Object.keys(view_produits).map((e, i) => {
+        if (view_produits[e].deleted_famille) {
+          inter.push({
+            element: 'famille',
+            data: view_produits[e].nom_famille,
+            id: view_produits[e].id_famille,
+            date: '',
+          })
+        }
+        if (view_produits[e].deleted_article) {
+          inter.push({
+            element: "article",
+            data: view_produits[e].nom_article,
+            id: view_produits[e].id_article,
+            date: '',
+          })
+        }
+      })
+
+      Object.keys(view_retour_fournisseur).map((e, i) => {
+        if (view_retour_fournisseur[e].delete_retour_fournisseur) {
+          inter.push({
+            element: 'retour fournisseur',
+            data: view_retour_fournisseur[e]['retour fournisseur n=°'],
+            id: view_retour_fournisseur[e].id_retour_fournisseur,
+            date: view_retour_fournisseur[e].date,
+          })
+        }
+      })
+
+      Object.keys(view_retour_client).map((e, i) => {
+        if (view_retour_client[e].delete_retour_client) {
+          inter.push({
+            element: 'retour client',
+            data: view_retour_client[e]['retour client n=°'],
+            id: view_retour_client[e].id_retour_client,
+            date: view_retour_client[e].date,
+          })
+        }
+      })
+
+      Object.keys(magasin).map((e, i) => {
+        if (magasin[e].is_deleted) {
+          inter.push({
+            element: 'magasin',
+            data: magasin[e].nom_magasin,
+            id: magasin[e].id_magasin,
+            date: '',
+          })
+        }
+      })
+
+      Object.keys(view_reparation).map((e, i) => {
+        if (view_reparation[e].deleted_reparation) {
+          inter.push({
+            element: 'reparation',
+            data: view_reparation[e]['reparation n=°'],
+            id: view_reparation[e].id_reparation,
+            date: view_reparation[e].date,
+          })
+        }
+      })
+
+      Object.keys(view_charge).map((e, i) => {
+        if (view_charge[e].deleted_charge) {
+          inter.push({
+            element: 'charge',
+            data: view_charge[e]['charge n=°'],
+            id: view_charge[e].id_charge,
+            date: view_charge[e].date,
+          })
+        }
+        if (view_charge[e].deleted_type) {
+          inter.push({
+            element: 'type',
+            data: view_charge[e].nom_type,
+            id: view_charge[e].nom_type,
+            date: '',
+          })
+        }
+        if (view_charge[e].deleted_sous_type) {
+          inter.push({
+            element: 'sous type',
+            data: view_charge[e].nom_sous_type,
+            id: view_charge[e].id_sous_type,
+            date: '',
+          })
+        }
+      })
+
+      Object.keys(titres).map((e, i) => {
+        if (titres[e].is_deleted) {
+          inter.push({
+            element: 'titre',
+            data: titres[e].titre,
+            id: titres[e].id_titre,
+            date: '',
           })
         }
       })

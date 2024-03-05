@@ -70,7 +70,18 @@ const AddVersementFournisseur = () => {
           })
         }
       })
-      setData(inter)
+
+      const uniqueObjectsSet = new Set();
+
+      const uniqueArray = inter.filter(obj => {
+        const stringRepresentation = JSON.stringify(obj);
+        if (!uniqueObjectsSet.has(stringRepresentation)) {
+          uniqueObjectsSet.add(stringRepresentation);
+          return true;
+        }
+        return false;
+      });
+      setData(uniqueArray)
     }
     fetchAllData()
   }, [2000])
@@ -95,7 +106,7 @@ const AddVersementFournisseur = () => {
         setDone(true)
         setTimeout(() => {
             setDone(false)
-            // navigate('/versements')
+            navigate('/versements')
         }, 2000)
         const result = await axios.post(api_add_versement_fournisseur, add)
         if(result.status === 200) {
