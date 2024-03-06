@@ -322,7 +322,7 @@ const TrashPage = () => {
           inter.push({
             element: 'type',
             data: view_charge[e].nom_type,
-            id: view_charge[e].nom_type,
+            id: view_charge[e].id_type,
             date: '',
           })
         }

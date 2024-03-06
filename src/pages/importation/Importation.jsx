@@ -58,7 +58,7 @@ const Importation = () => {
       ...column,
     },
     {
-      field: "versement aregnt",
+      field: "versement argent",
       headerName: "VERSEMENT ARGENT",
       ...column,
     },

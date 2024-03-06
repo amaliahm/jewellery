@@ -103,7 +103,7 @@ const AchatImportation = () => {
     const fetchAllData = () => {
        let inter = []
        Object.keys(view_importation).map((e, i) => {
-         if (importation.id_importation === view_importation[e].id_importation) {
+         if (importation.id_importation === view_importation[e].id_importation && view_importation[e].id_achat_importation !== null) {
            inter.push({
              id_achat_importation: view_importation[e].id_achat_importation,
              nom_importateur: importation.nom_importateur,
@@ -139,6 +139,7 @@ const AchatImportation = () => {
     filter: true,
     enableRowGroup: true,
   }))
+  console.log(data)
 
   const cellClickListner = (params) => {
     navigate(`/importations/achat_importation/${params.data.id_achat_importation}`, {state: params.data})

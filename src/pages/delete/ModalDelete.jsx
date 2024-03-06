@@ -51,18 +51,26 @@ const confirme_button_style = {
 export default function ModalDelete({ delete_, setDelete_, detail, all_data, setAllData, ...props}) {
     const handleClose = () => setDelete_(false);
     const [supprimer, setSupprimer] = useState(false)
-    const navigate = useNavigate()
     console.log(detail)
   
     const hanldeDelete = async () => {
       setSupprimer(true)
+      const inter = []
+      Object.keys(all_data).map((e, i) => {
+        if (all_data[e] !== detail) {
+            inter.push(all_data[e])
+        }
+      })
+      setAllData(inter)
       
       setTimeout(() => {
         setDelete_(false)
         setSupprimer(false)
         
       }, 2000)
-      let to_delete = {...detail
+      let to_delete = {
+        type:  'delete',
+        ...detail
       }
       try {
         const result = await axios.delete( api + `trash` , {data: to_delete})
@@ -98,7 +106,7 @@ export default function ModalDelete({ delete_, setDelete_, detail, all_data, set
             </Box>
           </Box>
         </Modal>
-        {supprimer && <Notification name={`${data} a été supprimée'`}/>}
+        {supprimer && <Notification name={`${detail.data} a été supprimée'`}/>}
       </div>
     );
   }

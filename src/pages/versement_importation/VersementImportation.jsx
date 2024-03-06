@@ -95,7 +95,7 @@ const VersementImportation = () => {
     const fetchAllData = () => {
        let inter = []
        Object.keys(view_importation).map((e, i) => {
-         if (importation.id_importation === view_importation[e].id_importation) {
+         if (importation.id_importation === view_importation[e].id_importation && view_importation[e].id_versement_importation !== null) {
            inter.push({
              id_versement_importation: view_importation[e].id_versement_importation,
              nom_importateur: importation.nom_importateur,
