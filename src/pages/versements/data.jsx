@@ -115,7 +115,6 @@ const add_versement = {
   titre: 0,
   "versement or" : 0,
   "versement argent": 0,
-  "versement casse": 0,
   "or v": 0,
   fonte: 0,
   'net 750': 0,

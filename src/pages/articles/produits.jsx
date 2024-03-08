@@ -62,6 +62,14 @@ const Produits = () => {
       headerAlign: 'left'
     },
     {
+      field: "alert",
+      headerName: "",
+      flex: 1,
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
+    },
+    {
       field: "plus details",
       headerName: "",
       flex: 1,
@@ -108,7 +116,10 @@ const Produits = () => {
       let inter = []
       Object.keys(view_produits).map((e, i) => {
         if (view_produits[e].id_famille === location.state.id_famille && view_produits[e].id_article !== null) {
-          inter.push(view_produits[e])
+          inter.push({
+            ...view_produits[e],
+            alert: view_produits[e].quantite_stock < view_produits[e].stock_min ? 'STOCK FAIBLE !!!' : ''
+          })
         }
       })
       const uniqueObjectsSet = new Set();

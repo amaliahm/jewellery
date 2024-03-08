@@ -6,13 +6,11 @@ import AddVersementClient from "../versements/AddVersementClient"
 import AddAchatImportation from "../achat_importation/AddAchatImportation"
 import AddVersementImportation from "../versement_importation/AddVersementImportation"
 import AddArticle from "../articles/AddArticle"
-import AddCaisse from "../caisse/AddCaisse"
 import AddVersementFournisseur from "../versements/AddVersementFournisseur"
 import AddRetour from "../retours/AddRetour"
 import AddReparation from "../reparation/AddReparation"
 import AddCharge from "../charge/AddCharge"
 import AddCommand from "../command/AddCommand"
-import AddCasse from "../casse/AddCasse"
 
 const add_routes = [
     {
@@ -66,14 +64,6 @@ const add_routes = [
     {
         to: '/commands/add-command',
         component: <AddCommand />
-    },
-    {
-        to: '/casse/add-casse',
-        component: <AddCasse />
-    },
-    {
-        to: '/caisse/add',
-        component: <AddCaisse />
     },
 ]
 

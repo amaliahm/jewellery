@@ -4,7 +4,6 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { caisse } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
 
@@ -63,6 +62,15 @@ const Caisse = () => {
       headerAlign: 'left'
     },
     {
+      field: "operation",
+      headerName: "OPERATION",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      minWidth: 250,
+      maxWidth: 350,
+      headerAlign: 'left'
+    },
+    {
       field: "quantite",
       headerName: "QUANTITE",
       flex: 1,
@@ -72,19 +80,19 @@ const Caisse = () => {
       headerAlign: 'left'
     },
     {
-      field: "prix_unitaire",
-      headerName: "PRIX UNITAIRE",
+      field: "total",
+      headerName: "VALEUR",
       flex: 1,
       minWidth: 200,
       maxWidth: 300,
       headerAlign: 'left'
     },
     {
-      field: "total",
-      headerName: "VALEUR",
+      field: "ancien_quantite",
+      headerName: "ANCIEN QUANTITE",
       flex: 1,
-      minWidth: 200,
-      maxWidth: 300,
+      minWidth: 300,
+      maxWidth: 400,
       headerAlign: 'left'
     },
     {
@@ -97,11 +105,11 @@ const Caisse = () => {
       headerAlign: 'left',
     },
     {
-      field: "CUMP",
-      headerName: "CUMP",
+      field: "ancien_valeur",
+      headerName: "ANCIEN VALEUR",
       flex: 1,
-      minWidth: 200,
-      maxWidth: 300,
+      minWidth: 300,
+      maxWidth: 400,
       headerAlign: 'left'
     },
     {
@@ -113,47 +121,16 @@ const Caisse = () => {
       headerAlign: 'left'
     },
     {
-      field: "plus details",
-      headerName: "",
+      field: "CUMP",
+      headerName: "CUMP",
       flex: 1,
-      minWidth: 100,
-      maxWidth: 100,
-      headerAlign: 'left',
-      cellRenderer : (params) => 
-        <Button
-        sx={{
-          background: `${!params.data.deleted_caisse ? 'var(--brand-1)' : 'transparent'} `,
-          marginBottom: '5px',
-          padding: '15px',
-          '&:hover' : {
-            border: `${!params.data.deleted_caisse ? '1px solid var(--brand-1)' : 'transparent'}`,
-          }
-        }} 
-        onClick={() => {
-          !params.data.deleted_caisse ? cellClickListner(params) : console.log()
-        }}
-        >
-          {!params.data.deleted_caisse && <i className="fa-solid fa-arrow-right fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
-        </Button>
+      minWidth: 200,
+      maxWidth: 300,
+      headerAlign: 'left'
     },
   ];
 
-
-
-  const cellClickListner = (params) => {
-    navigate(`/caisse/${params.data.id_caisse}`, {state: params.data})
-  }
-
-  const getRowStyle = (params) => {
-    if (params.data.deleted_caisse) {
-      return { background: '#db4f4a' };
-    }
-    return null;
-  };
-
   const gridRef = useRef();
-  const navigate = useNavigate()
-  const colors = useStyle()
 
 
   const [tous, setTous] = useState([])
@@ -206,14 +183,6 @@ const Caisse = () => {
               <Button sx={data == 0 ? style_clicked : style} onClick={() => {setData(0)}}>tous</Button>
               <Button sx={data == 1 ? style_clicked : style} onClick={() => {setData(1)}}>entrer</Button>
               <Button sx={data == 2 ? style_clicked : style} onClick={() => {setData(2)}}>sortie</Button>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={() => { navigate('/caisse/add')}}
-              >ajouter mouvement</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data == 1 ? entrer : data == 2 ? sortie : tous}
@@ -221,7 +190,6 @@ const Caisse = () => {
               defaultColDef={defaultColDef}
               rowGroupPanelShow='always'
               pagination={true}
-              getRowStyle={getRowStyle}
             />
             </div>
     </>

@@ -2,7 +2,6 @@ import { achat, articles, bourse, clients, fournisseurs, gestion_utilisateurs, v
 import Achat from "../achats/Achat"
 import Articles from "../articles/Articles"
 import Caisse from "../caisse/caisse"
-import Casse from "../casse/Casse"
 import Charge from "../charge/Charge"
 import Clients from "../clients/Clients"
 import Command from "../command/Command"
@@ -96,14 +95,6 @@ const routes = [
         component: <Magasin />,
         image: magasin
     },
-    // {
-    //     icon: 'link-slash',
-    //     to: '/casse',
-    //     name: 'casses',
-    //     key: 'casse',
-    //     component: <Casse />,
-    //     image: vente
-    // },
     {
         icon: 'question',
         to: '/charges',

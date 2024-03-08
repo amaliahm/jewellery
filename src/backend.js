@@ -22,7 +22,6 @@ let magasin
 let titres
 let view_produits
 let view_command
-let casse
 let caisse
 
 /* to add data */
@@ -34,11 +33,9 @@ const api_add_fournisseur = api + 'fournisseurs/add-fournisseur'
 const api_add_versement_client = api + 'versements/add-versement-client'
 const api_add_versement_fournisseur = api + 'versements/add-versement-fournisseur'
 const api_add_retour = api + 'retours/add-retour'
-const api_add_casse = api + 'casse/add-casse'
 const api_add_achat_importation = api + 'importations/achat_importation/add'
 const api_add_versement_importation = api + 'importations/versement_importation/add'
 const api_add_article = api + 'produits/:id/add'
-const api_add_mouvement = api + 'caisse/add'
 const api_add_reparation = api + 'magasins/:id/add-reparation'
 const api_add_charge = api + 'charges/add-charge'
 const api_add_command = api + 'commands/add-command'
@@ -64,7 +61,6 @@ async function getData() {
         magasin = result.data.magasin
         view_produits = result.data.view_produits
         view_command = result.data.view_command
-        casse = result.data.casse
         caisse = result.data.caisse
     } catch (e) {
         console.log(e)
@@ -84,11 +80,9 @@ export {
     api_add_achat_importation,
     api_add_versement_importation,
     api_add_article,
-    api_add_mouvement,
     api_add_reparation,
     api_add_charge,
     api_add_command,
-    api_add_casse,
     magasin,
     result,
     fournisseur,
@@ -105,7 +99,6 @@ export {
     view_charge,
     view_produits,
     view_command,
-    casse,
     caisse,
     titres,
 }

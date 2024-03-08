@@ -92,7 +92,7 @@ const AddVersementClient = () => {
                 </FormControl>
                 {Object.keys(versement).slice(7).map((key, index) => (
                     <>
-                    { (index <= 2) &&
+                    { (index <= 1) &&
                     <TextField 
                         key={index}
                         id={"outlined-controlled"}
