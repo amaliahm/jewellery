@@ -118,7 +118,7 @@ const UpdateAchat = () => {
       const fetchAllData = () => {
         let inter = []
         Object.keys(view_achat_articles_fournisseur).map((e, i) => {
-          if (view_achat_articles_fournisseur[e].id_total_achat === id) {
+          if (view_achat_articles_fournisseur[e].id_total_achat === id && view_achat_articles_fournisseur[e].id_achat !== null) {
             inter.push({
               delete_total_achat: view_achat_articles_fournisseur[e].delete_total_achat,
               delete_achat: view_achat_articles_fournisseur[e].delete_achat,

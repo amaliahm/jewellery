@@ -16,7 +16,7 @@ function SelectedFamille({ name, options, setValue, valeur, show = true, ...prop
           nom_famille: view_produits[e].nom_famille,
           id_article: view_produits[e].id_article,
           nom_article: view_produits[e].nom_article,
-          prix_vente: view_produits[e].prix_vente,
+          prix_unitaire: view_produits[e].prix_vente,
           quantite_stock: view_produits[e].quantite_stock,
           solde: valeur.solde,
         })

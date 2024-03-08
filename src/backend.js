@@ -22,7 +22,6 @@ let magasin
 let titres
 let view_produits
 let view_command
-let view_reception
 let casse
 let caisse
 
@@ -43,7 +42,6 @@ const api_add_mouvement = api + 'caisse/add'
 const api_add_reparation = api + 'magasins/:id/add-reparation'
 const api_add_charge = api + 'charges/add-charge'
 const api_add_command = api + 'commands/add-command'
-const api_add_reception = api + 'receptions/add-reception'
 
 
 
@@ -66,7 +64,6 @@ async function getData() {
         magasin = result.data.magasin
         view_produits = result.data.view_produits
         view_command = result.data.view_command
-        view_reception = result.data.view_reception
         casse = result.data.casse
         caisse = result.data.caisse
     } catch (e) {
@@ -86,7 +83,6 @@ export {
     api_add_versement_fournisseur,
     api_add_achat_importation,
     api_add_versement_importation,
-    api_add_reception,
     api_add_article,
     api_add_mouvement,
     api_add_reparation,
@@ -109,7 +105,6 @@ export {
     view_charge,
     view_produits,
     view_command,
-    view_reception,
     casse,
     caisse,
     titres,

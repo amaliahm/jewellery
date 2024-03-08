@@ -12,7 +12,6 @@ import AddRetour from "../retours/AddRetour"
 import AddReparation from "../reparation/AddReparation"
 import AddCharge from "../charge/AddCharge"
 import AddCommand from "../command/AddCommand"
-import AddReception from "../reception/AddReception"
 import AddCasse from "../casse/AddCasse"
 
 const add_routes = [
@@ -67,10 +66,6 @@ const add_routes = [
     {
         to: '/commands/add-command',
         component: <AddCommand />
-    },
-    {
-        to: '/receptions/add-reception',
-        component: <AddReception />
     },
     {
         to: '/casse/add-casse',

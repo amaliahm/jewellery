@@ -66,7 +66,7 @@ export default function ModalDelete({_delete, setDelete, type, ...props}) {
         ...props.detail
       }
       try {
-        const result = await axios.delete(type === 'total_achats' ? api + `achats/${props.detail.id_total_achat}` : api + `achats/${props.detail.id_achat}/${props.detail.id_achat}` , {data: to_delete})
+        const result = await axios.delete(type === 'total_achats' ? api + `achats/${props.detail.id_total_achat}`  : api + `achats/${props.detail.id_achat}/${props.detail.id_achat}` , {data: to_delete})
         if(result.status === 200) {
         }
       } catch (error) {
