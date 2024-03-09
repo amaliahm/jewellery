@@ -70,7 +70,7 @@ const UpdateFournisseur = () => {
           <NavigationBar name={data.nom}/>
           <div className="add">
             {Object.keys(data).slice(2).map((value, index) => (
-                   <TextField 
+                  <TextField 
                    key={index}
                    id={"outlined-controlled"}
                    label={value} variant="outlined"

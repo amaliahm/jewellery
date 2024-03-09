@@ -5,7 +5,7 @@ import { fournisseur } from '../../backend';
 
 
 
-const generateHtmlTable = (data, name, date, nom, id, wilaya, ville, adresse, telephone, total, achat_numero) => {
+const generateHtmlTable = (data, name) => {
 
   const body_style = `
     width: 100vw;
@@ -117,7 +117,7 @@ const generateHtmlTable = (data, name, date, nom, id, wilaya, ville, adresse, te
     height: 200px;
     width: 100%;
     margin: 10px;
-    margin-bottom: 70px;
+    margin-bottom: 200px;
   `;
 
   const tableStyles = `
@@ -169,16 +169,11 @@ const generateHtmlTable = (data, name, date, nom, id, wilaya, ville, adresse, te
     font-size: 30px;
     text-wrap: nowrap;
     color: #000;
-    margin: 180px 10px 20px 450px;
+    margin: 50px 10px 20px 450px;
   `
-
   const currentDate = new Date();
   const current_date = `<p style="${reste_entreprise_nom_style}"> ${String(currentDate.getFullYear())}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')} </p>`
-  const tableHeader = Object.keys(data[0]).map((key) => `<th style="${thStyles}">${key}</th>`).join('');
-  const tableBody = data.map((row) => {
-    const rowCells = Object.values(row).map((value, index) => `<td style="${tdStyles}">${value}</td>`).join('');
-    return `<tr>${rowCells}</tr>`;
-  }).join('');
+  
   const signature = `<h6 style="${signature_style}"> EURL BN ZAHAV </h6>`
 
     return `
@@ -192,7 +187,7 @@ const generateHtmlTable = (data, name, date, nom, id, wilaya, ville, adresse, te
     </head>
     <body style="${body_style}">
     <div style="${logo_div_style}">
-      <p style="${titre_style}">bon de ${name} </p>
+      <p style="${titre_style}">bon ${name} </p>
       <div style="${logo_style}"></div>
     </div>
     <div style="${entreprise_div_style}">
@@ -210,24 +205,39 @@ const generateHtmlTable = (data, name, date, nom, id, wilaya, ville, adresse, te
         </div>
         <div style="${info_head_half_div_style}">
           <p style="${reste_entreprise_nom_style}">${current_date}</p>
-          <p style="${reste_entreprise_nom_style}">${achat_numero}</p>
-          <p style="${reste_entreprise_nom_style}">${date} </p>
+          <p style="${reste_entreprise_nom_style}">${data.type === 'client' ? data['retour client n=°'] : data['retour fournisseur n=°']}</p>
+          <p style="${reste_entreprise_nom_style}">${data.date} </p>
         </div>
       </div>
       <div style="${info_other_half_div_style}">
         <p style="${entreprise_nom_style}">distinataire:</p>
-        <p style="${reste_entreprise_nom_style}">MR ${nom}</p>
-        <p style="${reste_entreprise_nom_style}">${ville}, ${wilaya}</p>
-        <p style="${reste_entreprise_nom_style}">${adresse}</p>
-        <p style="${reste_entreprise_nom_style}">${telephone}</p>
+        <p style="${reste_entreprise_nom_style}">${data.nom}</p>
+        <p style="${reste_entreprise_nom_style}">${data.wilaya}</p>
+        <p style="${reste_entreprise_nom_style}">${data.ville}</p>
+        <p style="${reste_entreprise_nom_style}">${data.adresse}</p>
       </div>
     </div>
     <div style="${tableau_div_style}">
-      <table style="${tableStyles}" border="1"><thead>${tableHeader}</thead><tbody>${tableBody}</tbody></table>
+      <table style="${tableStyles}" border="1">
+        <thead>
+          <th style="${thStyles}">retour argent</th>
+          <th style="${thStyles}">retour or</th>
+        </thead>
+        <tbody> 
+           <tr>
+              <td style="${tdStyles}">${data.retour_argent}$</td>
+              <td style="${tdStyles}">${data.retour_or}</td>
+           </tr>
+        </tbody>
+      </table>
     </div>
     <div style="${last_div_style}">
-       <p style="${entreprise_nom_style}">total: </p>
-       <p style="${entreprise_nom_style}">${total}$</p>
+       <p style="${entreprise_nom_style}">ancien solde: </p>
+       <p style="${entreprise_nom_style}">${data.ancien_solde}$</p>
+    </div>
+    <div style="${last_div_style}">
+       <p style="${entreprise_nom_style}">nouveau solde: </p>
+       <p style="${entreprise_nom_style}">${data.nouveau_solde}$</p>
     </div>
     ${signature}
     </body>
@@ -242,27 +252,7 @@ const generateHtmlTable = (data, name, date, nom, id, wilaya, ville, adresse, te
   
   
   const exportAllDataToPdf = (data, name) => {
-
-    let all_data = []
-    const date = data[data.length - 1].date
-    const nom = data[data.length - 1].nom
-    const id = data[data.length - 1].id_total_achat
-    const wilaya = data[data.length - 1].wilaya
-    const ville = data[data.length - 1].ville
-    const adresse = data[data.length - 1].adresse
-    const telephone = data[data.length - 1].telephone
-    const achat_numero = data[data.length - 1].achat_numero
-    let total = 0
-    Object.keys(data).map((e, i) => {
-        all_data.push({
-            'article': data[e].nom_article,
-            'prix unitaire': data[e].prix_unitaire,
-            quantite: data[e].quantite,
-            total: data[e].total,
-        })
-        total += parseFloat(data[e].total)
-    })
-    const htmlContent = generateHtmlTable(all_data, name, date, nom, id, wilaya, ville, adresse, telephone, total, achat_numero);
+    const htmlContent = generateHtmlTable(data, name);
     exportHtmlToPdf(htmlContent);
   };
   

@@ -6,6 +6,8 @@ import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
+import { exportBonToPdf } from '../home/telechargerBonVersement';
+import { client, fournisseur } from '../../backend';
 
 const useStyle = makeStyles({
     root: {
@@ -33,7 +35,7 @@ const UpdateVersement = () => {
         <>
           <NavigationBar name={data.type === 'client' ? data['versement client n=°'] :  data['versement fournisseur n=°']}/>
           <div className="add">
-            {Object.keys(data).slice(4).map(value => (
+            {Object.keys(data).slice(5).map(value => (
                    <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
@@ -58,6 +60,37 @@ const UpdateVersement = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => {
+                let data__ = data
+                if (data.type === 'client') {
+                  Object.keys(client).map((e, i) => {
+                    if (client[e].id_client === data.id_client) {
+                      data__ = ({
+                        ...data__,
+                        wilaya: client[e].wilaya,
+                        ville: client[e].ville,
+                        adresse: client[e].adresse,
+                        telephone: client[e].telephone
+                      })
+                    }
+                  })
+                  exportBonToPdf(data__, "de versement client")
+                } else {
+                  Object.keys(fournisseur).map((e, i) => {
+                    if (fournisseur[e].id_fournisseur === data.id_fournisseur) {
+                      data__ = ({
+                        ...data__,
+                        wilaya: fournisseur[e].wilaya,
+                        ville: fournisseur[e].ville,
+                        adresse: fournisseur[e].adresse,
+                        telephone: fournisseur[e].telephone
+                      })
+                    }
+                  })
+                  exportBonToPdf(data__, "de versement fournisseur")
+                }
+                console.log(data__.type)
+              }}></i>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>

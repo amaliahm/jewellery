@@ -3,8 +3,6 @@ import NavigationBar from "../home/NavigationBar"
 import { useLocation } from "react-router-dom"
 import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
-// import ModalDelete from './ModalDelete';
-// import ModalUpdate from './ModalUpdate';
 import { Button } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
@@ -102,10 +100,7 @@ const Reparation = () => {
 
     const colors = useStyle()
     const location = useLocation()
-    const [modal, setModal] = useState(false);
-    const [data_update, setDataUpdate] = useState()
     const [m_delete, setM_Delete] = useState(false)
-    const [data_delete, setDataDelete] = useState()
     const [gridApi, setGridApi] = useState(null);
     const [state, setState] = useState(location.state)
     const navigate = useNavigate()
@@ -119,6 +114,8 @@ const Reparation = () => {
           if (view_reparation[e].id_magasin === state.id) {
             inter.push({
               id_magasin: state.id,
+              id_client: view_reparation[e].id_client,
+              id_fournisseur: view_reparation[e].id_fournisseur,
               nom_magasin: state.magasin,
               deleted_reparation: view_reparation[e].deleted_reparation,
               deleted_magasin: view_reparation[e].deleted_magasin,
@@ -181,7 +178,6 @@ const Reparation = () => {
                 navigate(`/magasins/${state.id}/add-reparation`, {state: state})
               }}
               >ajouter reparation</Button>
-
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}

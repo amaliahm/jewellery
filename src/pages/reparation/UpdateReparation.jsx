@@ -6,7 +6,8 @@ import { TextField, Button } from "@mui/material"
 import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
-import { useNavigate } from 'react-router-dom';
+import { exportBonToPdf } from '../home/telechargerReparation';
+import { fournisseur, client } from '../../backend';
 
 
 const useStyle = makeStyles({
@@ -43,7 +44,7 @@ const UpdateReparation = () => {
           <div style={style}>
           </div>
           <div className="add" style={{marginTop: '10px'}} >
-            {Object.keys(data).slice(6).map(value => (
+            {Object.keys(data).slice(8).map(value => (
                    <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
@@ -68,6 +69,32 @@ const UpdateReparation = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => {
+                let data__ = data
+                Object.keys(client).map((e, i) => {
+                  if (client[e].id_client === data.id_client) {
+                    data__ = ({
+                      ...data__,
+                      wilaya_client: client[e].wilaya,
+                      ville_client: client[e].ville,
+                      adresse_client: client[e].adresse,
+                      telephone_client: client[e].telephone
+                    })
+                  }
+                })
+                Object.keys(fournisseur).map((e, i) => {
+                  if (fournisseur[e].id_fournisseur === data.id_fournisseur) {
+                    data__ = ({
+                      ...data__,
+                      wilaya_fournisseur: fournisseur[e].wilaya,
+                      ville_fournisseur: fournisseur[e].ville,
+                      adresse_fournisseur: fournisseur[e].adresse,
+                      telephone_fournisseur: fournisseur[e].telephone
+                    })
+                  }
+                })
+                exportBonToPdf(data__, "de reparation")
+              } }></i>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>

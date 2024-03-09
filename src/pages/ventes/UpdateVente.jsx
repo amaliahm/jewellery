@@ -10,6 +10,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { exportBonToPdf } from "../home/telechargerBonVente";
 
 const useStyle = makeStyles({
     root: {
@@ -137,6 +138,13 @@ const UpdateVente = () => {
               nom_famille: view_vente_articles_client[e].nom_famille,
               nom_article: view_vente_articles_client[e].nom_article,
               id_fournisseur: view_vente_articles_client[e].id_fournisseur,
+              nom: view_vente_articles_client[e].nom_client,
+              wilaya: view_vente_articles_client[e].wilaya,
+              ville: view_vente_articles_client[e].ville,
+              telephone: view_vente_articles_client[e].telephone,
+              adresse: view_vente_articles_client[e].adresse,
+              date: view_vente_articles_client[e].date_total_vente,
+              vente_numero: view_vente_articles_client[e]['vente total n=°'],
             })
           }
         })
@@ -192,7 +200,7 @@ const UpdateVente = () => {
                 marginBottom: '10px',
                 marginRight: '10px'
               }} 
-              // onClick={() => { navigate('/achats/add-achat') }}
+              onClick={() => { exportBonToPdf(data, "de vente") }}
               >bon de vente</Button>
 
             <AgGridReact className="clear"

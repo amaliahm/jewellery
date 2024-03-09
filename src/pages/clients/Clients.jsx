@@ -2,12 +2,10 @@ import { Button } from "@mui/material";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { client } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
-import { exportDataToPdf } from "../home/telecharger_table";
-import { RowNode } from "ag-grid-community";
 
 const Clients = () => {
   const columns_clients = [
@@ -78,7 +76,6 @@ const Clients = () => {
     },
   ]
   
-
   const cellClickListner = (params) => {
     navigate(`/clients/${params.data.id_client}`, {state: params.data.id_client})
   }
@@ -94,7 +91,6 @@ const Clients = () => {
   const navigate = useNavigate()
   const [data, setData] = useState([])
   const [gridApi, setGridApi] = useState(null);
-  const [filtered, setFiltered] = useState(false)
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -108,28 +104,9 @@ const Clients = () => {
     filter: true,
   }))
 
-
   const onGridReady = (params) => {
     setGridApi(params.api);
-  }
-
-  
-
-  const onFilterChanged = () => {
-    const filteredRows = gridApi.getModel().rowsToDisplay;
-    setFiltered(true)
-    let inter = []
-    Object.keys(filteredRows).map((e, i) => {
-      inter.push(filteredRows[e].data)
-    })
-    return inter
-  };
-
-
-
-  
-
- 
+  } 
 
   return (
     <>
@@ -151,29 +128,6 @@ const Clients = () => {
                 navigate('/clients/add-client') 
               }}
               >ajouter client</Button>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={() => {
-                const inter = filtered ? onFilterChanged() : data
-                let download_data = []
-                Object.keys(inter).map((e, i) => {
-                  download_data.push({
-                    nom: inter[e].nom_client,
-                    ville: inter[e].ville,
-                    wilaya: inter[e].wilaya,
-                    solde: inter[e].solde,
-                    or: inter[e].total_or,
-                  })
-                })
-                console.log(data)
-                console.log(download_data)
-                exportDataToPdf(download_data, gridApi, 'les clients')
-              }}
-              >telecharger pdf</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
@@ -183,7 +137,6 @@ const Clients = () => {
               pagination={true}
               getRowStyle={getRowStyle}
               onGridReady={onGridReady}
-              onFilterChanged={onFilterChanged}
             />
             </div>
     </>

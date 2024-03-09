@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fournisseur } from "../../backend";
 import NavigationBar from "../home/NavigationBar";
-import { exportDataToPdf } from "../home/telecharger_table";
 
 const Fournisseurs = () => {
   const columns_fournisseurs = [
@@ -93,7 +92,6 @@ const Fournisseurs = () => {
   const navigate = useNavigate()
   const [data, setData] = useState([])
   const [gridApi, setGridApi] = useState(null);
-  const [filtered, setFiltered] = useState(false)
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -107,28 +105,9 @@ const Fournisseurs = () => {
     filter: true,
   }))
 
-
   const onGridReady = (params) => {
     setGridApi(params.api);
   }
-
-  
-
-  const onFilterChanged = () => {
-    const filteredRows = gridApi.getModel().rowsToDisplay;
-    setFiltered(true)
-    let inter = []
-    Object.keys(filteredRows).map((e, i) => {
-      inter.push(filteredRows[e].data)
-    })
-    return inter
-  };
-
-
-
-  
-
- 
 
   return (
     <>
@@ -150,29 +129,6 @@ const Fournisseurs = () => {
                 navigate('/fournisseurs/add-fournisseur') 
               }}
               >ajouter fournisseur</Button>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={() => {
-                const inter = filtered ? onFilterChanged() : data
-                let download_data = []
-                Object.keys(inter).map((e, i) => {
-                  download_data.push({
-                    nom: inter[e].nom_fournisseur,
-                    ville: inter[e].ville,
-                    wilaya: inter[e].wilaya,
-                    solde: inter[e].solde,
-                    or: inter[e].total_or,
-                  })
-                })
-                console.log(data)
-                console.log(download_data)
-                exportDataToPdf(download_data, gridApi, 'les fournisseurs')
-              }}
-              >telecharger pdf</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}
@@ -182,7 +138,6 @@ const Fournisseurs = () => {
               pagination={true}
               getRowStyle={getRowStyle}
               onGridReady={onGridReady}
-              onFilterChanged={onFilterChanged}
             />
             </div>
     </>

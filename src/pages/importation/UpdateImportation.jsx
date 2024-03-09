@@ -7,6 +7,7 @@ import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
 import { useNavigate } from 'react-router-dom';
+import { export_details_to_pdf } from '../home/telechargerImportation';
 
 
 const useStyle = makeStyles({
@@ -81,6 +82,7 @@ const UpdateImportation = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => export_details_to_pdf(data) }></i>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>

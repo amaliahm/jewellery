@@ -46,7 +46,7 @@ const UpdateVenteDetail = () => {
           <div className="add" style={{marginTop: '10px'}} >
             {Object.keys(data).slice(6).map((value, index) => (
                 <>
-                   { (index !== 5) && <TextField 
+                   { (index !== 5 && index <= 6) && <TextField 
                    id={"outlined-controlled"}
                    label={value} variant="outlined"
                    sx={{

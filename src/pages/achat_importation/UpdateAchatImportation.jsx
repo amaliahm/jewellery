@@ -6,6 +6,7 @@ import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
+import { exportBonToPdf } from '../home/telechargerBonAchatImpo';
 
 const useStyle = makeStyles({
     root: {
@@ -56,6 +57,7 @@ const UpdateAchatImportation = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => exportBonToPdf(data, "d'achat importation")}></i>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>

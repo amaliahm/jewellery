@@ -6,6 +6,8 @@ import { TextField } from "@mui/material"
 import { makeStyles } from "@mui/styles";
 import ModalDelete from './ModalDelete';
 import ModalUpdate from './ModalUpdate';
+import { exportBonToPdf } from '../home/telechargerRetour';
+import { client, fournisseur } from '../../backend';
 
 const useStyle = makeStyles({
     root: {
@@ -56,6 +58,35 @@ const UpdateRetour = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => {
+                let data__ = data
+                if (data.type === 'client') {
+                  Object.keys(client).map((e, i) => {
+                    if (client[e].id_client === data.id_person) {
+                      data__ = {
+                        ...data__,
+                        wilaya: client[e].wilaya,
+                        ville: client[e].ville,
+                        telephone: client[e].telephone,
+                        adresse: client[e].adresse,
+                      }
+                    }
+                  })
+                } else {
+                  Object.keys(fournisseur).map((e, i) => {
+                    if (fournisseur[e].id_fournisseur === data.id_person) {
+                      data__ = {
+                        ...data__,
+                        wilaya: fournisseur[e].wilaya,
+                        ville: fournisseur[e].ville,
+                        telephone: fournisseur[e].telephone,
+                        adresse: fournisseur[e].adresse,
+                      }
+                    }
+                  })
+                }
+                exportBonToPdf(data__, data__.type === 'client' ? 'de retour client' : 'de retour fournisseur')
+              }}></i>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
             </div>

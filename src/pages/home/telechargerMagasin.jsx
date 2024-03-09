@@ -109,54 +109,7 @@ const generateHtmlTable = (data) => {
       <div style="${detail_style}">
         <div style="${element_style}">
           <p style="${element_style_p}">nom</p>
-          <span style="${element_style_span}">${data.nom}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">titre</p>
-          <span style="${element_style_span}">${data.titre}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">NIF</p>
-          <span style="${element_style_span}">${data.NIF}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">NIS</p>
-          <span style="${element_style_span}">${data.NIS}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">NRC</p>
-          <span style="${element_style_span}">${data.NRC}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">numero d'artcile</p>
-          <span style="${element_style_span}">${data['n=° article']}</span>
-        </div>
-      </div>
-    </div>
-    <div style="${div_info_style}">
-      <div style="${div_info_hear_style}">
-        <p>cordonnées</p>
-      </div>
-      <div style="${detail_style}">
-        <div style="${element_style}">
-          <p style="${element_style_p}">telephone</p>
-          <span style="${element_style_span}">${data.telephone}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">email</p>
-          <span style="${element_style_span}">${data.email}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">wilaya</p>
-          <span style="${element_style_span}">${data.wilaya}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">ville</p>
-          <span style="${element_style_span}">${data.ville}</span>
-        </div>
-        <div style="${element_style}">
-          <p style="${element_style_p}">adresse</p>
-          <span style="${element_style_span}">${data.adresse}</span>
+          <span style="${element_style_span}">${data.nom_magasin}</span>
         </div>
       </div>
     </div>
@@ -167,27 +120,15 @@ const generateHtmlTable = (data) => {
        <div style="${detail_style}">
          <div style="${element_style}">
            <p style="${element_style_p}">chiffre d'affaire</p>
-           <span style="${element_style_span}">${data.solde}</span>
+           <span style="${element_style_span}">${data.argent}$</span>
          </div>
          <div style="${element_style}">
-           <p style="${element_style_p}">total or</p>
-           <span style="${element_style_span}">${data.or}</span>
+           <p style="${element_style_p}">poids total</p>
+           <span style="${element_style_span}">${data.poids}</span>
          </div>
          <div style="${element_style}">
-           <p style="${element_style_p}">versement or</p>
-           <span style="${element_style_span}">${data['versement or']}</span>
-         </div>
-         <div style="${element_style}">
-           <p style="${element_style_p}">versement argent</p>
-           <span style="${element_style_span}">${data['versement argent']}</span>
-         </div>
-         <div style="${element_style}">
-           <p style="${element_style_p}">retour or</p>
-           <span style="${element_style_span}">${data['retour or']}</span>
-         </div>
-         <div style="${element_style}">
-           <p style="${element_style_p}">retour argent</p>
-           <span style="${element_style_span}">${data['retour argent']}</span>
+           <p style="${element_style_p}">nombre de reparation</p>
+           <span style="${element_style_span}">${data['nombre reparation']}</span>
          </div>
        </div>
     </div>

@@ -10,7 +10,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { exportBonToPdf } from "../home/telechargerBon";
+import { exportBonToPdf } from "../home/telechargerBonAchat";
 
 const useStyle = makeStyles({
     root: {

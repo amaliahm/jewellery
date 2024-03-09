@@ -10,6 +10,7 @@ import { makeStyles } from "@mui/styles";
 import { magasin } from "../../backend";
 import ModalUpdate from "./ModalUpdate";
 import ModalDelete from "./ModalDelete";
+import { export_details_to_pdf } from "../home/telechargerMagasin";
 
 const useStyle = makeStyles({
     root: {
@@ -116,6 +117,32 @@ const Magasin = () => {
         }}
         >
           {!params.data.deleted_magasin && <i className="fa-solid fa-trash fa-xl" style={{color: 'white'}} ></i>}
+        </Button>
+    },
+    {
+      field: "download",
+      headerName: "DOWNLOAD",
+      flex: 1,
+      minWidth: 150,
+      maxWidth: 200,
+      headerAlign: 'left',
+      cellRenderer : (params) => 
+        <Button
+        sx={{
+          background: `${!params.data.deleted_magasin ? 'var(--brand-1)' : 'transparent'} `,
+          marginBottom: '5px',
+          padding: '15px',
+          '&:hover' : {
+            border: `${!params.data.deleted_magasin ? '1px solid var(--brand-1)' : 'transparent'}`,
+          }
+        }} 
+        onClick={() => {
+          if (!params.data.deleted_magasin) {
+            export_details_to_pdf(params.data) 
+          }
+        }}
+        >
+          {!params.data.deleted_magasin && <i className="fa-solid fa-download fa-xl" style={{color: 'var(--bg-color-2)'}} ></i>}
         </Button>
     },
     {
@@ -236,14 +263,14 @@ const Magasin = () => {
             width: '95vw',
             marginBottom: '20px'
         }}>
-              <Button sx={{
-                color: 'var(--brand-1)',
-                border: '1px solid var(--brand-1)',
-                marginBottom: '10px',
-                marginRight: '10px'
-              }} 
-              onClick={() => { setModal(true) }}
-              >ajouter magasin</Button>
+        <Button sx={{
+          color: 'var(--brand-1)',
+          border: '1px solid var(--brand-1)',
+          marginBottom: '10px',
+          marginRight: '10px'
+        }} 
+        onClick={() => { setModal(true) }}
+        >ajouter magasin</Button>
             <AgGridReact className="clear"
               ref={gridRef}
               rowData={data}

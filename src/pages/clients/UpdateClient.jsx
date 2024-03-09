@@ -78,7 +78,7 @@ const UpdateClient = () => {
       pdf.text('Name: John Doe', 10, 40);
       pdf.save('eurl bn zahav.pdf');
     };
-    
+
     return (
         <>
           <NavigationBar name={data.nom}/>
@@ -109,10 +109,7 @@ const UpdateClient = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
             }}>
-              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => 
-                // export_details_to_pdf(data)
-                handleDownload()
-                }></i>
+              <i className="fa-solid fa-download fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => export_details_to_pdf(data) }></i>
               {!supprimer && !data.is_deleted &&  <>
               <i className="fa-solid fa-pen fa-xl" style={{color: 'var(--brand-1)'}} onClick={() => setModal(true)}></i>
               <i className="fa-solid fa-trash fa-xl" style={{color: 'red'}} onClick={() => setM_Delete(true)}></i>
@@ -135,7 +132,6 @@ const UpdateClient = () => {
             />
           </div>
           <TableData />
-          <div id='pdf-content'></div>
         </>
     )
 }
