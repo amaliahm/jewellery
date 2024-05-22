@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
-import SignupComponent from './signup';
+import React, { useState } from 'react';
 import SigninComponent from './signin';
+import SignupComponent from './signup';
 
 function Auth() {
 
@@ -19,7 +19,7 @@ function Auth() {
           <div className='overlay-container'>
             <div className="overlay">
               <div className='overlay-panel overlay-left'>
-                <h1 className='m-0'>Heyy, Friend!</h1>
+                <h1 className='m-0'>Heyy, There!</h1>
                 <button className='ghost' onClick={addRight}>sign in</button>
               </div>
               <div className='overlay-panel overlay-right'>
